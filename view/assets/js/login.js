@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let user = JSON.parse(string);
             console.log(user);
             localStorage.setItem("actualProfile", string);
-            window.location.href = "main.html";
+            window.location.href = "main.php";
           }
         }
       } else {

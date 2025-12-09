@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['user'])) {
+    header('Location: login.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head class="headHome">
@@ -15,7 +22,7 @@
         class="topPic"
       />
 
-      <a href="login.html" class="logoutIcon"
+      <a href="logout.php" class="logoutIcon"
         ><svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"

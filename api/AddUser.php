@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -19,6 +21,8 @@ try {
     $user = $controller->create_user($username, $pswd1);
 
     if ($user) {
+        $_SESSION['user'] = $user;
+        $_SESSION['is_admin'] = false;
         echo json_encode([
             'resultado' => $user,
             'exito' => true

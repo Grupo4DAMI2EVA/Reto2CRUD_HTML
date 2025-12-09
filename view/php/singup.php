@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (isset($_SESSION['user'])) {
+    header('Location: main.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -41,7 +48,7 @@
           />
           <button type="submit" class="SignUpbutton">SignUp</button>
           <p class="registerLink">
-            Already have an account? <a href="login.html">Log In</a>
+            Already have an account? <a href="login.php">Log In</a>
           </p>
           <br />
           <h5 id="mensaje"></h5>

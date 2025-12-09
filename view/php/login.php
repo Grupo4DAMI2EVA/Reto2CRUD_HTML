@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (isset($_SESSION['user'])) {
+    header('Location: main.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -33,7 +40,7 @@
           />
           <button type="submit">Log In</button>
           <p class="registerLink">
-            Don't have an account? <a href="singup.html">Register now</a>
+            Don't have an account? <a href="singup.php">Register now</a>
           </p>
         </form>
       </section>

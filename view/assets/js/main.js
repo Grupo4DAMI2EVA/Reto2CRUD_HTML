@@ -608,6 +608,6 @@ async function delete_user(id) {
   if (data.error) {
     //DEBUG console.log("Error deleting user: ", data.error);
   } else {
-    window.location.href = "login.html";
+    window.location.href = "login.php";
   }
 }

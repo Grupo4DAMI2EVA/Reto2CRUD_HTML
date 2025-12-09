@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
           parrafo.innerText = "Usuario creado con éxito.";
           parrafo.style.color = "green";
           localStorage.setItem("actualProfile", JSON.stringify(data.resultado));
-          window.location.href = "main.html";
+          window.location.href = "login.php";
           console.log("Datos recibidos:", data.resultado);
         } else {
           parrafo.innerText =
