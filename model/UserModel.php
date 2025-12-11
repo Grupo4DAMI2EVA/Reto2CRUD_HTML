@@ -21,15 +21,14 @@ class UserModel
     public function loginUser($username, $password)
     {
         $query = "SELECT * FROM PROFILE_ P JOIN USER_ U ON P.PROFILE_CODE = U.PROFILE_CODE
-        WHERE USER_NAME = :username AND PSWD = :pass";
+        WHERE USER_NAME = :username";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":username", $username);
-        $stmt->bindParam(":pass", $password);
         $stmt->execute();
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($result) {
+        if ($result && password_verify($password, $result['PSWD'])) {
             return $result;
         } else {
             return null;
@@ -39,15 +38,14 @@ class UserModel
     public function loginAdmin($username, $password)
     {
         $query = " SELECT * FROM PROFILE_ P JOIN ADMIN_ A ON P.PROFILE_CODE=A.PROFILE_CODE
-        WHERE USER_NAME = :username AND PSWD = :pass";
+        WHERE USER_NAME = :username";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":username", $username);
-        $stmt->bindParam(":pass", $password);
         $stmt->execute();
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($result) {
+        if ($result && password_verify($password, $result['PSWD'])) {
             return $result;
         } else {
             return null;
@@ -57,27 +55,25 @@ class UserModel
     public function checkUser($username, $password)
     {
         $query = "SELECT * FROM PROFILE_ P JOIN USER_ U ON P.PROFILE_CODE = U.PROFILE_CODE
-        WHERE USER_NAME = :username AND PSWD = :pass";
+        WHERE USER_NAME = :username";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":username", $username);
-        $stmt->bindParam(":pass", $password);
         $stmt->execute();
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($result) {
+        if ($result && password_verify($password, $result['PSWD'])) {
             return false;
         } else {
             $query = " SELECT * FROM PROFILE_ P JOIN ADMIN_ A ON P.PROFILE_CODE=A.PROFILE_CODE
-        WHERE USER_NAME = :username AND PSWD = :pass";
+        WHERE USER_NAME = :username";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(":username", $username);
-            $stmt->bindParam(":pass", $password);
             $stmt->execute();
 
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($result) {
+            if ($result && password_verify($password, $result['PSWD'])) {
                 return true;
             }
         }
@@ -93,10 +89,11 @@ class UserModel
         if ($checkStmt->rowCount() > 0) {
             return null;
         }
+        $hashedPassword = password_hash($pswd1, PASSWORD_DEFAULT);
         $createQuery = "CALL RegistrarUsuario(?, ?)";
         $createStmt = $this->conn->prepare($createQuery);
         $createStmt->bindValue(1, $username);
-        $createStmt->bindValue(2, $pswd1);
+        $createStmt->bindValue(2, $hashedPassword);
         $createStmt->execute();
         $result = $createStmt->fetch(PDO::FETCH_ASSOC);
         return $result;
@@ -176,10 +173,11 @@ class UserModel
 
     public function modifyPassword($profile_code, $password)
     {
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $query = "UPDATE PROFILE_ SET PSWD = :password_ WHERE PROFILE_CODE = :profile_code";
         $stmt = $this->conn->prepare($query);
         $stmt->bindparam(':profile_code', $profile_code);
-        $stmt->bindparam(':password_', $password);
+        $stmt->bindparam(':password_', $hashedPassword);
 
         if ($stmt->execute()) {
             return true;

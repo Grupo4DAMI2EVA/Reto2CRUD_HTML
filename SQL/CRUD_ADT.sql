@@ -5,7 +5,7 @@ CREATE TABLE PROFILE_(
 PROFILE_CODE INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 EMAIL VARCHAR (40) UNIQUE,
 USER_NAME VARCHAR (30) UNIQUE,
-PSWD VARCHAR (30),
+PSWD VARCHAR (255),
 TELEPHONE BIGINT,
 NAME_ VARCHAR (30),
 SURNAME VARCHAR (30)
@@ -26,11 +26,11 @@ FOREIGN KEY (PROFILE_CODE) REFERENCES PROFILE_(PROFILE_CODE) ON UPDATE CASCADE O
 
 
 INSERT INTO PROFILE_ (PROFILE_CODE, EMAIL, USER_NAME, PSWD, TELEPHONE, NAME_, SURNAME) VALUES
-(1, 'juan.perez@email.com', 'juanP', '1234', 611223344, 'Juan', 'Pérez'),
-(2, 'maria.garcia@email.com', 'mariag', '1234', 622334455, 'María', 'García'),
-(3, 'carlos.lopez@email.com', 'carlosl', '1234', 633445566, 'Carlos', 'López'),
-(4, 'ana.martinez@email.com', 'anam', '1234', 644556677, 'Ana', 'Martínez'),
-(5, 'pedro.rodriguez@email.com', 'pedror', '1234', 655667788, 'Pedro', 'Rodríguez');
+(1, 'juan.perez@email.com', 'juanP', '$2y$12$7uSC/7BFdIMWXbee65qBqese793PaTmPd.EyHfnk7AjTnHU1FS6Jm', 611223344, 'Juan', 'Pérez'),
+(2, 'maria.garcia@email.com', 'mariag', '$2y$12$7uSC/7BFdIMWXbee65qBqese793PaTmPd.EyHfnk7AjTnHU1FS6Jm', 622334455, 'María', 'García'),
+(3, 'carlos.lopez@email.com', 'carlosl', '$2y$12$7uSC/7BFdIMWXbee65qBqese793PaTmPd.EyHfnk7AjTnHU1FS6Jm', 633445566, 'Carlos', 'López'),
+(4, 'ana.martinez@email.com', 'anam', '$2y$12$7uSC/7BFdIMWXbee65qBqese793PaTmPd.EyHfnk7AjTnHU1FS6Jm', 644556677, 'Ana', 'Martínez'),
+(5, 'pedro.rodriguez@email.com', 'pedror', '$2y$12$7uSC/7BFdIMWXbee65qBqese793PaTmPd.EyHfnk7AjTnHU1FS6Jm', 655667788, 'Pedro', 'Rodríguez');
 
 
 INSERT INTO USER_ (PROFILE_CODE, GENDER, CARD_NO) VALUES
@@ -44,7 +44,7 @@ INSERT INTO ADMIN_ (PROFILE_CODE, CURRENT_ACCOUNT) VALUES
 (5, 'ES98-7654-3210-9876-5432');
 
 DELIMITER //
-CREATE PROCEDURE RegistrarUsuario( IN p_username VARCHAR(30), IN p_pswd VARCHAR(30))
+CREATE PROCEDURE RegistrarUsuario( IN p_username VARCHAR(30), IN p_pswd VARCHAR(255))
 BEGIN
     DECLARE  nuevo_profile_code INT;
     
