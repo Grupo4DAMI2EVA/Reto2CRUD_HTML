@@ -3,6 +3,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Iniciar sesión
+session_start();
+
 require_once '../controller/controller.php';
 header('Content-Type: application/json; charset=utf-8');
 
@@ -19,6 +22,12 @@ try {
     $user = $controller->create_user($username, $pswd1);
 
     if ($user) {
+        // Guardar user en la sesión
+        $_SESSION['logeado'] = true;
+        $_SESSION['tipo'] = 'user';
+        $_SESSION['user_data'] = $user;
+        $_SESSION['username'] = $username;
+        
         echo json_encode([
             'resultado' => $user,
             'exito' => true
@@ -37,4 +46,3 @@ try {
     ]);
 }
 ?>
-

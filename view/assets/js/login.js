@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function login(username, password) {
     const response = await fetch(`../../api/Login.php`, {
       method: "POST",
+      credentials: 'include', // Envía y recibe cookies
       headers: {
         "Content-Type": "application/json",
       },

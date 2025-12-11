@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         const response = await fetch("../../api/AddUser.php", {
           method: "POST",
+          credentials: 'include', // Envía y recibe cookies
           headers: {
             "Content-Type": "application/json; charset=utf-8",
           },

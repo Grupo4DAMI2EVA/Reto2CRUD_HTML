@@ -150,6 +150,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
           const response = await fetch("../../api/ModifyPassword.php", {
             method: "POST",
+            credentials: 'include',
             headers: {
               "Content-Type": "application/json",
             },
@@ -316,7 +317,10 @@ async function modifyUser() {
           telephone
         )}&gender=${encodeURIComponent(gender)}&card_no=${encodeURIComponent(
           card_no
-        )}`
+        )}`,
+        {
+          credentials: 'include'
+        }
       );
       const data = await response.json();
       //DEBUG console.log(data);
@@ -355,7 +359,9 @@ async function modifyUser() {
 
 /* ----------ADMIN POPUP---------- */
 async function get_all_users() {
-  const response = await fetch("../../api/GetAllUsers.php");
+  const response = await fetch("../../api/GetAllUsers.php", {
+    credentials: 'include'
+  });
   const data = await response.json();
 
   return data["resultado"];
@@ -365,7 +371,10 @@ async function delete_user_admin(id) {
   if (!confirm("Are you sure you want to delete this user?")) return;
 
   const response = await fetch(
-    `../../api/DeleteUser.php?id=${encodeURIComponent(id)}`
+    `../../api/DeleteUser.php?id=${encodeURIComponent(id)}`,
+    {
+      credentials: 'include'
+    }
   );
 
   const data = await response.json();
@@ -553,7 +562,10 @@ async function modifyAdmin() {
           username
         )}&telephone=${encodeURIComponent(
           telephone
-        )}&current_account=${encodeURIComponent(current_account)}`
+        )}&current_account=${encodeURIComponent(current_account)}`,
+        {
+          credentials: 'include'
+        }
       );
 
       const data = await response.json();
@@ -600,7 +612,10 @@ async function delete_user(id) {
   if (!confirm("Are you sure you want to your account?")) return;
 
   const response = await fetch(
-    `../../api/DeleteUser.php?id=${encodeURIComponent(id)}`
+    `../../api/DeleteUser.php?id=${encodeURIComponent(id)}`,
+    {
+      credentials: 'include'
+    }
   );
 
   const data = await response.json();

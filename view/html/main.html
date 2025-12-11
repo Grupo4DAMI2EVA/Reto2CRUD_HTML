@@ -5,7 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home Page</title>
     <link rel="stylesheet" href="../assets/css/style.css" />
+    <script src="../assets/js/auth.js"></script>
     <script src="../assets/js/main.js"></script>
+    <script>
+      window.addEventListener('load', async () => {
+        await comprobarSesion();
+      });
+    </script>
   </head>
   <body>
     <header class="headHome">
@@ -15,7 +21,7 @@
         class="topPic"
       />
 
-      <a href="login.html" class="logoutIcon"
+      <a href="login.html" onclick="logout();" class="logoutIcon"
         ><svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
