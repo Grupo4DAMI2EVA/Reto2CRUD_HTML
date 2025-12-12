@@ -14,10 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
           alert("El nombre de usuario o la contraseña con incorrectas.");
         } else {
           if (data["resultado"]) {
-            let string = JSON.stringify(data["resultado"]);
-            let user = JSON.parse(string);
-            console.log(user);
-            localStorage.setItem("actualProfile", string);
             window.location.href = "main.html";
           }
         }
