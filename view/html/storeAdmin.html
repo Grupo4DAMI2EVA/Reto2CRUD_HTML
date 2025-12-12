@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Store</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <script src="../assets/js/auth.js"></script>
+  </head>
+  <body class="storeBody">
+    <header class="storeHeader">
+      <div class="storeUser">
+        <p class="storeWelcome">
+          Welcome, <span id="storeUserName">[Admin]</span>
+        </p>
+        <p class="storeBalance">
+          Balance: <span id="storeUserBalance">0.00€</span>
+        </p>
+      </div>
+      <h1 class="storeTitle">STORE MANAGEMENT</h1>
+      <button class="storeHelp" aria-label="Ayuda">
+        <span>?</span>
+      </button>
+    </header>
+
+    <main class="storeMain">
+      <section class="storePanel">
+        <div class="storePanelHeader">
+          <h2>Available Games</h2>
+        </div>
+        <div class="storeTableWrapper">
+          <table class="storeTable">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Genre</th>
+                <th>Platform</th>
+                <th>Price (€)</th>
+                <th>Pegi</th>
+                <th>Stock</th>
+                <th>Company</th>
+                <th>ReleaseDate</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="emptyRow">
+                <td colspan="8">Tabla sin contenido</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="storeControls">
+        <div class="storeFilters">
+          <label class="filterLabel" for="searchTitle">Search game:</label>
+          <input
+            id="searchTitle"
+            type="text"
+            placeholder="Game name..."
+            class="filterInput"
+          />
+          <label class="filterLabel" for="searchGenre">Genre:</label>
+          <select id="searchGenre" class="filterSelect">
+            <option value="all">All</option>
+          </select>
+          <label class="filterLabel" for="searchPlatform">Platform:</label>
+          <select id="searchPlatform" class="filterSelect">
+            <option value="all">All</option>
+          </select>
+          <button class="storeBtn primary">Search</button>
+        </div>
+
+        <div class="storeSelected">
+          <span class="selectedLabel">Selected game:</span>
+          <span class="selectedValue" id="selectedGame">Select a game</span>
+        </div>
+
+        <div class="storeActions">
+          <div class="storeActionsLeft">
+            <button class="storeBtn ghost">Add Game</button>
+            <button class="storeBtn ghost">Modify Game</button>
+            <button class="storeBtn danger">Delete Game</button>
+          </div>
+          <div class="storeActionsRight">
+            <button class="storeBtn danger">Exit</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
