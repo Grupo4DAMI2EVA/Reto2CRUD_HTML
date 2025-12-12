@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   //Change password popup functionality, inside this initial on document loaded method as it relies on the
-  //form existing even though it isnt shown to be able to listen to it, if it isnt inside this on document
+  //form existing even though it isn't shown to be able to listen to it, if it isn't inside this on document
   //loaded method an error occurs as it tries to listen to the form before it is loaded
   document
     .getElementById("changePasswordForm")
@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
           const response = await fetch("../../api/ModifyPassword.php", {
             method: "POST",
-            credentials: 'include',
+            credentials: "include",
             headers: {
               "Content-Type": "application/json",
             },
@@ -319,7 +319,7 @@ async function modifyUser() {
           card_no
         )}`,
         {
-          credentials: 'include'
+          credentials: "include",
         }
       );
       const data = await response.json();
@@ -360,7 +360,7 @@ async function modifyUser() {
 /* ----------ADMIN POPUP---------- */
 async function get_all_users() {
   const response = await fetch("../../api/GetAllUsers.php", {
-    credentials: 'include'
+    credentials: "include",
   });
   const data = await response.json();
 
@@ -373,7 +373,7 @@ async function delete_user_admin(id) {
   const response = await fetch(
     `../../api/DeleteUser.php?id=${encodeURIComponent(id)}`,
     {
-      credentials: 'include'
+      credentials: "include",
     }
   );
 
@@ -564,7 +564,7 @@ async function modifyAdmin() {
           telephone
         )}&current_account=${encodeURIComponent(current_account)}`,
         {
-          credentials: 'include'
+          credentials: "include",
         }
       );
 
@@ -614,7 +614,7 @@ async function delete_user(id) {
   const response = await fetch(
     `../../api/DeleteUser.php?id=${encodeURIComponent(id)}`,
     {
-      credentials: 'include'
+      credentials: "include",
     }
   );
 
@@ -624,5 +624,14 @@ async function delete_user(id) {
     //DEBUG console.log("Error deleting user: ", data.error);
   } else {
     window.location.href = "login.html";
+  }
+}
+
+// Use as onclick function for a button
+async function openStore() {
+  if (["CARD_NO"] in profile) {
+    window.location.href = "store.html";
+  } else if (["CURRENT_ACCOUNT"] in profile) {
+    window.location.href = "storeAdmin.html";
   }
 }
