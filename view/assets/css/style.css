@@ -400,7 +400,7 @@ li {
 }
 
 /* Profile Popup */
-/* to blurr the background */
+/* to blur the background */
 .popupOverlay {
   position: fixed;
   inset: 0;
@@ -633,7 +633,7 @@ li {
   }
 }
 
-/* ----- Store Page ----- */
+/* Store Page */
 .storeBody {
   min-height: 100vh;
   background: var(--background-color, #f1f1f1);
