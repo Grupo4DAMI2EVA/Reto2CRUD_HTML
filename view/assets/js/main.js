@@ -611,9 +611,17 @@ async function delete_user(id) {
 
 // Use as onclick function for a button
 async function openStore() {
-  if (["CARD_NO"] in profile) {
-    window.location.href = "store.html";
-  } else if (["CURRENT_ACCOUNT"] in profile) {
+  const response = await fetch(`../../api/CheckUserType.php`, {
+    credentials: "include",
+  });
+
+  const type = await response.json();
+
+  if (type.admin) {
     window.location.href = "storeAdmin.html";
+  } else if (type.user) {
+    window.location.href = "store.html";
+  } else {
+    // Error message here
   }
 }
