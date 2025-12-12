@@ -1,0 +1,132 @@
+/* Estilos específicos para la página de valoración */
+.game-info-container {
+    padding: 10px 0;
+}
+
+.game-info {
+    flex: 1;
+}
+
+.game-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #101416;
+}
+
+.game-details {
+    font-size: 14px;
+    color: #6b6b6b;
+    margin-bottom: 4px;
+}
+
+/* Sistema de 5 estrellas */
+.rating-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.rating-stars {
+    position: relative;
+    width: fit-content;
+}
+
+.stars-background {
+    display: flex;
+    gap: 8px;
+}
+
+/* Estilo para cada estrella */
+.star {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+
+/* Estrella vacía (fondo) */
+.star-empty {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 50px;
+    color: #d1d1d1;
+    line-height: 50px;
+    text-align: center;
+    z-index: 1;
+}
+
+/* Estrella llena (primer plano) */
+.star-full {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 50px;
+    color: #ffd700;
+    line-height: 50px;
+    text-align: center;
+    clip-path: inset(0 100% 0 0); /* Inicialmente oculta */
+    transition: clip-path 0.1s ease;
+    z-index: 2;
+}
+
+/* Para media estrella */
+.star.half .star-full {
+    clip-path: inset(0 50% 0 0);
+}
+
+/* Para estrella completa */
+.star.full .star-full {
+    clip-path: inset(0 0 0 0);
+}
+
+.rating-display {
+    font-size: 24px;
+    font-weight: 700;
+    color: #101416;
+}
+
+.rating-value {
+    color: #0074b8;
+}
+
+.rating-text {
+    color: #6b6b6b;
+    font-size: 18px;
+}
+
+/* Resto de estilos se mantienen igual */
+.textarea-container {
+    margin: 20px 0;
+}
+
+.review-textarea {
+    width: 100%;
+    height: 150px;
+    padding: 12px;
+    border: 2px solid #d1d1d1;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+    margin-top: 8px;
+}
+
+.review-textarea:focus {
+    outline: none;
+    border-color: #729acb;
+}
+
+.char-counter {
+    text-align: right;
+    font-size: 12px;
+    color: #6b6b6b;
+    margin-top: 4px;
+}
