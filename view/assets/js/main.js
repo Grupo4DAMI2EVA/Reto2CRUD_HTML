@@ -3,8 +3,12 @@ document.addEventListener("DOMContentLoaded", async () => {
    *****************************************VARIABLE DECLARATION*****************************************
    ******************************************************************************************************/
 
-  //Loading the current user from localstorage, can be admin or user this is checked later
-  let profile = JSON.parse(localStorage.getItem("actualProfile"));
+  //Loading the current user from server session
+  let profile = await comprobarSesion();
+  
+  if (!profile) {
+    return; // La sesión no es válida, comprobarSesion ya redirige a login
+  }
 
   /* ----------HOME---------- */
   const homeBtn = document.getElementById("adjustData");
@@ -34,9 +38,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   /* ----------HOME---------- */
   //Opens a popup depending on if the profile is a user or admin
-  homeBtn.onclick = function () {
+  homeBtn.onclick = async function () {
+    profile = await comprobarSesion();
+    if (!profile) return;
+    
     if (["CARD_NO"] in profile) {
-      profile = JSON.parse(localStorage.getItem("actualProfile"));
       document.getElementById("message").innerHTML = "";
       openModifyUserPopup(profile);
     } else if (["CURRENT_ACCOUNT"] in profile) {
@@ -109,13 +115,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.getElementById("messageWrongPassword").innerHTML = "";
       document.getElementById("message").innerHTML = "";
 
-      let actualProfile;
-
-      if (["CARD_NO"] in profile) {
-        actualProfile = JSON.parse(localStorage.getItem("actualUser"));
-      } else if (["CURRENT_ACCOUNT"] in profile) {
-        actualProfile = JSON.parse(localStorage.getItem("actualProfile"));
-      }
+      // Obtener datos actuales del servidor
+      let actualProfile = await comprobarSesion();
+      if (!actualProfile) return;
 
       const profile_code = actualProfile["PROFILE_CODE"];
       const userPassword = actualProfile["PSWD"];
@@ -166,17 +168,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             actualProfile.PSWD = newPassword;
             document.getElementById("messageSuccessPassword").innerHTML =
               "Password correctly changed";
-            if (["CARD_NO"] in profile) {
-              console.log("IS A USER");
-              localStorage.setItem("actualUser", JSON.stringify(actualProfile));
-            } else if (["CURRENT_ACCOUNT"] in profile) {
-              console.log("IS AN ADMIN");
-              localStorage.setItem(
-                "actualProfile",
-                JSON.stringify(actualProfile)
-              );
-            }
-
+            profile = actualProfile;
+            
             setTimeout(() => {
               document.getElementById("messageSuccessPassword").innerHTML = ""; // clean the modified message
               document.getElementById("changePasswordForm").reset(); // clean all the fields
@@ -201,7 +194,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 /* ----------HOME---------- */
 function openModifyUserPopup(actualProfile) {
   document.getElementById("message").innerHTML = "";
-  localStorage.setItem("actualUser", JSON.stringify(actualProfile));
 
   const usuario = {
     profile_code: actualProfile.PROFILE_CODE,
@@ -232,7 +224,8 @@ function openModifyUserPopup(actualProfile) {
 
 /* ----------USER POPUP---------- */
 async function modifyUser() {
-  const actualProfile = JSON.parse(localStorage.getItem("actualUser"));
+  let actualProfile = await comprobarSesion();
+  if (!actualProfile) return;
 
   const usuario = {
     profile_code: actualProfile.PROFILE_CODE,
@@ -337,15 +330,13 @@ async function modifyUser() {
         actualProfile.CARD_NO = card_no;
         actualProfile.GENDER = gender;
 
-        localStorage.setItem("actualUser", JSON.stringify(actualProfile));
+        profile = actualProfile;
 
         if (
           ["CURRENT_ACCOUNT"] in
-          JSON.parse(localStorage.getItem("actualProfile"))
+          (await comprobarSesion())
         ) {
           refreshAdminTable();
-        } else {
-          localStorage.setItem("actualProfile", JSON.stringify(actualProfile));
         }
       } else {
         document.getElementById("message").innerHTML = data.error;
@@ -455,7 +446,7 @@ async function refreshAdminTable() {
 
 function openModifyAdminPopup() {
   document.getElementById("messageAdmin").innerHTML = "";
-  const actualProfile = JSON.parse(localStorage.getItem("actualProfile"));
+  const actualProfile = profile; // Usar el profile cargado del servidor
   let modifyAdminPopup = document.getElementById("modifyAdminPopup");
 
   const usuario = {
@@ -484,7 +475,8 @@ function openModifyAdminPopup() {
 }
 
 async function modifyAdmin() {
-  const actualProfile = JSON.parse(localStorage.getItem("actualProfile"));
+  let actualProfile = await comprobarSesion();
+  if (!actualProfile) return;
 
   const usuario = {
     profile_code: actualProfile.PROFILE_CODE,
@@ -582,14 +574,7 @@ async function modifyAdmin() {
         actualProfile.TELEPHONE = telephone;
         actualProfile.CURRENT_ACCOUNT = current_account;
 
-        //DEBUG console.log("New actual profile:", JSON.stringify(actualProfile));
-
-        localStorage.setItem("actualProfile", JSON.stringify(actualProfile));
-
-        /*DEBUG console.log(
-          "Local storage updated: ",
-          localStorage.getItem("actualProfile")
-        );*/
+        profile = actualProfile;
       } else {
         document.getElementById("messageAdmin").innerHTML = data.error;
         document.getElementById("messageAdmin").style.color = "red";

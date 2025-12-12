@@ -19,7 +19,6 @@ async function comprobarSesion() {
 
         if (response.ok) {
             const userData = await response.json();
-            localStorage.setItem('actualProfile', JSON.stringify(userData));
             return userData;
         } else {
             console.error('Error al verificar sesión');
@@ -44,11 +43,30 @@ async function logout() {
         });
 
         if (response.ok) {
-            localStorage.removeItem('actualProfile');
             window.location.href = 'login.html';
         }
     } catch (error) {
         console.error('Error al hacer logout:', error);
         window.location.href = 'login.html';
+    }
+}
+
+// Redirige a main si el usuario ya está logueado (para login y signup)
+async function redirigirSiLogueado() {
+    try {
+        const response = await fetch('../../api/me.php', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            // Sesión válida, redirigir a main
+            window.location.href = 'main.html';
+        }
+    } catch (error) {
+        console.error('Error al verificar sesión:', error);
     }
 }
