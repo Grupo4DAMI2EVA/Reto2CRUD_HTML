@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   //Loading the current user from server session
   let profile = await comprobarSesion();
-  
+
   if (!profile) {
     return; // La sesión no es válida, comprobarSesion ya redirige a login
   }
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   homeBtn.onclick = async function () {
     profile = await comprobarSesion();
     if (!profile) return;
-    
+
     if (["CARD_NO"] in profile) {
       document.getElementById("message").innerHTML = "";
       openModifyUserPopup(profile);
@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.getElementById("messageSuccessPassword").innerHTML =
               "Password correctly changed";
             profile = actualProfile;
-            
+
             setTimeout(() => {
               document.getElementById("messageSuccessPassword").innerHTML = ""; // clean the modified message
               document.getElementById("changePasswordForm").reset(); // clean all the fields
@@ -332,10 +332,7 @@ async function modifyUser() {
 
         profile = actualProfile;
 
-        if (
-          ["CURRENT_ACCOUNT"] in
-          (await comprobarSesion())
-        ) {
+        if (["CURRENT_ACCOUNT"] in (await comprobarSesion())) {
           refreshAdminTable();
         }
       } else {
