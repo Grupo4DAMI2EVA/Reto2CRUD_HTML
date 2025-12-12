@@ -47,7 +47,7 @@ CREATE TABLE ORDER_(
 CREATE TABLE REVIEW_(
  REVIEW_CODE INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
  COMMENT VARCHAR (255),
- RATING ENUM ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10'),
+ RATING ENUM ('0.5', '1', '1.5', '2', '2.5', '3', '3.5', '4', '4.5', '5'),
  FOREIGN KEY (USER_CODE) REFERENCES USER_(USER_CODE) ON UPDATE CASCADE ON DELETE CASCADE,
  FOREIGN KEY (VIDEOGAME_CODE) REFERENCES VIDEOGAME_(VIDEOGAME_CODE) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -80,9 +80,9 @@ INSERT INTO ORDER_ (ORDER_CODE, QUANTITY) VALUES
 (1, 1);
 
 INSERT INTO REVIEW_ (REVIEW_CODE, COMMENT, RATING) VALUES
-(1, 'The Witcher 3: Wild Hunt is a great game', 10),
-(2, 'The Last of Us is a great game', 10),
-(3, 'The Elder Scrolls V: Skyrim is a great game', 10);
+(1, 'The Witcher 3: Wild Hunt is a great game', 5),
+(2, 'The Last of Us is a great game', 4),
+(3, 'The Elder Scrolls V: Skyrim is a great game', 4.5);
     
 DELIMITER //
 CREATE PROCEDURE RegistrarUsuario( IN p_username VARCHAR(30), IN p_pswd VARCHAR(255))
