@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add games</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
   </head>
   <body class="storeBody">
     <header class="storeHeader">
@@ -15,23 +18,23 @@
         <!--PHP file not made yet!-->
         <section>
           <label for="name">Name:</label>
-          <input id="name" type="text" />
+          <input id="name" type="text" required />
           <label for="platforms">Platforms:</label>
-          <input id="platforms" type="text" />
+          <input id="platforms" type="text" required />
           <label for="company">Company:</label>
-          <input id="company" type="text" />
+          <input id="company" type="text" required />
           <label for="stock">Stock:</label>
-          <input id="stock" type="text" />
+          <input id="stock" type="text" required />
         </section>
         <section>
           <label for="genre">Genre:</label>
-          <input id="genre" type="text" />
+          <input id="genre" type="text" required />
           <label for="price">Price:</label>
-          <input id="price" type="text" />
+          <input id="price" type="text" required />
           <label for="pegi">PEGI:</label>
-          <input id="pegi" type="text" />
+          <input id="pegi" type="text" required />
           <label for="releaseDate">Release Date:</label>
-          <input id="releaseDate" type="date" />
+          <input id="releaseDate" type="date" required />
         </section>
         <input type="submit" />
       </form>
