@@ -43,16 +43,17 @@ function initializeRatingSystem() {
         });
         
         star.addEventListener('click', function(e) {
-            isSelecting = true;
             const value = parseInt(this.dataset.value);
             const rect = this.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const isHalf = x < rect.width / 2;
-            
+
             // Calcular rating final
             currentRating = isHalf ? value - 0.5 : value;
-            
-            updateStarsDisplay(value, isHalf, stars, ratingValue);
+
+            // Fijar la visualización al rating final y dejar de seleccionar
+            updateStarsByRating(currentRating, stars, ratingValue);
+            isSelecting = false;
         });
         
         star.addEventListener('mouseleave', function() {
