@@ -1,1 +1,40 @@
 <!DOCTYPE html>
+<html>
+  <head>
+    <title>Add games</title>
+  </head>
+  <body class="storeBody">
+    <header class="storeHeader">
+      <h1 class="storeTitle">ADD GAME TO STORE</h1>
+      <button>
+        <span>Exit</span>
+      </button>
+    </header>
+    <main>
+      <form action="AddGame.php">
+        <!--PHP file not made yet!-->
+        <section>
+          <label for="name">Name:</label>
+          <input id="name" type="text" />
+          <label for="platforms">Platforms:</label>
+          <input id="platforms" type="text" />
+          <label for="company">Company:</label>
+          <input id="company" type="text" />
+          <label for="stock">Stock:</label>
+          <input id="stock" type="text" />
+        </section>
+        <section>
+          <label for="genre">Genre:</label>
+          <input id="genre" type="text" />
+          <label for="price">Price:</label>
+          <input id="price" type="text" />
+          <label for="pegi">PEGI:</label>
+          <input id="pegi" type="text" />
+          <label for="releaseDate">Release Date:</label>
+          <input id="releaseDate" type="date" />
+        </section>
+        <input type="submit" />
+      </form>
+    </main>
+  </body>
+</html>
