@@ -1,95 +1,128 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Carrito de Compras</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body class="storeBody">
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="storeBody">
     <!-- Encabezado -->
     <header class="storeHeader">
-        <div class="storeUser">
-            <span>Usuario: <strong>Cliente</strong></span>
-            <span class="storeBalance">Saldo disponible: $0</span>
-        </div>
-        
-        <h1 class="storeTitle">CARRITO DE COMPRAS</h1>
-        
-        <button class="storeHelp" title="Ayuda">?</button>
+      <div class="storeUser">
+        <span>Usuario: <strong>Cliente</strong></span>
+        <span class="storeBalance">Saldo disponible: $0</span>
+      </div>
+
+      <h1 class="storeTitle">CARRITO DE COMPRAS</h1>
+
+      <button class="storeHelp" title="Ayuda">?</button>
     </header>
 
     <!-- Contenido principal -->
     <main class="storeMain">
-        <!-- Panel de items del carrito -->
-        <section class="storePanel">
-            <div class="storePanelHeader">
-                <h2>Items en el carrito:</h2>
-            </div>
-            
-            <div style="text-align: center; padding: 40px 20px; color: #6b6b6b; font-style: italic;">
-                ---<br>
-                El carrito está vacío<br>
-                ---
-            </div>
-            
-            <div class="storeSelected" style="margin-top: 20px;">
-                <span>Total de items:</span>
-                <span class="selectedValue">0</span>
-            </div>
-            
-            <div class="storeSelected" style="margin-top: 8px;">
-                <span>Total a pagar:</span>
-                <span class="selectedValue">$0</span>
-            </div>
-        </section>
+      <!-- Panel de items del carrito -->
+      <section class="storePanel">
+        <div class="storePanelHeader">
+          <h2>Items en el carrito:</h2>
+        </div>
 
-        <!-- Panel de selección y acciones -->
-        <section class="storePanel">
-            <div class="storePanelHeader">
-                <h2>Seleccionar y gestionar items</h2>
+        <div
+          style="
+            text-align: center;
+            padding: 40px 20px;
+            color: #6b6b6b;
+            font-style: italic;
+          "
+        >
+          ---<br />
+          El carrito está vacío<br />
+          ---
+        </div>
+
+        <div class="storeSelected" style="margin-top: 20px">
+          <span>Total de items:</span>
+          <span class="selectedValue">0</span>
+        </div>
+
+        <div class="storeSelected" style="margin-top: 8px">
+          <span>Total a pagar:</span>
+          <span class="selectedValue">$0</span>
+        </div>
+      </section>
+
+      <!-- Panel de selección y acciones -->
+      <section class="storePanel">
+        <div class="storePanelHeader">
+          <h2>Seleccionar y gestionar items</h2>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 24px">
+          <!-- Mensaje de selección -->
+          <div
+            style="
+              text-align: center;
+              padding: 16px;
+              background: #f5f7fa;
+              border-radius: 8px;
+            "
+          >
+            <p style="font-weight: 600; margin: 0">Selecciona un item</p>
+          </div>
+
+          <!-- Ajuste de cantidad -->
+          <div>
+            <h3 style="font-size: 16px; margin-bottom: 12px; font-weight: 600">
+              Ajustar cantidad:
+            </h3>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 16px;
+              "
+            >
+              <button
+                class="storeBtn"
+                style="width: 48px; height: 48px; font-size: 20px; padding: 0"
+              >
+                -
+              </button>
+
+              <div style="display: flex; align-items: center; gap: 12px">
+                <span
+                  style="
+                    font-size: 24px;
+                    font-weight: 600;
+                    min-width: 40px;
+                    text-align: center;
+                  "
+                  >0</span
+                >
+              </div>
+
+              <button
+                class="storeBtn"
+                style="width: 48px; height: 48px; font-size: 20px; padding: 0"
+              >
+                +
+              </button>
             </div>
-            
-            <div style="display: flex; flex-direction: column; gap: 24px;">
-                <!-- Mensaje de selección -->
-                <div style="text-align: center; padding: 16px; background: #f5f7fa; border-radius: 8px;">
-                    <p style="font-weight: 600; margin: 0;">Selecciona un item</p>
-                </div>
-                
-                <!-- Ajuste de cantidad -->
-                <div>
-                    <h3 style="font-size: 16px; margin-bottom: 12px; font-weight: 600;">Ajustar cantidad:</h3>
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 16px;">
-                        <button class="storeBtn" style="width: 48px; height: 48px; font-size: 20px; padding: 0;">
-                            -
-                        </button>
-                        
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span style="font-size: 24px; font-weight: 600; min-width: 40px; text-align: center;">0</span>
-                        </div>
-                        
-                        <button class="storeBtn" style="width: 48px; height: 48px; font-size: 20px; padding: 0;">
-                            +
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Acciones -->
-                <div class="storeActions">
-                    <div class="storeActionsLeft">
-                        <button class="storeBtn primary">
-                            Realizar Compra
-                        </button>
-                    </div>
-                    
-                    <div class="storeActionsRight">
-                        <button class="storeBtn danger">
-                            Eliminar
-                        </button>
-                    </div>
-                </div>
+          </div>
+
+          <!-- Acciones -->
+          <div class="storeActions">
+            <div class="storeActionsLeft">
+              <button class="storeBtn primary">Realizar Compra</button>
             </div>
-        </section>
+
+            <div class="storeActionsRight">
+              <button class="storeBtn danger">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
-</body>
+  </body>
 </html>

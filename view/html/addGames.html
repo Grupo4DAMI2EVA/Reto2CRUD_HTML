@@ -15,12 +15,17 @@
     </header>
     <main>
       <form action="AddGame.php">
-        <!--PHP file not made yet!-->
         <section>
           <label for="name">Name:</label>
           <input id="name" type="text" required />
-          <label for="platforms">Platforms:</label>
-          <input id="platforms" type="text" required />
+          <label for="platform">Platforms:</label>
+          <select name="platform" id="platform" required>
+            <option value="pc">PC</option>
+            <option value="playstation">Playstation</option>
+            <option value="xbox">Xbox</option>
+            <option value="nintendo">Nintendo</option>
+            <option value="other">Other</option>
+          </select>
           <label for="company">Company:</label>
           <input id="company" type="text" required />
           <label for="stock">Stock:</label>
@@ -28,11 +33,29 @@
         </section>
         <section>
           <label for="genre">Genre:</label>
-          <input id="genre" type="text" required />
+          <select name="genre" id="genre" required>
+            <option value="action">Action</option>
+            <option value="adventure">Adventure</option>
+            <option value="rpg">RPG</option>
+            <option value="platformer">Platformer</option>
+            <option value="shooter">Shooter</option>
+            <option value="strategy">Strategy</option>
+            <option value="racing">Racing</option>
+            <option value="sports">Sports</option>
+            <option value="simulation">Simulation</option>
+            <option value="educational">Educational</option>
+            <option value="other">Other</option>
+          </select>
           <label for="price">Price:</label>
           <input id="price" type="text" required />
           <label for="pegi">PEGI:</label>
-          <input id="pegi" type="text" required />
+          <select name="pegi" id="pegi" required>
+            <option value="3">3</option>
+            <option value="7">7</option>
+            <option value="12">12</option>
+            <option value="16">16</option>
+            <option value="18">18</option>
+          </select>
           <label for="releaseDate">Release Date:</label>
           <input id="releaseDate" type="date" required />
         </section>

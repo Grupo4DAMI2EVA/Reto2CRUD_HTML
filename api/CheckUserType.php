@@ -16,6 +16,7 @@ $password = $data['password'] ?? '';
 
 $controller = new controller();
 $type = $controller->checkUser($username, $password);
+
 if ($type) {
     echo json_encode(["admin" => "admin"], JSON_UNESCAPED_UNICODE);
 } else if (!$type) {
