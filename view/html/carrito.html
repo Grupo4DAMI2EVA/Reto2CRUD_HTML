@@ -27,7 +27,7 @@
                 <h2>Items en el carrito:</h2>
             </div>
             
-            <div style="text-align: center; padding: 40px 20px; color: #6b6b6b; font-style: italic;">
+            <div data-role="cart-items" style="text-align: center; padding: 40px 20px; color: #6b6b6b; font-style: italic;">
                 ---<br>
                 El carrito está vacío<br>
                 ---
@@ -35,12 +35,12 @@
             
             <div class="storeSelected" style="margin-top: 20px;">
                 <span>Total de items:</span>
-                <span class="selectedValue">0</span>
+                <span class="selectedValue" data-role="total-items">0</span>
             </div>
             
             <div class="storeSelected" style="margin-top: 8px;">
                 <span>Total a pagar:</span>
-                <span class="selectedValue">$0</span>
+                <span class="selectedValue" data-role="total-price">$0</span>
             </div>
         </section>
 
@@ -77,13 +77,13 @@
                 <!-- Acciones -->
                 <div class="storeActions">
                     <div class="storeActionsLeft">
-                        <button class="storeBtn primary">
+                        <button class="storeBtn primary" data-role="buy-btn">
                             Realizar Compra
                         </button>
                     </div>
                     
                     <div class="storeActionsRight">
-                        <button class="storeBtn danger">
+                        <button class="storeBtn danger" data-role="selected-delete-btn">
                             Eliminar
                         </button>
                     </div>
@@ -91,5 +91,6 @@
             </div>
         </section>
     </main>
+    <script src="../assets/js/cart.js" defer></script>
 </body>
 </html>
