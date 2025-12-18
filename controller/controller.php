@@ -58,5 +58,35 @@ class controller
     {
         return $this->UserModel->modifyPassword($profile_code, $password);
     }
+
+    public function create_review($profile_code, $review_text, $rating)
+    {
+        return $this->UserModel->create_review($profile_code, $review_text, $rating);
+    }
+
+    public function get_all_reviews()
+    {
+        return $this->UserModel->get_all_reviews();
+    }
+    
+    public function delete_review($id)
+    {
+        return $this->UserModel->delete_review($id);
+    }
+
+    public function buy_ticket($profile_code, $event_id, $quantity)
+    {
+        return $this->UserModel->buy_ticket($profile_code, $event_id, $quantity);
+    }
+
+    public function get_user_tickets($profile_code)
+    {
+        return $this->UserModel->get_user_tickets($profile_code);
+    }
+
+    public function delete_item_from_cart($ticket_id)
+    {
+        return $this->UserModel->delete_item_from_cart($ticket_id);
+    }
 }
 ?>
