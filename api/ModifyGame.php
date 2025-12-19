@@ -10,6 +10,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 require_once '../controller/controller.php';
 
+$code = $_GET['code'] ?? '';
 $name = $_GET['name'] ?? '';
 $platform = $_GET['platform'] ?? '';
 $company = $_GET['company'] ?? '';
@@ -21,7 +22,8 @@ $releaseDate = $_GET['releaseDate'] ?? '';
 
 try {
     $controller = new controller();
-    $add = $controller->add_videogame(
+    $modify = $controller->modify_videogame(
+        $code,
         $price,
         $name,
         $platform,
@@ -32,11 +34,10 @@ try {
         $releaseDate
     );
 
-    if ($add > 0) {
-        http_response_code(201);
+    if ($modify) {
         echo json_encode([
-            'resultado' => 'El videojuego ha sido creado correctamente.',
-            'status' => http_response_code(201),
+            'resultado' => 'El videojuego ha sido modificado correctamente.',
+            'status' => http_response_code(200),
             'exito' => true
         ], JSON_UNESCAPED_UNICODE);
     } else {

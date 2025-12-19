@@ -33,7 +33,6 @@ try {
     );
 
     if ($add > 0) {
-        http_response_code(201);
         echo json_encode([
             'resultado' => 'El videojuego ha sido creado correctamente.',
             'status' => http_response_code(201),
