@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Carrito de Compras</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body class="storeBody">
     <!-- Encabezado -->
     <header class="storeHeader">
-        <div class="storeUser">
-            <span>Usuario: <strong>Cliente</strong></span>
-            <span class="storeBalance">Saldo disponible: $0</span>
-        </div>
-        
-        <h1 class="storeTitle">CARRITO DE COMPRAS</h1>
-        
-        <button class="storeHelp" title="Ayuda">?</button>
+      <div class="storeUser">
+        <span>Usuario: <strong>Cliente</strong></span>
+        <span class="storeBalance">Saldo disponible: $0</span>
+      </div>
+
+      <h1 class="storeTitle">CARRITO DE COMPRAS</h1>
+
+      <button class="storeHelp" title="Ayuda">?</button>
     </header>
 
     <!-- Contenido principal -->
@@ -42,12 +42,12 @@
                 <span>Total a pagar:</span>
                 <span class="selectedValue" data-role="total-price">$0</span>
             </div>
-        </section>
+          </div>
 
-        <!-- Panel de selección y acciones -->
-        <section class="storePanel">
-            <div class="storePanelHeader">
-                <h2>Seleccionar y gestionar items</h2>
+          <!-- Acciones -->
+          <div class="storeActions">
+            <div class="storeActionsLeft">
+              <button class="storeBtn primary">Realizar Compra</button>
             </div>
             
             <div style="display: flex; flex-direction: column; gap: 24px;">
@@ -89,7 +89,9 @@
                     </div>
                 </div>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
     </main>
     <script src="../assets/js/cart.js" defer></script>
 </body>

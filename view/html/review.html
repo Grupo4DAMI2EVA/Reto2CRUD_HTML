@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Valorar Videojuego</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/review-styles.css">
@@ -10,101 +10,106 @@
 <body class="storeBody">
     <!-- Encabezado -->
     <header class="storeHeader">
-        <div class="storeUser">
-            <span>Usuario: <strong>Jugador</strong></span>
-            <span class="storeBalance">Tus reseñas: 3</span>
-        </div>
-        
-        <h1 class="storeTitle">VALORAR VIDEOJUEGO</h1>
-        
-        <button class="storeHelp" title="Ayuda">?</button>
+      <div class="storeUser">
+        <span>Usuario: <strong>Jugador</strong></span>
+        <span class="storeBalance">Tus reseñas: 3</span>
+      </div>
+
+      <h1 class="storeTitle">VALORAR VIDEOJUEGO</h1>
+
+      <button class="storeHelp" title="Ayuda">?</button>
     </header>
 
     <!-- Contenido principal -->
     <main class="storeMain">
-        <!-- Panel de valoración -->
-        <section class="storePanel">
-            <div class="storePanelHeader">
-                <h2>Videojuego:</h2>
-            </div>
-            
-            <!-- Selección de videojuego (sin foto) -->
-            <div class="game-info-container">
-                <div class="game-info">
-                    <div class="game-title">The Legend of Zelda: Breath of the Wild</div>
-                    <div class="game-details">Género: Aventura • Plataforma: Nintendo Switch</div>
-                    <div class="game-details">Desarrollador: Nintendo • Año: 2017</div>
-                </div>
-            </div>
-        </section>
+      <!-- Panel de valoración -->
+      <section class="storePanel">
+        <div class="storePanelHeader">
+          <h2>Videojuego:</h2>
+        </div>
 
-        <!-- Panel de puntuación -->
-        <section class="storePanel">
-            <div class="storePanelHeader">
-                <h2>Puntuación:</h2>
+        <!-- Selección de videojuego (sin foto) -->
+        <div class="game-info-container">
+          <div class="game-info">
+            <div class="game-title">
+              The Legend of Zelda: Breath of the Wild
             </div>
-            
-            <!-- Sistema de 5 estrellas con posibilidad de media estrella -->
-            <div class="rating-container">
-                <div class="rating-stars" id="rating-stars">
-                    <!-- Estrellas vacías de fondo -->
-                    <div class="stars-background">
-                        <div class="star" data-value="1">
-                            <span class="star-empty">★</span>
-                            <span class="star-full">★</span>
-                        </div>
-                        <div class="star" data-value="2">
-                            <span class="star-empty">★</span>
-                            <span class="star-full">★</span>
-                        </div>
-                        <div class="star" data-value="3">
-                            <span class="star-empty">★</span>
-                            <span class="star-full">★</span>
-                        </div>
-                        <div class="star" data-value="4">
-                            <span class="star-empty">★</span>
-                            <span class="star-full">★</span>
-                        </div>
-                        <div class="star" data-value="5">
-                            <span class="star-empty">★</span>
-                            <span class="star-full">★</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="rating-display">
-                    <span class="rating-value" id="rating-value">0.0</span>
-                    <span class="rating-text">/ 5.0</span>
-                </div>
+            <div class="game-details">
+              Género: Aventura • Plataforma: Nintendo Switch
             </div>
-        </section>
+            <div class="game-details">Desarrollador: Nintendo • Año: 2017</div>
+          </div>
+        </div>
+      </section>
 
-        <!-- Panel de comentario -->
-        <section class="storePanel">
-            <div class="storePanelHeader">
-                <h2>Comentario:</h2>
+      <!-- Panel de puntuación -->
+      <section class="storePanel">
+        <div class="storePanelHeader">
+          <h2>Puntuación:</h2>
+        </div>
+
+        <!-- Sistema de 5 estrellas con posibilidad de media estrella -->
+        <div class="rating-container">
+          <div class="rating-stars" id="rating-stars">
+            <!-- Estrellas vacías de fondo -->
+            <div class="stars-background">
+              <div class="star" data-value="1">
+                <span class="star-empty">★</span>
+                <span class="star-full">★</span>
+              </div>
+              <div class="star" data-value="2">
+                <span class="star-empty">★</span>
+                <span class="star-full">★</span>
+              </div>
+              <div class="star" data-value="3">
+                <span class="star-empty">★</span>
+                <span class="star-full">★</span>
+              </div>
+              <div class="star" data-value="4">
+                <span class="star-empty">★</span>
+                <span class="star-full">★</span>
+              </div>
+              <div class="star" data-value="5">
+                <span class="star-empty">★</span>
+                <span class="star-full">★</span>
+              </div>
             </div>
-            
-            <!-- Área de texto para la reseña -->
-            <div class="textarea-container">
-                <textarea class="review-textarea" id="review-textarea" placeholder="Escribe tu reseña aquí..." maxlength="500"></textarea>
-                <div class="char-counter" id="char-counter">0/500 caracteres</div>
-            </div>
-            
-            <!-- Botones de acción -->
-            <div class="storeActions">
-                <div class="storeActionsLeft">
-                    <button class="storeBtn ghost" id="btn-cancel">
-                        Cancelar
-                    </button>
-                </div>
-                
-                <div class="storeActionsRight">
-                    <button class="storeBtn primary" id="btn-submit">
-                        Enviar
-                    </button>
-                </div>
-            </div>
-        </section>
+          </div>
+          <div class="rating-display">
+            <span class="rating-value" id="rating-value">0.0</span>
+            <span class="rating-text">/ 5.0</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Panel de comentario -->
+      <section class="storePanel">
+        <div class="storePanelHeader">
+          <h2>Comentario:</h2>
+        </div>
+
+        <!-- Área de texto para la reseña -->
+        <div class="textarea-container">
+          <textarea
+            class="review-textarea"
+            id="review-textarea"
+            placeholder="Escribe tu reseña aquí..."
+            maxlength="500"
+          ></textarea>
+          <div class="char-counter" id="char-counter">0/500 caracteres</div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="storeActions">
+          <div class="storeActionsLeft">
+            <button class="storeBtn ghost" id="btn-cancel">Cancelar</button>
+          </div>
+
+          <div class="storeActionsRight">
+            <button class="storeBtn primary" id="btn-submit">Enviar</button>
+          </div>
+        </div>
+      </section>
     </main>
 
     <script src="../assets/js/review.js"></script>
