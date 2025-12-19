@@ -6,16 +6,16 @@ PROFILE_CODE INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 EMAIL VARCHAR (40) UNIQUE,
 USER_NAME VARCHAR (30) UNIQUE,
 PSWD VARCHAR (255),
-TELEPHONE BIGINT,
+TELEPHONE VARCHAR(15),
 NAME_ VARCHAR (30),
 SURNAME VARCHAR (30)
 );
 
 CREATE TABLE USER_(
 PROFILE_CODE INT NOT NULL PRIMARY KEY,
-GENDER VARCHAR (10),
-CARD_NO VARCHAR (50),
-BALANCE DECIMAL (10, 2),
+GENDER ENUM('MALE', 'FEMALE', 'OTHER'),
+CARD_NO VARCHAR(19),
+BALANCE DECIMAL(10, 2) DEFAULT 0.00,
 FOREIGN KEY (PROFILE_CODE) REFERENCES PROFILE_(PROFILE_CODE) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -34,70 +34,86 @@ GENRE ENUM ('ACTION', 'ADVENTURE', 'RPG', 'PLATFORMER', 'SHOOTER', 'STRATEGY', '
 PEGI ENUM ('3', '7', '12', '16', '18'),
 STOCK INT,
 COMPANYNAME VARCHAR (255),
-RELEASE_DATE DATE,
+RELEASE_DATE DATE
 );
 
 CREATE TABLE ORDER_(
+ PROFILE_CODE INT NOT NULL,
+ VIDEOGAME_CODE INT NOT NULL ,
  ORDER_CODE INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
  QUANTITY INT,
- FOREIGN KEY (USER_CODE) REFERENCES USER_(USER_CODE) ON UPDATE CASCADE ON DELETE CASCADE,
+ FOREIGN KEY (PROFILE_CODE) REFERENCES USER_(PROFILE_CODE) ON UPDATE CASCADE ON DELETE CASCADE,
  FOREIGN KEY (VIDEOGAME_CODE) REFERENCES VIDEOGAME_(VIDEOGAME_CODE) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE REVIEW_(
+ PROFILE_CODE INT NOT NULL,
+ VIDEOGAME_CODE INT NOT NULL,
  REVIEW_CODE INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
  COMMENT VARCHAR (255),
  RATING ENUM ('0.5', '1', '1.5', '2', '2.5', '3', '3.5', '4', '4.5', '5'),
- FOREIGN KEY (USER_CODE) REFERENCES USER_(USER_CODE) ON UPDATE CASCADE ON DELETE CASCADE,
+ FOREIGN KEY (PROFILE_CODE) REFERENCES USER_(PROFILE_CODE) ON UPDATE CASCADE ON DELETE CASCADE,
  FOREIGN KEY (VIDEOGAME_CODE) REFERENCES VIDEOGAME_(VIDEOGAME_CODE) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
-INSERT INTO PROFILE_ (PROFILE_CODE, EMAIL, USER_NAME, PSWD, TELEPHONE, NAME_, SURNAME) VALUES
-(1, 'juan.perez@email.com', 'juanP', '$2y$12$7uSC/7BFdIMWXbee65qBqese793PaTmPd.EyHfnk7AjTnHU1FS6Jm', 611223344, 'Juan', 'Pérez'),
-(2, 'maria.garcia@email.com', 'mariag', '$2y$12$7uSC/7BFdIMWXbee65qBqese793PaTmPd.EyHfnk7AjTnHU1FS6Jm', 622334455, 'María', 'García'),
-(3, 'carlos.lopez@email.com', 'carlosl', '$2y$12$7uSC/7BFdIMWXbee65qBqese793PaTmPd.EyHfnk7AjTnHU1FS6Jm', 633445566, 'Carlos', 'López'),
-(4, 'ana.martinez@email.com', 'anam', '$2y$12$7uSC/7BFdIMWXbee65qBqese793PaTmPd.EyHfnk7AjTnHU1FS6Jm', 644556677, 'Ana', 'Martínez'),
-(5, 'pedro.rodriguez@email.com', 'pedror', '$2y$12$7uSC/7BFdIMWXbee65qBqese793PaTmPd.EyHfnk7AjTnHU1FS6Jm', 655667788, 'Pedro', 'Rodríguez');
+INSERT INTO PROFILE_ (EMAIL, USER_NAME, PSWD, TELEPHONE, NAME_, SURNAME) VALUES
+('juan.perez@email.com', 'juanP', '1234', '611223344', 'Juan', 'Pérez'),
+('maria.garcia@email.com', 'mariag', '1234', '622334455', 'María', 'García'),
+('admin1@email.com', 'admin1', 'admin123', '622334423', 'Admin', 'Uno'),
+('admin2@email.com', 'admin2', 'admin456', '633445566', 'Admin', 'Dos'),
+('carlos.lopez@email.com', 'carlosL', 'pass123', '644556677', 'Carlos', 'López');  -- Perfil 5
 
-
+-- 2. SEGUNDO: Insertar usuarios (solo para perfiles que son usuarios)
 INSERT INTO USER_ (PROFILE_CODE, GENDER, CARD_NO, BALANCE) VALUES
-(1, 'Man', '1234-5678-9012-3456', 100.00),
-(2, 'Female', '2345-6789-0123-4567', 100.00),
-(3, 'Man', '3456-7890-1234-5678', 100.00);
+(1, 'MALE', '1234-5678-9012-3456', 100.00),
+(2, 'FEMALE', '2345-6789-0123-4567', 150.50),
+(5, 'MALE', '3456-7890-1234-5678', 75.25);  -- ¡Ahora sí existe el perfil 5!
 
-
+-- 3. TERCERO: Insertar admins (para perfiles que son administradores)
 INSERT INTO ADMIN_ (PROFILE_CODE, CURRENT_ACCOUNT) VALUES
-(4, 'ES12-3456-7890-1234-5678'),
-(5, 'ES98-7654-3210-9876-5432');
+(3, 'ES12-3456-7890-1234-5678'),
+(4, 'ES98-7654-3210-9876-5432');
 
-INSERT INTO VIDEOGAME_ (VIDEOGAME_CODE, PRICE, NAME_, PLATAFORM, GENRE, PEGI, STOCK, COMPANYNAME, RELEASE_DATE) VALUES
-(1, 19.99, 'The Witcher 3: Wild Hunt', 'PC', 'ACTION', '18', 100, 'CD Projekt Red', '2015-05-19'),
-(2, 29.99, 'The Last of Us', 'PLAYSTATION', 'ACTION', '18', 100, 'Naughty Dog', '2013-06-14'),
-(3, 39.99, 'The Elder Scrolls V: Skyrim', 'XBOX', 'RPG', '18', 100, 'Bethesda Game Studios', '2011-11-11');
+-- 4. CUARTO: Insertar videojuegos
+INSERT INTO VIDEOGAME_ (PRICE, NAME_, PLATAFORM, GENRE, PEGI, STOCK, COMPANYNAME, RELEASE_DATE) VALUES
+(19.99, 'The Witcher 3: Wild Hunt', 'PC', 'ACTION', '18', 100, 'CD Projekt Red', '2015-05-19'),
+(29.99, 'The Last of Us', 'PLAYSTATION', 'ACTION', '18', 100, 'Naughty Dog', '2013-06-14'),
+(39.99, 'The Elder Scrolls V: Skyrim', 'XBOX', 'RPG', '18', 100, 'Bethesda Game Studios', '2011-11-11');
 
-INSERT INTO ORDER_ (ORDER_CODE, QUANTITY) VALUES
-(1, 1);
+-- 5. QUINTO: Insertar órdenes (usuarios y videojuegos ya existen)
+INSERT INTO ORDER_ (PROFILE_CODE, VIDEOGAME_CODE, QUANTITY) VALUES
+(1, 1, 1),   -- Juan compra The Witcher 3
+(2, 2, 2),   -- María compra 2x The Last of Us
+(5, 3, 1);   -- Carlos compra Skyrim
 
-INSERT INTO REVIEW_ (REVIEW_CODE, COMMENT, RATING) VALUES
-(1, 'The Witcher 3: Wild Hunt is a great game', 5),
-(2, 'The Last of Us is a great game', 4),
-(3, 'The Elder Scrolls V: Skyrim is a great game', 4.5);
-    
+-- 6. SEXTO: Insertar reviews
+INSERT INTO REVIEW_ (PROFILE_CODE, VIDEOGAME_CODE, COMMENT, RATING) VALUES
+(1, 1, 'The Witcher 3: Wild Hunt is a great game', 5.0),
+(2, 2, 'The Last of Us is a great game', 4.0),
+(5, 3, 'The Elder Scrolls V: Skyrim is a great game', 4.5);
+
+-- 3. Procedure corregido
 DELIMITER //
-CREATE PROCEDURE RegistrarUsuario( IN p_username VARCHAR(30), IN p_pswd VARCHAR(255))
+CREATE PROCEDURE RegistrarUsuario(
+    IN p_username VARCHAR(30), 
+    IN p_pswd VARCHAR(255)
+)
 BEGIN
-    DECLARE  nuevo_profile_code INT;
+    DECLARE nuevo_profile_code INT;
     
-    INSERT INTO PROFILE_ (EMAIL, USER_NAME, PSWD, TELEPHONE, NAME_, SURNAME)
-    VALUES (null, p_username, p_pswd, null, null, null);
-
+    -- Insertar en PROFILE_
+    INSERT INTO PROFILE_ (USER_NAME, PSWD)
+    VALUES (p_username, p_pswd);
+    
     SET nuevo_profile_code = LAST_INSERT_ID();
-
-    INSERT INTO USER_ (PROFILE_CODE, GENDER, CARD_NO)
-    VALUES (nuevo_profile_code, null, null);
     
-    SELECT * FROM PROFILE_ P, USER_ U WHERE P.PROFILE_CODE = U.PROFILE_CODE AND P.PROFILE_CODE= nuevo_profile_code;
- END //
-
+    -- Insertar en USER_
+    INSERT INTO USER_ (PROFILE_CODE, BALANCE)
+    VALUES (nuevo_profile_code, 0.00);
+    
+    -- Devolver el perfil creado
+    SELECT * FROM PROFILE_ 
+    WHERE PROFILE_CODE = nuevo_profile_code;
+END //
 DELIMITER ; 

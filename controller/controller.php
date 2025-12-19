@@ -66,6 +66,12 @@ class controller
         return $this->UserModel->modifyPassword($profile_code, $password);
     }
 
+    //VideogameModel
+    public function get_all_videogames()
+    {
+        return $this->VideogameModel->get_all_videogames();
+    }
+
     public function add_videogame($price, $name_, $plataform, $genre, $pegi, $stock, $companyname, $release_date)
     {
         return $this->VideogameModel->add_videogame($price, $name_, $plataform, $genre, $pegi, $stock, $companyname, $release_date);
