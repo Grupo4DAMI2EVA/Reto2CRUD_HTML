@@ -1,7 +1,7 @@
 <?php
 class Database {
     private $host = "localhost";
-    private $db_name = "CRUD_WEB";
+    private $db_name = "crud_web";
     private $username = "root";
     private $password = "abcd*1234";
     private $conn;
