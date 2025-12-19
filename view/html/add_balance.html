@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Añadir saldo</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <script src="../assets/js/auth.js"></script>
+  </head>
+  <body class="storeBody">
+    <header class="storeHeader">
+      <div class="storeUser">
+        <p class="storeWelcome">
+          Welcome, <span id="storeUserName">[User]</span>
+        </p>
+        <p class="storeBalance">
+          Balance: <span id="storeUserBalance">0.00€</span>
+        </p>
+      </div>
+      <h1 class="storeTitle">AÑADIR SALDO</h1>
+      <button
+        class="storeHelp"
+        aria-label="Volver a la tienda"
+        onclick="window.location.href='store.html'"
+      >
+        ⬅
+      </button>
+    </header>
+
+    <main class="storeMain">
+      <section class="storeControls">
+        <div class="storeSelected">
+          <span class="selectedLabel">Usuario:</span>
+          <span class="selectedValue" id="balanceUserName">[User]</span>
+        </div>
+
+        <form
+          id="addBalanceForm"
+          class="storeFilters"
+          style="margin-top: 16px; gap: 16px 12px"
+        >
+          <label class="filterLabel" for="amount">Cantidad a añadir (€):</label>
+          <input
+            id="amount"
+            name="amount"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="Ej: 20.00"
+            class="filterInput"
+            required
+          />
+
+          <button type="submit" class="storeBtn primary">
+            Confirmar ingreso
+          </button>
+        </form>
+
+        <p id="addBalanceMessage" style="margin-top: 12px; font-weight: 600"></p>
+      </section>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Comprobar sesión y rellenar datos del usuario
+        const user = await comprobarSesion();
+        if (!user) return;
+
+        const headerName = document.getElementById("storeUserName");
+        const balanceUserName = document.getElementById("balanceUserName");
+        const balanceSpan = document.getElementById("storeUserBalance");
+
+        const displayName = user.USER_NAME || user.NAME_ || "[User]";
+        if (headerName) headerName.textContent = displayName;
+        if (balanceUserName) balanceUserName.textContent = displayName;
+
+        if (balanceSpan) {
+          const balance = user.BALANCE ?? 0;
+          balanceSpan.textContent = `${Number(balance).toFixed(2)}€`;
+        }
+
+        // Manejo del formulario: llamada real a la API AddBalance.php
+        document
+          .getElementById("addBalanceForm")
+          .addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const amount = parseFloat(
+              document.getElementById("amount").value || "0"
+            );
+            const msg = document.getElementById("addBalanceMessage");
+
+            if (isNaN(amount) || amount <= 0) {
+              msg.textContent = "Introduce una cantidad válida mayor que 0.";
+              msg.style.color = "#e27171";
+              return;
+            }
+
+            try {
+              const res = await fetch("../../api/AddBalance.php", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ amount }),
+              });
+
+              const data = await res.json();
+
+              if (!res.ok || !data.success) {
+                msg.textContent =
+                  data.error || "Ha ocurrido un error al añadir saldo.";
+                msg.style.color = "#e27171";
+                return;
+              }
+
+              // Actualizar saldo en la vista
+              if (balanceSpan) {
+                balanceSpan.textContent = `${Number(
+                  data.new_balance
+                ).toFixed(2)}€`;
+              }
+
+              msg.textContent = "Saldo añadido correctamente.";
+              msg.style.color = "#0074b8";
+              document.getElementById("amount").value = "";
+            } catch (err) {
+              console.error(err);
+              const msg = document.getElementById("addBalanceMessage");
+              msg.textContent = "Ha ocurrido un error al añadir saldo.";
+              msg.style.color = "#e27171";
+            }
+          });
+      });
+    </script>
+  </body>
+</html>
+
+
