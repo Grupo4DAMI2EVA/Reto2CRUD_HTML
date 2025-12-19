@@ -8,6 +8,11 @@
     <script src="../assets/js/auth.js"></script>
   </head>
   <body class="storeBody">
+    <script>
+      window.addEventListener("load", async () => {
+        await comprobarSesion();
+      });
+    </script>
     <header class="storeHeader">
       <div class="storeUser">
         <p class="storeWelcome">
