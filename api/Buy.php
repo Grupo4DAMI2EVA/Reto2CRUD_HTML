@@ -1,0 +1,24 @@
+<?php
+    ini_set('display_errors', 1);  
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+
+    ini_set('log_errors', 1);
+    ini_set('error_log', 'php_error.log');
+
+    header('Content-Type: application/json; charset=utf-8');
+
+    require_once '../controller/controller.php';
+
+    $product_id = $_GET['product_id'] ?? '';
+    $user_id = $_GET['user_id'] ?? '';
+    $quantity = $_GET['quantity'] ?? 1;
+    $payment_method = $_GET['payment_method'] ?? '';
+    $controller = new controller();
+    $buy = $controller->buyProduct($product_id, $user_id, $quantity, $payment_method);
+    if ($buy) {
+        echo json_encode(['success' => true, 'message' => 'Purchase completed successfully']);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Error processing the purchase']);
+    }
+?>
