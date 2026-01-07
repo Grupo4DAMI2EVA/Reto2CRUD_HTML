@@ -10,12 +10,15 @@ class controller
     private $UserModel;
     private $VideogameModel;
 
+    private $ReviewModel;
+
     public function __construct()
     {
         $database = new Database();
         $db = $database->getConnection();
         $this->UserModel = new UserModel($db);
         $this->VideogameModel = new VideogameModel($db);
+        $this->ReviewModel = new ReviewModel($db);
     }
 
     public function loginUser($username, $password)
@@ -88,35 +91,35 @@ class controller
     {
         return $this->VideogameModel->delete_videogame($videogame_code);
     }
-  
+
     public function create_review($profile_code, $review_text, $rating)
     {
-        return $this->UserModel->create_review($profile_code, $review_text, $rating);
+        return $this->ReviewModel->create_review($profile_code, $review_text, $rating);
     }
 
     public function get_all_reviews()
     {
-        return $this->UserModel->get_all_reviews();
+        return $this->ReviewModel->get_all_reviews();
     }
-    
+
     public function delete_review($id)
     {
-        return $this->UserModel->delete_review($id);
+        return $this->ReviewModel->delete_review($id);
     }
 
     public function buy_ticket($profile_code, $event_id, $quantity)
     {
-        return $this->UserModel->buy_ticket($profile_code, $event_id, $quantity);
+        return $this->ReviewModel->buy_ticket($profile_code, $event_id, $quantity);
     }
 
     public function get_user_tickets($profile_code)
     {
-        return $this->UserModel->get_user_tickets($profile_code);
+        return $this->ReviewModel->get_user_tickets($profile_code);
     }
 
     public function delete_item_from_cart($ticket_id)
     {
-        return $this->UserModel->delete_item_from_cart($ticket_id);
+        return $this->ReviewModel->delete_item_from_cart($ticket_id);
     }
 }
 ?>

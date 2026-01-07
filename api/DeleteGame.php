@@ -10,38 +10,22 @@ header('Content-Type: application/json; charset=utf-8');
 
 require_once '../controller/controller.php';
 
-$name = $_GET['name'] ?? '';
-$platform = $_GET['platform'] ?? '';
-$company = $_GET['company'] ?? '';
-$stock = $_GET['stock'] ?? '';
-$genre = $_GET['genre'] ?? '';
-$price = $_GET['price'] ?? '';
-$pegi = $_GET['pegi'] ?? '';
-$releaseDate = $_GET['releaseDate'] ?? '';
+$code = $_GET['code'] ?? '';
 
 try {
     $controller = new controller();
-    $add = $controller->add_videogame(
-        $price,
-        $name,
-        $platform,
-        $genre,
-        $pegi,
-        $stock,
-        $company,
-        $releaseDate
-    );
+    $del = $controller->delete_videogame($code);
 
-    if ($add > 0) {
+    if ($del) {
         echo json_encode([
-            'resultado' => 'El videojuego ha sido creado correctamente.',
-            'status' => http_response_code(201),
+            'resultado' => 'El videojuego ha sido eliminado correctamente.',
+            'status' => http_response_code(204),
             'exito' => true
         ], JSON_UNESCAPED_UNICODE);
     } else {
         echo json_encode([
-            'resultado' => 'No se ha creado correctamente el videojuego.',
-            'status' => http_response_code(400),
+            'resultado' => 'No se ha encontrado el videojuego.',
+            'status' => http_response_code(404),
             'exito' => false
         ]);
     }
