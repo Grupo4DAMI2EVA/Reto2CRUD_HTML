@@ -16,6 +16,13 @@
         <p class="storeBalance">
           Balance: <span id="storeUserBalance">0.00€</span>
         </p>
+        <button
+          class="storeBtn primary"
+          style="margin-top: 6px; width: 100%; max-width: 180px"
+          onclick="window.location.href='add_balance.html'"
+        >
+          Añadir saldo
+        </button>
       </div>
       <h1 class="storeTitle">GAME STORE</h1>
       <button class="storeHelp" aria-label="Ayuda">
@@ -68,7 +75,7 @@
           <select id="searchPlatform" class="filterSelect">
             <option value="all">All</option>
           </select>
-          <button class="storeBtn primary">Search</button>
+          <button class="storeBtn primary" style="display:none;">Search</button>
         </div>
 
         <div class="storeSelected">
@@ -90,7 +97,7 @@
           </div>
           <div class="storeActionsRight">
             <button class="storeBtn accent">Add to Cart</button>
-            <button class="storeBtn danger">Exit</button>
+            <button class="storeBtn danger" onclick="window.location.href='main.html'">Exit</button>
           </div>
         </div>
       </section>

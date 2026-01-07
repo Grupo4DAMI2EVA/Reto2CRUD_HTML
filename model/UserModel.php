@@ -185,5 +185,31 @@ class UserModel
             return false;
         }
     }
+
+    public function addBalance($profile_code, $amount)
+    {
+        // Asegurarse de que la cantidad sea numérica positiva
+        if (!is_numeric($amount) || $amount <= 0) {
+            return false;
+        }
+
+        // Actualizar el balance sumando la cantidad
+        $query = "UPDATE USER_ SET BALANCE = BALANCE + :amount WHERE PROFILE_CODE = :profile_code";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':amount', $amount);
+        $stmt->bindParam(':profile_code', $profile_code, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            // Devolver el nuevo balance
+            $querySelect = "SELECT BALANCE FROM USER_ WHERE PROFILE_CODE = :profile_code";
+            $stmtSelect = $this->conn->prepare($querySelect);
+            $stmtSelect->bindParam(':profile_code', $profile_code, PDO::PARAM_INT);
+            $stmtSelect->execute();
+            $result = $stmtSelect->fetch(PDO::FETCH_ASSOC);
+            return $result ?: false;
+        } else {
+            return false;
+        }
+    }
 }
 ?>

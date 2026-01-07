@@ -63,6 +63,11 @@ class controller
         return $this->UserModel->modifyPassword($profile_code, $password);
     }
 
+    public function addBalance($profile_code, $amount)
+    {
+        return $this->UserModel->addBalance($profile_code, $amount);
+    }
+
     //VideogameModel
     public function get_all_videogames()
     {
