@@ -10,14 +10,32 @@ header('Content-Type: application/json; charset=utf-8');
 
 require_once '../controller/controller.php';
 
-$name = $_GET['name'] ?? '';
-$platform = $_GET['platform'] ?? '';
-$company = $_GET['company'] ?? '';
+$error = false;
+$name = filter_input(INPUT_POST, "name", FILTER_UNSAFE_RAW);
+$platform = filter_input(INPUT_POST, "platform", FILTER_UNSAFE_RAW);
+$company = filter_input(INPUT_POST, "company", FILTER_UNSAFE_RAW);
 $stock = $_GET['stock'] ?? '';
-$genre = $_GET['genre'] ?? '';
+if (!filter_input(INPUT_POST, "stock", FILTER_VALIDATE_INT)) {
+    $error = true;
+}
+
+$genre = filter_input(INPUT_POST, "genre", FILTER_UNSAFE_RAW);
 $price = $_GET['price'] ?? '';
-$pegi = $_GET['pegi'] ?? '';
+if (!filter_input(INPUT_POST, "price", FILTER_VALIDATE_FLOAT) && !$error) {
+    $error = true;
+}
+
+$pegi = filter_input(INPUT_POST, "pegi", FILTER_UNSAFE_RAW);
 $releaseDate = $_GET['releaseDate'] ?? '';
+if (!$error) {
+    $error = validate_date($releaseDate, "y/m/d");
+}
+
+function validate_date($date, $format = "y/m/d")
+{
+    $d = DateTime::createFromFormat($format, $date);
+    return $d->format($format) === $date;
+}
 
 try {
     $controller = new controller();
