@@ -89,7 +89,7 @@ class controller
 
     public function create_review($profile_code, $review_text, $rating)
     {
-        return $this->ReviewModel->create_review($profile_code, $review_text, $rating);
+        return $this->ReviewModel->add_review($profile_code, $review_text, $rating);
     }
 
     public function get_all_reviews()
