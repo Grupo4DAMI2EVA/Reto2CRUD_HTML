@@ -58,11 +58,11 @@ CREATE TABLE REVIEW_(
 
 
 INSERT INTO PROFILE_ (EMAIL, USER_NAME, PSWD, TELEPHONE, NAME_, SURNAME) VALUES
-('juan.perez@email.com', 'juanP', '1234', '611223344', 'Juan', 'Pérez'),
-('maria.garcia@email.com', 'mariag', '1234', '622334455', 'María', 'García'),
-('admin1@email.com', 'admin1', 'admin123', '622334423', 'Admin', 'Uno'),
-('admin2@email.com', 'admin2', 'admin456', '633445566', 'Admin', 'Dos'),
-('carlos.lopez@email.com', 'carlosL', 'pass123', '644556677', 'Carlos', 'López');  -- Perfil 5
+('juan.perez@email.com', 'juanP', '$2y$12$7uSC/7BFdIMWXbee65qBqese793PaTmPd.EyHfnk7AjTnHU1FS6Jm', '611223344', 'Juan', 'Pérez'),
+('maria.garcia@email.com', 'mariag', '$2y$12$7uSC/7BFdIMWXbee65qBqese793PaTmPd.EyHfnk7AjTnHU1FS6Jm', '622334455', 'María', 'García'),
+('admin1@email.com', 'admin1', '$2y$12$7uSC/7BFdIMWXbee65qBqese793PaTmPd.EyHfnk7AjTnHU1FS6Jm', '622334423', 'Admin', 'Uno'),
+('admin2@email.com', 'admin2', '$2y$12$7uSC/7BFdIMWXbee65qBqese793PaTmPd.EyHfnk7AjTnHU1FS6Jm', '633445566', 'Admin', 'Dos'),
+('carlos.lopez@email.com', 'carlosL', '$2y$12$7uSC/7BFdIMWXbee65qBqese793PaTmPd.EyHfnk7AjTnHU1FS6Jm', '644556677', 'Carlos', 'López');  -- Perfil 5
 
 -- 2. SEGUNDO: Insertar usuarios (solo para perfiles que son usuarios)
 INSERT INTO USER_ (PROFILE_CODE, GENDER, CARD_NO, BALANCE) VALUES

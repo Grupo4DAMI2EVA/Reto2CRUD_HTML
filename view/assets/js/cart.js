@@ -9,7 +9,7 @@ const api = {
 let CART = []; // in-memory cart representation: [{id, name, price, qty}, ...]
 
 // DOM refs
-let cartContainer, totalItemsEl, totalPriceEl, buyBtn;
+let cartContainer, totalItemsEl, totalPriceEl, buyBtns;
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -17,13 +17,13 @@ async function init() {
   cartContainer = document.querySelector('[data-role="cart-items"]');
   totalItemsEl = document.querySelector('[data-role="total-items"]');
   totalPriceEl = document.querySelector('[data-role="total-price"]');
-  buyBtn = document.querySelector('[data-role="buy-btn"]');
+  buyBtns = document.querySelectorAll('[data-role="buy-btn"]');
 
   if (!cartContainer) return console.warn("Cart container not found");
 
   // Delegated event handling for item buttons
-  cartContainer.addEventListener("click", onCartClick);
-  buyBtn?.addEventListener("click", onBuy);
+  cartContainer.addEventListener('click', onCartClick);
+  buyBtns.forEach(b => b.addEventListener('click', onBuy));
 
   // Load cart
   CART = await fetchCart();
@@ -165,6 +165,9 @@ async function removeItem(id) {
 async function onBuy() {
   if (!CART || CART.length === 0) return alert("El carrito está vacío");
 
+  // Confirmation popup
+  if (!confirm('¿Estás seguro de realizar la compra?')) return;
+
   try {
     const payload = { items: CART };
     const resp = await fetch(api.buy, {
@@ -182,7 +185,10 @@ async function onBuy() {
     // assume success: clear cart
     CART = [];
     renderCart();
-    alert(json.message || "Compra realizada con éxito");
+    alert(json.message || 'Compra realizada con éxito');
+
+    // Redirect back to the store page
+    window.location.href = 'store.html';
   } catch (err) {
     console.error(err);
     alert("Error de red al procesar la compra");

@@ -1,3 +1,5 @@
+let ALL_VIDEOGAMES = [];
+
 document.addEventListener("DOMContentLoaded", async () => {
   // Verificar sesión y cargar datos del usuario
   const user = await comprobarSesion();
@@ -13,12 +15,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   if (balanceSpan) {
-    const balance = user.CURRENT_ACCOUNT ?? 0;
+    const balance = user.BALANCE ?? 0;
     balanceSpan.textContent = `${Number(balance).toFixed(2)}€`;
   }
 
   // Cargar lista de videojuegos
   await loadVideogames();
+
+  // Configurar eventos de búsqueda
+  setupSearch();
 });
 
 async function get_all_videogames() {
@@ -32,20 +37,33 @@ async function get_all_videogames() {
 
 async function loadVideogames() {
   const tbody = document.querySelector(".storeTable tbody");
-  const selectedGameSpan = document.getElementById("selectedGame");
 
   if (!tbody) return;
 
   // Limpiar cualquier fila anterior (incluida la "Tabla sin contenido")
   tbody.innerHTML = "";
 
-  let videogames = [];
-
   try {
-    videogames = await get_all_videogames();
+    ALL_VIDEOGAMES = await get_all_videogames();
   } catch (e) {
     console.error("Error obteniendo videojuegos:", e);
+    ALL_VIDEOGAMES = [];
   }
+
+  // Rellenar selects de género y plataforma
+  populateFilters(ALL_VIDEOGAMES);
+
+  // Pintar todos los videojuegos inicialmente
+  renderVideogames(ALL_VIDEOGAMES);
+}
+
+function renderVideogames(videogames) {
+  const tbody = document.querySelector(".storeTable tbody");
+  const selectedGameSpan = document.getElementById("selectedGame");
+
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
 
   if (!videogames || videogames.length === 0) {
     const row = document.createElement("tr");
@@ -55,6 +73,9 @@ async function loadVideogames() {
     cell.textContent = "No hay videojuegos disponibles";
     row.appendChild(cell);
     tbody.appendChild(row);
+    if (selectedGameSpan) {
+      selectedGameSpan.textContent = "Select a game";
+    }
     return;
   }
 
@@ -95,4 +116,76 @@ async function loadVideogames() {
   });
 }
 
+function populateFilters(videogames) {
+  const genreSelect = document.getElementById("searchGenre");
+  const platformSelect = document.getElementById("searchPlatform");
 
+  if (!genreSelect || !platformSelect) return;
+
+  // Limpiar, dejando solo la opción "All"
+  genreSelect.innerHTML = '<option value="all">All</option>';
+  platformSelect.innerHTML = '<option value="all">All</option>';
+
+  const genres = new Set();
+  const platforms = new Set();
+
+  videogames.forEach((game) => {
+    if (game.GENRE) genres.add(game.GENRE);
+    if (game.PLATAFORM) platforms.add(game.PLATAFORM);
+  });
+
+  genres.forEach((g) => {
+    const opt = document.createElement("option");
+    opt.value = g;
+    opt.textContent = g;
+    genreSelect.appendChild(opt);
+  });
+
+  platforms.forEach((p) => {
+    const opt = document.createElement("option");
+    opt.value = p;
+    opt.textContent = p;
+    platformSelect.appendChild(opt);
+  });
+}
+
+function setupSearch() {
+  const searchInput = document.getElementById("searchTitle");
+  const genreSelect = document.getElementById("searchGenre");
+  const platformSelect = document.getElementById("searchPlatform");
+  // Botón "Search" (es el único storeBtn primary dentro de los filtros)
+  const searchButton = document.querySelector(
+    ".storeFilters .storeBtn.primary"
+  );
+
+  if (!searchInput || !genreSelect || !platformSelect || !searchButton) return;
+
+  const applyFilters = () => {
+    const text = searchInput.value.trim().toLowerCase();
+    const genre = genreSelect.value;
+    const platform = platformSelect.value;
+
+    const filtered = ALL_VIDEOGAMES.filter((game) => {
+      const name = (game.NAME_ || "").toLowerCase();
+      const matchesText = !text || name.includes(text);
+
+      const matchesGenre = genre === "all" || game.GENRE === genre;
+      const matchesPlatform =
+        platform === "all" || game.PLATAFORM === platform;
+
+      return matchesText && matchesGenre && matchesPlatform;
+    });
+
+    renderVideogames(filtered);
+  };
+
+  searchButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    applyFilters();
+  });
+
+  // Búsqueda inmediata al escribir / cambiar selects (opcional pero cómodo)
+  searchInput.addEventListener("input", applyFilters);
+  genreSelect.addEventListener("change", applyFilters);
+  platformSelect.addEventListener("change", applyFilters);
+}

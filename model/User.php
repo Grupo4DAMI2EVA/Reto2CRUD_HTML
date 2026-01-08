@@ -7,7 +7,9 @@ class User extends Profile
     private $gender;
     private $cardNumber;
 
-    public function __construct($profile_code, $email, $user_name, $pswd, $telephone, $name_, $surname, $gender, $cardnumber)
+    private $balance;
+
+    public function __construct($profile_code, $email, $user_name, $pswd, $telephone, $name_, $surname, $gender, $cardnumber, $balance)
     {
         parent::__construct(
             $profile_code,
@@ -20,6 +22,7 @@ class User extends Profile
         );
         $this->gender = $gender;
         $this->cardNumber = $cardnumber;
+        $this->balance = $balance;
     }
     public function getGender()
     {
@@ -36,6 +39,15 @@ class User extends Profile
     public function setCardNumber($cardNumber)
     {
         $this->cardNumber = $cardNumber;
+    }
+    public function getBalance()
+    {
+        return $this->balance;
+    }
+
+    public function setBalance($balance)
+    {
+        $this->balance = $balance;
     }
     public function __toString()
     {
