@@ -99,5 +99,3 @@ async function loadVideogames() {
     tbody.appendChild(row);
   });
 }
-
-document.addEventListener("DOMContentLoaded", async () => {});
