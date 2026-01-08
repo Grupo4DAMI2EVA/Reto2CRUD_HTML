@@ -603,7 +603,7 @@ async function delete_user(id) {
   const data = await response.json();
 
   if (data.error) {
-    //DEBUG console.log("Error deleting user: ", data.error);
+    console.log("Error deleting user: ", data.error);
   } else {
     window.location.href = "login.html";
   }
