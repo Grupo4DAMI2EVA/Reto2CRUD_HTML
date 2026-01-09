@@ -13,7 +13,7 @@ require_once '../controller/controller.php';
 header('Content-Type: application/json; charset=utf-8');
 
 $input = json_decode(file_get_contents('php://input'), true);
-$username = $input['username'] ?? '';
+$username = filter_input(INPUT_POST, "username", FILTER_UNSAFE_RAW);
 $pswd1 = $input['pswd1'] ?? '';
 $pswd2 = $input['pswd2'] ?? '';
 
