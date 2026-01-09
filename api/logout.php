@@ -16,5 +16,9 @@ if (isset($_COOKIE[session_name()])) {
     setcookie(session_name(), '', time() - 3600, '/');
 }
 
-echo json_encode(["ok" => true, "mensaje" => "Sesión cerrada correctamente"], JSON_UNESCAPED_UNICODE);
+echo json_encode([
+    "ok" => true,
+    "mensaje" => "Sesión cerrada correctamente",
+    'status' => http_response_code(200)
+], JSON_UNESCAPED_UNICODE);
 ?>

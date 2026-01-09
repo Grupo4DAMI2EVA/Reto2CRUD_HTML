@@ -17,8 +17,6 @@ $username = filter_input(INPUT_POST, "username", FILTER_UNSAFE_RAW);
 $pswd1 = $input['pswd1'] ?? '';
 $pswd2 = $input['pswd2'] ?? '';
 
-$response = ["exito" => false];
-
 try {
 
     $controller = new controller();
@@ -32,20 +30,24 @@ try {
         $_SESSION['username'] = $username;
 
         echo json_encode([
+            'message' => "The user was created properly.",
             'resultado' => $user,
-            'exito' => true
+            'exito' => true,
+            'status' => http_response_code(203)
         ], JSON_UNESCAPED_UNICODE);
     } else {
         echo json_encode([
             'error' => 'No se ha creado correctamente el usuario',
-            'exito' => false
+            'exito' => false,
+            'status' => http_response_code(400)
         ]);
     }
 } catch (Exception $e) {
     error_log($e->getMessage());
     echo json_encode([
         'error' => 'Error del servidor: ' . $e->getMessage(),
-        'exito' => false
+        'exito' => false,
+        'status' => http_response_code(500)
     ]);
 }
 ?>

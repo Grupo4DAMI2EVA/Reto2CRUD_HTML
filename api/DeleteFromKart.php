@@ -15,8 +15,16 @@ $user_id = $_GET['user_id'] ?? '';
 $controller = new controller();
 $delete = $controller->delete_item_from_cart($user_id, $profile_code);
 if ($delete) {
-    echo json_encode(['success' => true, 'message' => 'Product removed from cart successfully']);
+    echo json_encode([
+        'success' => true,
+        'message' => 'Product removed from cart successfully',
+        'status' => http_response_code(204)
+    ]);
 } else {
-    echo json_encode(['success' => false, 'error' => 'Error removing product from cart']);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Error removing product from cart',
+        'status' => http_response_code(400)
+    ]);
 }
 ?>

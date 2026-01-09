@@ -33,9 +33,17 @@ if ($error) {
     ]);
 } else {
     if ($addReview) {
-        echo json_encode(['success' => true, 'message' => 'Review added correctly']);
+        echo json_encode([
+            'success' => true,
+            'message' => 'Review added correctly',
+            'status' => http_response_code(203)
+        ]);
     } else {
-        echo json_encode(['success' => false, 'error' => 'Error adding the review']);
+        echo json_encode([
+            'success' => false,
+            'error' => 'Error adding the review',
+            'status' => http_response_code(400)
+        ]);
     }
 }
 ?>

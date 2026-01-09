@@ -12,8 +12,11 @@ session_start();
 
 // Verificar que hay sesión activa
 if (!isset($_SESSION['logeado']) || !$_SESSION['logeado']) {
-    http_response_code(401);
-    echo json_encode(['error' => 'No autorizado'], JSON_UNESCAPED_UNICODE);
+    echo json_encode([
+        'error' => 'No autorizado',
+        'status' => http_response_code(401),
+        'exito' => false
+    ], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -24,8 +27,11 @@ $id = $data['id'] ?? $_POST['id'] ?? $_GET['id'] ?? null;
 
 // Validación básica
 if ($id === null || !filter_var($id, FILTER_VALIDATE_INT)) {
-    http_response_code(400);
-    echo json_encode(['error' => 'ID inválido'], JSON_UNESCAPED_UNICODE);
+    echo json_encode([
+        'error' => 'ID inválido',
+        'status' => http_response_code(400),
+        'exito' => false
+    ], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -37,8 +43,11 @@ $isAdmin = (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin');
 // - Si es admin, puede borrar cualquier cuenta (incluida la suya)
 // - Si no es admin, sólo puede borrar su propia cuenta
 if (!$isAdmin && ($selfId === null || $selfId !== $id)) {
-    http_response_code(403);
-    echo json_encode(['error' => 'Acceso denegado. Sólo puedes borrar tu propia cuenta.'], JSON_UNESCAPED_UNICODE);
+    echo json_encode([
+        'error' => 'Acceso denegado. Sólo puedes borrar tu propia cuenta.',
+        'status' => http_response_code(403),
+        'exito' => false
+    ], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -51,12 +60,23 @@ if ($result) {
     if ($selfId !== null && $selfId === $id) {
         session_unset();
         session_destroy();
-        echo json_encode(['result' => true, 'message' => 'Cuenta eliminada y sesión cerrada.'], JSON_UNESCAPED_UNICODE);
+        echo json_encode([
+            'result' => true,
+            'message' => 'Cuenta eliminada y sesión cerrada.',
+            'status' => http_response_code(204)
+        ], JSON_UNESCAPED_UNICODE);
     } else {
-        echo json_encode(['result' => true], JSON_UNESCAPED_UNICODE);
+        echo json_encode([
+            'result' => false,
+            'error' => "The account wasn't deleted correctly.",
+            'status' => http_response_code(500)
+        ], JSON_UNESCAPED_UNICODE);
     }
 } else {
-    http_response_code(404);
-    echo json_encode(['error' => 'User not found'], JSON_UNESCAPED_UNICODE);
+    echo json_encode([
+        'error' => 'User not found',
+        'status' => http_response_code(404),
+        'exito' => false
+    ], JSON_UNESCAPED_UNICODE);
 }
 ?>

@@ -33,9 +33,17 @@ if ($error) {
     ]);
 } else {
     if ($buy) {
-        echo json_encode(['success' => true, 'message' => 'Purchase completed successfully']);
+        echo json_encode([
+            'success' => true,
+            'message' => 'Purchase completed successfully',
+            'status' => http_response_code(200)
+        ]);
     } else {
-        echo json_encode(['success' => false, 'error' => 'Error processing the purchase']);
+        echo json_encode([
+            'success' => false,
+            'error' => 'Error processing the purchase',
+            'status' => http_response_code(400)
+        ]);
     }
 }
 ?>

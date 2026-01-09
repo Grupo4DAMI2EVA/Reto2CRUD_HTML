@@ -22,14 +22,22 @@ $user = $controller->loginUser($username, $password);
 if (is_null($user)) {
     $admin = $controller->loginAdmin($username, $password);
     if (is_null($admin)) {
-        echo json_encode(["error" => 'El nombre de usuario o contraseña son incorrectos.'], JSON_UNESCAPED_UNICODE);
+        echo json_encode([
+            "error" => 'El nombre de usuario o contraseña son incorrectos.',
+            'status' => http_response_code(400),
+            'exito' => false
+        ], JSON_UNESCAPED_UNICODE);
     } else {
         // Guardar admin en la sesión
         $_SESSION['logeado'] = true;
         $_SESSION['tipo'] = 'admin';
         $_SESSION['user_data'] = $admin;
         $_SESSION['username'] = $username;
-        echo json_encode(["resultado" => $admin], JSON_UNESCAPED_UNICODE);
+        echo json_encode([
+            "resultado" => $admin,
+            'status' => http_response_code(200),
+            'exito' => true
+        ], JSON_UNESCAPED_UNICODE);
     }
 } else {
     // Guardar user en la sesión
@@ -37,6 +45,10 @@ if (is_null($user)) {
     $_SESSION['tipo'] = 'user';
     $_SESSION['user_data'] = $user;
     $_SESSION['username'] = $username;
-    echo json_encode(["resultado" => $user], JSON_UNESCAPED_UNICODE);
+    echo json_encode([
+        "resultado" => $user,
+        'status' => http_response_code(200),
+        'exito' => true
+    ], JSON_UNESCAPED_UNICODE);
 }
 ?>

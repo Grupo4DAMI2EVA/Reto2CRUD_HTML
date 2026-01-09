@@ -11,11 +11,18 @@ header("Content-Type: application/json");
 session_start();
 
 if (!isset($_SESSION['logeado']) || !$_SESSION['logeado']) {
-    http_response_code(401);
-    echo json_encode(["error" => "No autorizado"], JSON_UNESCAPED_UNICODE);
+    echo json_encode([
+        "error" => "No autorizado",
+        'status' => http_response_code(401),
+        'exito' => false
+    ], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
 // Devolver los datos del usuario
-echo json_encode($_SESSION['user_data'], JSON_UNESCAPED_UNICODE);
+echo json_encode([
+    $_SESSION['user_data'],
+    'status' => http_response_code(200),
+    'exito' => true
+], JSON_UNESCAPED_UNICODE);
 ?>
