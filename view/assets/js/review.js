@@ -5,8 +5,44 @@ let currentRating = 0;
 let reviewText = "";
 let isSelecting = false;
 
+// Función para contar reseñas del usuario actual
+async function countUserReviews(profileCode) {
+  try {
+    const response = await fetch("../../api/GetAllVideogames.php");
+    // En realidad, necesitamos un endpoint que devuelva todas las reseñas
+    // Por ahora, asumimos que el usuario conoce sus reseñas desde el servidor
+    // Si tienes un endpoint GetAllReviews.php, usaríamos:
+    // const response = await fetch("../../api/GetAllReviews.php");
+    // const data = await response.json();
+    // return data.resultado ? data.resultado.filter(r => r.USER_CODE === profileCode).length : 0;
+    
+    // Fallback: devolver 0 hasta que tengas el endpoint
+    return 0;
+  } catch (err) {
+    console.error("Error contando reseñas:", err);
+    return 0;
+  }
+}
+
 // Inicializar cuando el DOM esté listo
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
+  // Verificar sesión y cargar datos del usuario
+  const user = await comprobarSesion();
+  if (!user) return;
+
+  // Pintar nombre del usuario
+  const nameSpan = document.getElementById("storeUserName");
+  if (nameSpan) {
+    nameSpan.textContent = user.USER_NAME || user.NAME_ || "[User]";
+  }
+
+  // Cargar y contar reseñas del usuario
+  const reviewCountSpan = document.getElementById("storeUserReviewCount");
+  if (reviewCountSpan) {
+    const userReviewCount = await countUserReviews(user.PROFILE_CODE);
+    reviewCountSpan.textContent = userReviewCount;
+  }
+
   initializeRatingSystem();
   initializeTextArea();
   initializeButtons();
