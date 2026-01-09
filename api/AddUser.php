@@ -12,13 +12,31 @@ session_start();
 require_once '../controller/controller.php';
 header('Content-Type: application/json; charset=utf-8');
 
+// Solo leer el input JSON, no mezclar con POST
 $input = json_decode(file_get_contents('php://input'), true);
-$username = filter_input(INPUT_POST, "username", FILTER_UNSAFE_RAW);
+
+// CORREGIDO: Obtener username del JSON, no de POST
+$username = $input['username'] ?? '';
 $pswd1 = $input['pswd1'] ?? '';
 $pswd2 = $input['pswd2'] ?? '';
 
+$response = ["exito" => false];
+
+// Validación básica
+if (empty($username) || empty($pswd1)) {
+    echo json_encode([
+        'error' => 'Usuario y contraseña son obligatorios',
+        'exito' => false,
+        'status' => http_response_code(400)
+    ], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 try {
     $controller = new controller();
+    // Añadir logs para depuración
+    error_log("Intentando crear usuario: $username");
+
     $user = $controller->create_user($username, $pswd1);
 
     if ($user) {
@@ -42,7 +60,7 @@ try {
         ]);
     }
 } catch (Exception $e) {
-    error_log($e->getMessage());
+    error_log("Error en AddUser.php: " . $e->getMessage() . " en " . $e->getFile() . ":" . $e->getLine());
     echo json_encode([
         'error' => 'Error del servidor: ' . $e->getMessage(),
         'exito' => false,
