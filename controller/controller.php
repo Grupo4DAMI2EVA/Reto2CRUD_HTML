@@ -92,9 +92,9 @@ class controller
         return $this->VideogameModel->delete_videogame($videogame_code);
     }
 
-    public function create_review($profile_code, $review_text, $rating)
+    public function add_review($comment, $rating, $user_code, $videogame_code)
     {
-        return $this->ReviewModel->add_review($profile_code, $review_text, $rating);
+        return $this->ReviewModel->add_review($comment, $rating, $user_code, $videogame_code);
     }
 
     public function get_all_reviews()

@@ -14,7 +14,7 @@ $profile_code = $_GET['profile_code'] ?? '';
 $review_id = $_GET['review_id'] ?? '';
 
 $controller = new controller();
-$deleteReview = $controller->deleteReview($profile_code, $review_id);
+$deleteReview = $controller->delete_review($review_id);
 
 if ($deleteReview) {
     echo json_encode(['success' => true, 'message' => 'Review deleted correctly']);
