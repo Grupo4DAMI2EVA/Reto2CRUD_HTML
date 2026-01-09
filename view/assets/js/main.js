@@ -229,7 +229,6 @@ async function modifyUser() {
 
   const usuario = {
     profile_code: actualProfile.PROFILE_CODE,
-    password: actualProfile.PSWD,
     email: actualProfile.EMAIL,
     username: actualProfile.USER_NAME,
     telephone: actualProfile.TELEPHONE,
@@ -239,109 +238,97 @@ async function modifyUser() {
     card_no: actualProfile.CARD_NO,
   };
 
-  const profile_code = usuario.profile_code;
-  const name = document.getElementById("firstNameUser").value;
-  const surname = document.getElementById("lastNameUser").value;
-  const email = document.getElementById("emailUser").value;
-  const username = document.getElementById("usernameUser").value;
-  const telephone = document
-    .getElementById("phoneUser")
-    .value.replace(/\s/g, ""); //remove spaces
+  const name = document.getElementById("firstNameUser").value.trim();
+  const surname = document.getElementById("lastNameUser").value.trim();
+  const email = document.getElementById("emailUser").value.trim();
+  const username = document.getElementById("usernameUser").value.trim();
+  const telephone = document.getElementById("phoneUser").value.replace(/\s/g, "").trim();
   const gender = document.getElementById("genderUser").value;
-  const card_no = document.getElementById("cardNumberUser").value;
+  const card_no = document.getElementById("cardNumberUser").value.trim();
 
-  /*DEBUG console.log(
-    "Esto son los datos de los textfields" + profile_code,
-    name,
-    surname,
-    email,
-    username,
-    telephone,
-    gender,
-    card_no
-  );*/
-
-  if (
-    !name ||
-    !surname ||
-    !email ||
-    !username ||
-    !telephone ||
-    !gender ||
-    !card_no
-  ) {
-    document.getElementById("message").innerHTML =
-      "You must fill all the fields";
+  // Validación de campos vacíos
+  if (!name || !surname || !email || !username || !telephone || !gender || !card_no) {
+    document.getElementById("message").innerHTML = "You must fill all the fields";
     document.getElementById("message").style.color = "red";
     return;
   }
 
-  //verify if there are changes in the fields
-  function hasChanges() {
-    let changes = false;
-
-    if (
-      name !== usuario.name ||
-      surname !== usuario.surname ||
-      email !== usuario.email ||
-      username !== usuario.username ||
-      telephone !== usuario.telephone ||
-      gender !== usuario.gender ||
-      card_no !== usuario.card_no
-    ) {
-      changes = true;
-    }
-    return changes;
+  // Validación de email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    document.getElementById("message").innerHTML = "Please enter a valid email address";
+    document.getElementById("message").style.color = "red";
+    return;
   }
 
-  if (!hasChanges()) {
+  // Verificar si hay cambios
+  const hasChanges = 
+    name !== usuario.name ||
+    surname !== usuario.surname ||
+    email !== usuario.email ||
+    username !== usuario.username ||
+    telephone !== usuario.telephone ||
+    gender !== usuario.gender ||
+    card_no !== usuario.card_no;
+
+  if (!hasChanges) {
     document.getElementById("message").innerHTML = "No changes detected";
-    document.getElementById("message").style.color = "red";
-  } else {
-    try {
-      const response = await fetch(
-        `../../api/ModifyUser.php?profile_code=${encodeURIComponent(
-          profile_code
-        )}&name=${encodeURIComponent(name)}&surname=${encodeURIComponent(
-          surname
-        )}&email=${encodeURIComponent(email)}&username=${encodeURIComponent(
-          username
-        )}&telephone=${encodeURIComponent(
-          telephone
-        )}&gender=${encodeURIComponent(gender)}&card_no=${encodeURIComponent(
-          card_no
-        )}`,
-        {
-          credentials: "include",
-        }
-      );
-      const data = await response.json();
-      //DEBUG console.log(data);
+    document.getElementById("message").style.color = "orange";
+    return;
+  }
 
-      if (data.success) {
-        document.getElementById("message").innerHTML = data.message;
-        document.getElementById("message").style.color = "green";
+  try {
+    const response = await fetch("../../api/ModifyUser.php", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        profile_code: usuario.profile_code,
+        name: name,
+        surname: surname,
+        email: email,
+        username: username,
+        telephone: telephone,
+        gender: gender,
+        card_no: card_no
+      }),
+    });
+    
+    const data = await response.json();
 
-        actualProfile.NAME_ = name;
-        actualProfile.SURNAME = surname;
-        actualProfile.EMAIL = email;
-        actualProfile.USER_NAME = username;
-        actualProfile.TELEPHONE = telephone;
-        actualProfile.CARD_NO = card_no;
-        actualProfile.GENDER = gender;
+    if (data.success) {
+      document.getElementById("message").innerHTML = data.message;
+      document.getElementById("message").style.color = "green";
 
-        profile = actualProfile;
+      // Actualizar perfil local
+      actualProfile.NAME_ = name;
+      actualProfile.SURNAME = surname;
+      actualProfile.EMAIL = email;
+      actualProfile.USER_NAME = username;
+      actualProfile.TELEPHONE = telephone;
+      actualProfile.CARD_NO = card_no;
+      actualProfile.GENDER = gender;
 
-        if (["CURRENT_ACCOUNT"] in (await comprobarSesion())) {
-          refreshAdminTable();
-        }
-      } else {
-        document.getElementById("message").innerHTML = data.error;
-        document.getElementById("message").style.color = "red";
+      // Si es admin, refrescar la tabla
+      if (actualProfile.CURRENT_ACCOUNT) {
+        await refreshAdminTable();
       }
-    } catch (error) {
-      //DEBUG console.log(error);
+      
+      // Opcional: Recargar datos de sesión desde el servidor
+      setTimeout(async () => {
+        profile = await comprobarSesion();
+      }, 1000);
+
+    } else {
+      document.getElementById("message").innerHTML = data.error;
+      document.getElementById("message").style.color = "red";
     }
+  } catch (error) {
+    console.error("Error modifying user:", error);
+    document.getElementById("message").innerHTML = "Connection error. Please try again.";
+    document.getElementById("message").style.color = "red";
   }
 }
 

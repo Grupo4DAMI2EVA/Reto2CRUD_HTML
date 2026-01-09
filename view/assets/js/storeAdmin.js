@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const nameSpan = document.getElementById("storeUserName");
   const balanceSpan = document.getElementById("storeUserBalance");
   const addGameBtn = document.getElementById("addGameBtn");
+  const delGameBtn = document.getElementById("delGameBtn");
 
   if (nameSpan) {
     // Intentamos usar USER_NAME, si no existe usamos NAME_
@@ -20,6 +21,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   addGameBtn.onclick = function () {
     window.location.href = "addGames.html";
+  };
+
+  delGameBtn.onclick = function () {
+    // PH
   };
 
   // Cargar lista de videojuegos
@@ -99,5 +104,3 @@ async function loadVideogames() {
     tbody.appendChild(row);
   });
 }
-
-document.addEventListener("DOMContentLoaded", async () => {});
