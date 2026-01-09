@@ -11,16 +11,18 @@ header('Content-Type: application/json; charset=utf-8');
 require_once '../controller/controller.php';
 
 $error = false;
-$profile_code = $_GET['profile_code'] ?? '';
-$coment = filter_input(INPUT_POST, "coment", FILTER_UNSAFE_RAW);
+$comment = filter_input(INPUT_POST, "coment", FILTER_UNSAFE_RAW);
 $rating = $_GET['rating'] ?? '';
 if (!filter_input(INPUT_POST, "rating", FILTER_VALIDATE_FLOAT)) {
     $error = true;
 }
+$user_code = $_GET['profile_code'] ?? '';
+//Currently unsettable
+$videogame_code = $_GET['videogame_code'] ?? '';
 
 if (!$error) {
     $controller = new controller();
-    $addReview = $controller->addReview($profile_code, $review_text, $rating);
+    $addReview = $controller->add_review($comment, $rating, $user_code, $videogame_code);
 }
 
 if ($error) {
@@ -31,9 +33,17 @@ if ($error) {
     ]);
 } else {
     if ($addReview) {
-        echo json_encode(['success' => true, 'message' => 'Review added correctly']);
+        echo json_encode([
+            'success' => true,
+            'message' => 'Review added correctly',
+            'status' => http_response_code(203)
+        ]);
     } else {
-        echo json_encode(['success' => false, 'error' => 'Error adding the review']);
+        echo json_encode([
+            'success' => false,
+            'error' => 'Error adding the review',
+            'status' => http_response_code(400)
+        ]);
     }
 }
 ?>

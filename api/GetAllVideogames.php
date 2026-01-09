@@ -15,9 +15,15 @@ $videogames = $controller->get_all_videogames();
 
 if ($videogames) {
     echo json_encode([
-        'resultado' => $videogames
+        'resultado' => $videogames,
+        'status' => http_response_code(200),
+        'exito' => true
     ], JSON_UNESCAPED_UNICODE);
 } else {
-    echo json_encode(['error' => 'No se ha encontrado ningun juego.']);
+    echo json_encode([
+        'error' => 'No se ha encontrado ningun juego.',
+        'status' => http_response_code(400),
+        'exito' => false
+    ]);
 }
 ?>

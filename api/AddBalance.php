@@ -14,8 +14,11 @@ require_once '../controller/controller.php';
 
 // Comprobar que el usuario está logueado
 if (!isset($_SESSION['logeado']) || !$_SESSION['logeado'] || !isset($_SESSION['user_data'])) {
-    http_response_code(401);
-    echo json_encode(["error" => "No autorizado"], JSON_UNESCAPED_UNICODE);
+    echo json_encode([
+        "error" => "No autorizado",
+        'status' => http_response_code(401),
+        'exito' => false
+    ], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -26,16 +29,22 @@ $amount = $data['amount'] ?? 0;
 
 // Validar cantidad
 if (!!filter_input(INPUT_POST, "amount", FILTER_VALIDATE_INT) || $amount <= 0) {
-    http_response_code(400);
-    echo json_encode(["error" => "Cantidad no válida"], JSON_UNESCAPED_UNICODE);
+    echo json_encode([
+        "error" => "Cantidad no válida",
+        'status' => http_response_code(400),
+        'exito' => false
+    ], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
 $profile_code = $_SESSION['user_data']['PROFILE_CODE'] ?? null;
 
 if ($profile_code === null) {
-    http_response_code(400);
-    echo json_encode(["error" => "Perfil de usuario no encontrado"], JSON_UNESCAPED_UNICODE);
+    echo json_encode([
+        "error" => "Perfil de usuario no encontrado",
+        'status' => http_response_code(400),
+        'exito' => false
+    ], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -43,8 +52,11 @@ $controller = new controller();
 $result = $controller->addBalance($profile_code, $amount);
 
 if ($result === false) {
-    http_response_code(500);
-    echo json_encode(["error" => "Error al actualizar el saldo"], JSON_UNESCAPED_UNICODE);
+    echo json_encode([
+        "error" => "Error al actualizar el saldo",
+        'status' => http_response_code(500),
+        'exito' => false
+    ], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -53,7 +65,9 @@ $_SESSION['user_data']['BALANCE'] = $result['BALANCE'];
 
 echo json_encode([
     "success" => true,
-    "new_balance" => $result['BALANCE']
+    "new_balance" => $result['BALANCE'],
+    'status' => http_response_code(200),
+    'exito' => false
 ], JSON_UNESCAPED_UNICODE);
 
 ?>

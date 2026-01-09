@@ -12,15 +12,22 @@ session_start();
 
 // Verificar sesión
 if (!isset($_SESSION['logeado']) || !$_SESSION['logeado']) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'error' => 'No autorizado']);
+    echo json_encode([
+        'success' => false,
+        'error' => 'No autorizado',
+        'status' => http_response_code(401),
+        'exito' => false
+    ]);
     exit;
 }
 
 // Solo permitir POST para mayor seguridad
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['success' => false, 'error' => 'Método no permitido']);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Método no permitido',
+        'status' => http_response_code(405)
+    ]);
     exit;
 }
 
@@ -29,7 +36,11 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 // Validar datos requeridos
 if (!isset($data['profile_code'])) {
-    echo json_encode(['success' => false, 'error' => 'Código de perfil requerido']);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Código de perfil requerido',
+        'status' => http_response_code(400)
+    ]);
     exit;
 }
 
@@ -37,7 +48,11 @@ if (!isset($data['profile_code'])) {
 $required_fields = ['email', 'username', 'telephone', 'name', 'surname', 'gender', 'card_no'];
 foreach ($required_fields as $field) {
     if (!isset($data[$field]) || empty(trim($data[$field]))) {
-        echo json_encode(['success' => false, 'error' => "El campo $field es requerido"]);
+        echo json_encode([
+            'success' => false,
+            'error' => "El campo $field es requerido",
+            'status' => http_response_code(400)
+        ]);
         exit;
     }
 }
@@ -54,7 +69,11 @@ $card_no = trim($data['card_no']);
 
 // Validar email
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    echo json_encode(['success' => false, 'error' => 'Email no válido']);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Email no válido',
+        'status' => http_response_code(400)
+    ]);
     exit;
 }
 
@@ -62,7 +81,11 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 if ($_SESSION['tipo'] === 'user') {
     // Usuario normal solo puede modificar su propio perfil
     if ($_SESSION['user_data']['PROFILE_CODE'] != $profile_code) {
-        echo json_encode(['success' => false, 'error' => 'No tienes permiso para modificar este perfil']);
+        echo json_encode([
+            'success' => false,
+            'error' => 'No tienes permiso para modificar este perfil',
+            'status' => http_response_code(403)
+        ]);
         exit;
     }
 }
@@ -72,21 +95,37 @@ require_once '../controller/controller.php';
 $controller = new controller();
 $modify = $controller->modifyUser($email, $username, $telephone, $name, $surname, $gender, $card_no, $profile_code);
 
-if ($modify) {
-    // Actualizar datos en sesión si el usuario modifica su propio perfil
-    if ($_SESSION['user_data']['PROFILE_CODE'] == $profile_code) {
-        $_SESSION['user_data']['EMAIL'] = $email;
-        $_SESSION['user_data']['USER_NAME'] = $username;
-        $_SESSION['user_data']['TELEPHONE'] = $telephone;
-        $_SESSION['user_data']['NAME_'] = $name;
-        $_SESSION['user_data']['SURNAME'] = $surname;
-        $_SESSION['user_data']['GENDER'] = $gender;
-        $_SESSION['user_data']['CARD_NO'] = $card_no;
-        $_SESSION['username'] = $username;
-    }
-    
-    echo json_encode(['success' => true, 'message' => 'Usuario modificado correctamente']);
+if ($error) {
+    echo json_encode([
+        'resultado' => 'Invalid syntax in one of the fields.',
+        'status' => http_response_code(400),
+        'exito' => false
+    ]);
 } else {
-    echo json_encode(['success' => false, 'error' => 'Error modificando el usuario. Puede que el email o username ya existan.']);
+    if ($modify) {
+        // Actualizar datos en sesión si el usuario modifica su propio perfil
+        if ($_SESSION['user_data']['PROFILE_CODE'] == $profile_code) {
+            $_SESSION['user_data']['EMAIL'] = $email;
+            $_SESSION['user_data']['USER_NAME'] = $username;
+            $_SESSION['user_data']['TELEPHONE'] = $telephone;
+            $_SESSION['user_data']['NAME_'] = $name;
+            $_SESSION['user_data']['SURNAME'] = $surname;
+            $_SESSION['user_data']['GENDER'] = $gender;
+            $_SESSION['user_data']['CARD_NO'] = $card_no;
+            $_SESSION['username'] = $username;
+        }
+
+        echo json_encode([
+            'success' => true,
+            'message' => 'Usuario modificado correctamente',
+            'status' => http_response_code(200)
+        ]);
+    } else {
+        echo json_encode([
+            'success' => false,
+            'error' => 'Error modificando el usuario. Puede que el email o username ya existan.',
+            'status' => http_response_code(400)
+        ]);
+    }
 }
 ?>

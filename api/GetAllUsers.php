@@ -15,9 +15,15 @@ $users = $controller->get_all_users();
 
 if ($users) {
     echo json_encode([
-        'resultado' => $users
+        'resultado' => $users,
+        'status' => http_response_code(200),
+        'exito' => true
     ], JSON_UNESCAPED_UNICODE);
 } else {
-    echo json_encode(['error' => 'No se ha encontrado usuarios']);
+    echo json_encode([
+        'error' => 'No se ha encontrado usuarios',
+        'status' => http_response_code(400),
+        'exito' => false
+    ]);
 }
 ?>

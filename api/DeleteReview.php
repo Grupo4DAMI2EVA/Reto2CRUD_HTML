@@ -14,11 +14,19 @@ $profile_code = $_GET['profile_code'] ?? '';
 $review_id = $_GET['review_id'] ?? '';
 
 $controller = new controller();
-$deleteReview = $controller->deleteReview($profile_code, $review_id);
+$deleteReview = $controller->delete_review($review_id);
 
 if ($deleteReview) {
-    echo json_encode(['success' => true, 'message' => 'Review deleted correctly']);
+    echo json_encode([
+        'success' => true,
+        'message' => 'Review deleted correctly',
+        'status' => http_response_code(204)
+    ]);
 } else {
-    echo json_encode(['success' => false, 'error' => 'Error deleting the review']);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Error deleting the review',
+        'status' => http_response_code(400)
+    ]);
 }
 ?>

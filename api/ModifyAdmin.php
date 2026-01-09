@@ -38,9 +38,17 @@ if ($error) {
     ]);
 } else {
     if ($modify) {
-        echo json_encode(['success' => true, 'message' => 'Admin modified correctly']);
+        echo json_encode([
+            'success' => true,
+            'message' => 'Admin modified correctly',
+            'status' => http_response_code(200)
+        ]);
     } else {
-        echo json_encode(['success' => false, 'error' => 'Error modifying the admin']);
+        echo json_encode([
+            'success' => false,
+            'error' => 'Error modifying the admin',
+            'status' => http_response_code(400)
+        ]);
     }
 }
 ?>
