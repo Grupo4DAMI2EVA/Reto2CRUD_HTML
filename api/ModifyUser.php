@@ -69,8 +69,10 @@ if ($_SESSION['tipo'] === 'user') {
 
 require_once '../controller/controller.php';
 
-$controller = new controller();
-$modify = $controller->modifyUser($email, $username, $telephone, $name, $surname, $gender, $card_no, $profile_code);
+if (!$error) {
+    $controller = new controller();
+    $modify = $controller->modifyUser($email, $username, $telephone, $name, $surname, $gender, $card_no, $profile_code);
+}
 
 if ($modify) {
     // Actualizar datos en sesión si el usuario modifica su propio perfil

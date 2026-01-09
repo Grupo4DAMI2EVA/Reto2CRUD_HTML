@@ -10,42 +10,69 @@ header('Content-Type: application/json; charset=utf-8');
 
 require_once '../controller/controller.php';
 
-$code = $_GET['code'] ?? '';
-$name = $_GET['name'] ?? '';
+$error = false;
+$name = filter_input(INPUT_POST, "name", FILTER_UNSAFE_RAW);
 $platform = $_GET['platform'] ?? '';
 $company = $_GET['company'] ?? '';
 $stock = $_GET['stock'] ?? '';
+if (!filter_input(INPUT_POST, "stock", FILTER_VALIDATE_INT)) {
+    $error = true;
+}
+
 $genre = $_GET['genre'] ?? '';
 $price = $_GET['price'] ?? '';
+if (!filter_input(INPUT_POST, "price", FILTER_VALIDATE_FLOAT) && !$error) {
+    $error = true;
+}
+
 $pegi = $_GET['pegi'] ?? '';
 $releaseDate = $_GET['releaseDate'] ?? '';
+if (!$error) {
+    $error = validate_date($releaseDate, "y/m/d");
+}
+
+function validate_date($date, $format = "y/m/d")
+{
+    $d = DateTime::createFromFormat($format, $date);
+    return $d->format($format) === $date;
+}
 
 try {
-    $controller = new controller();
-    $modify = $controller->modify_videogame(
-        $code,
-        $price,
-        $name,
-        $platform,
-        $genre,
-        $pegi,
-        $stock,
-        $company,
-        $releaseDate
-    );
+    if (!$error) {
+        $controller = new controller();
+        $modify = $controller->modify_videogame(
+            $code,
+            $price,
+            $name,
+            $platform,
+            $genre,
+            $pegi,
+            $stock,
+            $company,
+            $releaseDate
+        );
+    }
 
-    if ($modify) {
+    if ($error) {
         echo json_encode([
-            'resultado' => 'El videojuego ha sido modificado correctamente.',
-            'status' => http_response_code(200),
-            'exito' => true
-        ], JSON_UNESCAPED_UNICODE);
-    } else {
-        echo json_encode([
-            'resultado' => 'No se ha creado correctamente el videojuego.',
+            'resultado' => 'Invalid syntax in one of the fields.',
             'status' => http_response_code(400),
             'exito' => false
         ]);
+    } else {
+        if ($modify) {
+            echo json_encode([
+                'resultado' => 'El videojuego ha sido modificado correctamente.',
+                'status' => http_response_code(200),
+                'exito' => true
+            ], JSON_UNESCAPED_UNICODE);
+        } else {
+            echo json_encode([
+                'resultado' => 'No se ha creado correctamente el videojuego.',
+                'status' => http_response_code(400),
+                'exito' => false
+            ]);
+        }
     }
 } catch (Exception $e) {
     error_log($e->getMessage());

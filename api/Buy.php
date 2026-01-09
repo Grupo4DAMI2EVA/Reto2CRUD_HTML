@@ -19,11 +19,23 @@ if (!filter_input(INPUT_POST, "quantity", FILTER_VALIDATE_INT)) {
 }
 
 $payment_method = $_GET['payment_method'] ?? '';
-$controller = new controller();
-$buy = $controller->buyProduct($product_id, $user_id, $quantity, $payment_method);
-if ($buy) {
-    echo json_encode(['success' => true, 'message' => 'Purchase completed successfully']);
+
+if (!$error) {
+    $controller = new controller();
+    $buy = $controller->buyProduct($product_id, $user_id, $quantity, $payment_method);
+}
+
+if ($error) {
+    echo json_encode([
+        'resultado' => 'Invalid syntax in one of the fields.',
+        'status' => http_response_code(400),
+        'exito' => false
+    ]);
 } else {
-    echo json_encode(['success' => false, 'error' => 'Error processing the purchase']);
+    if ($buy) {
+        echo json_encode(['success' => true, 'message' => 'Purchase completed successfully']);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Error processing the purchase']);
+    }
 }
 ?>

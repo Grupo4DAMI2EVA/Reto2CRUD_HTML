@@ -18,11 +18,22 @@ if (!filter_input(INPUT_POST, "rating", FILTER_VALIDATE_FLOAT)) {
     $error = true;
 }
 
-$controller = new controller();
-$addReview = $controller->addReview($profile_code, $review_text, $rating);
-if ($addReview) {
-    echo json_encode(['success' => true, 'message' => 'Review added correctly']);
+if (!$error) {
+    $controller = new controller();
+    $addReview = $controller->addReview($profile_code, $review_text, $rating);
+}
+
+if ($error) {
+    echo json_encode([
+        'resultado' => 'Invalid syntax in one of the fields.',
+        'status' => http_response_code(400),
+        'exito' => false
+    ]);
 } else {
-    echo json_encode(['success' => false, 'error' => 'Error adding the review']);
+    if ($addReview) {
+        echo json_encode(['success' => true, 'message' => 'Review added correctly']);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Error adding the review']);
+    }
 }
 ?>
