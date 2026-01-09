@@ -10,12 +10,19 @@ header('Content-Type: application/json; charset=utf-8');
 
 require_once '../controller/controller.php';
 
+$error = false;
 $profile_code = $_GET['profile_code'] ?? '';
 $email = $_GET['email'] ?? '';
-$username = $_GET['username'] ?? '';
+if (!filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL)) {
+    $error = true;
+}
+$username = filter_input(INPUT_POST, "username", FILTER_UNSAFE_RAW);
 $telephone = $_GET['telephone'] ?? '';
-$name = $_GET['name'] ?? '';
-$surname = $_GET['surname'] ?? '';
+if (!filter_input(INPUT_POST, "telephone", FILTER_VALIDATE_INT) && !$error) {
+    $error = true;
+}
+$name = filter_input(INPUT_POST, "name", FILTER_UNSAFE_RAW);
+$surname = filter_input(INPUT_POST, "surname", FILTER_UNSAFE_RAW);
 $gender = $_GET['gender'] ?? '';
 $card_no = $_GET['card_no'] ?? '';
 
