@@ -26,12 +26,22 @@ $surname = filter_input(INPUT_POST, "surname", FILTER_UNSAFE_RAW);
 $gender = $_GET['gender'] ?? '';
 $card_no = $_GET['card_no'] ?? '';
 
-$controller = new controller();
-$modify = $controller->modifyUser($email, $username, $telephone, $name, $surname, $gender, $card_no, $profile_code);
+if (!$error) {
+    $controller = new controller();
+    $modify = $controller->modifyUser($email, $username, $telephone, $name, $surname, $gender, $card_no, $profile_code);
+}
 
-if ($modify) {
-    echo json_encode(['success' => true, 'message' => 'User modified correctly']);
+if ($error) {
+    echo json_encode([
+        'resultado' => 'Invalid syntax in one of the fields.',
+        'status' => http_response_code(400),
+        'exito' => false
+    ]);
 } else {
-    echo json_encode(['success' => false, 'error' => 'Error modifying the user']);
+    if ($modify) {
+        echo json_encode(['success' => true, 'message' => 'User modified correctly']);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Error modifying the user']);
+    }
 }
 ?>

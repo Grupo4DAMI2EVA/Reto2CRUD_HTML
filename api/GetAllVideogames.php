@@ -18,6 +18,6 @@ if ($videogames) {
         'resultado' => $videogames
     ], JSON_UNESCAPED_UNICODE);
 } else {
-    echo json_encode(['error' => 'No se ha encontrado Juegos']);
+    echo json_encode(['error' => 'No se ha encontrado ningun juego.']);
 }
 ?>

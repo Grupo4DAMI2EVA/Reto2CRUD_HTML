@@ -25,7 +25,7 @@ $data = json_decode($raw, true);
 $amount = $data['amount'] ?? 0;
 
 // Validar cantidad
-if (!is_numeric($amount) || $amount <= 0) {
+if (!!filter_input(INPUT_POST, "amount", FILTER_VALIDATE_INT) || $amount <= 0) {
     http_response_code(400);
     echo json_encode(["error" => "Cantidad no válida"], JSON_UNESCAPED_UNICODE);
     exit;
@@ -57,5 +57,3 @@ echo json_encode([
 ], JSON_UNESCAPED_UNICODE);
 
 ?>
-
-

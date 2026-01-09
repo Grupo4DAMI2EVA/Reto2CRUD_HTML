@@ -25,12 +25,22 @@ $name = filter_input(INPUT_POST, "name", FILTER_UNSAFE_RAW);
 $surname = filter_input(INPUT_POST, "surname", FILTER_UNSAFE_RAW);
 $current_account = $_GET['current_account'] ?? '';
 
-$controller = new controller();
-$modify = $controller->modifyAdmin($email, $username, $telephone, $name, $surname, $current_account, $profile_code);
+if (!$error) {
+    $controller = new controller();
+    $modify = $controller->modifyAdmin($email, $username, $telephone, $name, $surname, $current_account, $profile_code);
+}
 
-if ($modify) {
-    echo json_encode(['success' => true, 'message' => 'Admin modified correctly']);
+if ($error) {
+    echo json_encode([
+        'resultado' => 'Invalid syntax in one of the fields.',
+        'status' => http_response_code(400),
+        'exito' => false
+    ]);
 } else {
-    echo json_encode(['success' => false, 'error' => 'Error modifying the admin']);
+    if ($modify) {
+        echo json_encode(['success' => true, 'message' => 'Admin modified correctly']);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Error modifying the admin']);
+    }
 }
 ?>

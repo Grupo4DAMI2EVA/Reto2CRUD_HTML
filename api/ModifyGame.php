@@ -38,31 +38,41 @@ function validate_date($date, $format = "y/m/d")
 }
 
 try {
-    $controller = new controller();
-    $modify = $controller->modify_videogame(
-        $code,
-        $price,
-        $name,
-        $platform,
-        $genre,
-        $pegi,
-        $stock,
-        $company,
-        $releaseDate
-    );
+    if (!$error) {
+        $controller = new controller();
+        $modify = $controller->modify_videogame(
+            $code,
+            $price,
+            $name,
+            $platform,
+            $genre,
+            $pegi,
+            $stock,
+            $company,
+            $releaseDate
+        );
+    }
 
-    if ($modify) {
+    if ($error) {
         echo json_encode([
-            'resultado' => 'El videojuego ha sido modificado correctamente.',
-            'status' => http_response_code(200),
-            'exito' => true
-        ], JSON_UNESCAPED_UNICODE);
-    } else {
-        echo json_encode([
-            'resultado' => 'No se ha creado correctamente el videojuego.',
+            'resultado' => 'Invalid syntax in one of the fields.',
             'status' => http_response_code(400),
             'exito' => false
         ]);
+    } else {
+        if ($modify) {
+            echo json_encode([
+                'resultado' => 'El videojuego ha sido modificado correctamente.',
+                'status' => http_response_code(200),
+                'exito' => true
+            ], JSON_UNESCAPED_UNICODE);
+        } else {
+            echo json_encode([
+                'resultado' => 'No se ha creado correctamente el videojuego.',
+                'status' => http_response_code(400),
+                'exito' => false
+            ]);
+        }
     }
 } catch (Exception $e) {
     error_log($e->getMessage());
