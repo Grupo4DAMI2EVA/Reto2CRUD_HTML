@@ -18,7 +18,6 @@ $pswd1 = $input['pswd1'] ?? '';
 $pswd2 = $input['pswd2'] ?? '';
 
 try {
-
     $controller = new controller();
     $user = $controller->create_user($username, $pswd1);
 
