@@ -74,21 +74,29 @@ if (!$error) {
     $modify = $controller->modifyUser($email, $username, $telephone, $name, $surname, $gender, $card_no, $profile_code);
 }
 
-if ($modify) {
-    // Actualizar datos en sesión si el usuario modifica su propio perfil
-    if ($_SESSION['user_data']['PROFILE_CODE'] == $profile_code) {
-        $_SESSION['user_data']['EMAIL'] = $email;
-        $_SESSION['user_data']['USER_NAME'] = $username;
-        $_SESSION['user_data']['TELEPHONE'] = $telephone;
-        $_SESSION['user_data']['NAME_'] = $name;
-        $_SESSION['user_data']['SURNAME'] = $surname;
-        $_SESSION['user_data']['GENDER'] = $gender;
-        $_SESSION['user_data']['CARD_NO'] = $card_no;
-        $_SESSION['username'] = $username;
-    }
-    
-    echo json_encode(['success' => true, 'message' => 'Usuario modificado correctamente']);
+if ($error) {
+    echo json_encode([
+        'resultado' => 'Invalid syntax in one of the fields.',
+        'status' => http_response_code(400),
+        'exito' => false
+    ]);
 } else {
-    echo json_encode(['success' => false, 'error' => 'Error modificando el usuario. Puede que el email o username ya existan.']);
+    if ($modify) {
+        // Actualizar datos en sesión si el usuario modifica su propio perfil
+        if ($_SESSION['user_data']['PROFILE_CODE'] == $profile_code) {
+            $_SESSION['user_data']['EMAIL'] = $email;
+            $_SESSION['user_data']['USER_NAME'] = $username;
+            $_SESSION['user_data']['TELEPHONE'] = $telephone;
+            $_SESSION['user_data']['NAME_'] = $name;
+            $_SESSION['user_data']['SURNAME'] = $surname;
+            $_SESSION['user_data']['GENDER'] = $gender;
+            $_SESSION['user_data']['CARD_NO'] = $card_no;
+            $_SESSION['username'] = $username;
+        }
+
+        echo json_encode(['success' => true, 'message' => 'Usuario modificado correctamente']);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Error modificando el usuario. Puede que el email o username ya existan.']);
+    }
 }
 ?>
