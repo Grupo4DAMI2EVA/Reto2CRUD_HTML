@@ -14,6 +14,23 @@ let cartContainer, totalItemsEl, totalPriceEl, buyBtns;
 document.addEventListener("DOMContentLoaded", init);
 
 async function init() {
+  // Verificar sesión y cargar datos del usuario
+  const user = await comprobarSesion();
+  if (!user) return;
+
+  // Pintar nombre y saldo del usuario
+  const nameSpan = document.getElementById("storeUserName");
+  const balanceSpan = document.getElementById("storeUserBalance");
+
+  if (nameSpan) {
+    nameSpan.textContent = user.USER_NAME || user.NAME_ || "[User]";
+  }
+
+  if (balanceSpan) {
+    const balance = user.BALANCE ?? 0;
+    balanceSpan.textContent = `${Number(balance).toFixed(2)}€`;
+  }
+
   cartContainer = document.querySelector('[data-role="cart-items"]');
   totalItemsEl = document.querySelector('[data-role="total-items"]');
   totalPriceEl = document.querySelector('[data-role="total-price"]');

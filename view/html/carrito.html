@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Carrito de Compras</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
-</head>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Carrito de Compras</title>
+        <link rel="stylesheet" href="../assets/css/style.css">
+        <script src="../assets/js/auth.js"></script>
+    </head>
 <body class="storeBody">
     <!-- Encabezado -->
     <header class="storeHeader">
       <div class="storeUser">
-        <span>Usuario: <strong>Cliente</strong></span>
-        <span class="storeBalance">Saldo disponible: $0</span>
+        <span>Usuario: <span id="storeUserName">[User]</span></span>
+        <span class="storeBalance">Saldo disponible: <span id="storeUserBalance">$0</span></span>
       </div>
 
       <h1 class="storeTitle">CARRITO DE COMPRAS</h1>
