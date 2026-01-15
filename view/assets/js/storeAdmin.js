@@ -1,11 +1,13 @@
+let ALL_VIDEOGAMES = [];
+let selectedGameId = null; // Guardar el ID del juego seleccionado
+
 document.addEventListener("DOMContentLoaded", async () => {
   // Verificar sesión y cargar datos del usuario
   const user = await comprobarSesion();
   if (!user) return;
 
-  // Pintar nombre y saldo del usuario
+  // Pintar nombre del usuario
   const nameSpan = document.getElementById("storeUserName");
-  const balanceSpan = document.getElementById("storeUserBalance");
   const addGameBtn = document.getElementById("addGameBtn");
   const delGameBtn = document.getElementById("delGameBtn");
 
@@ -14,21 +16,52 @@ document.addEventListener("DOMContentLoaded", async () => {
     nameSpan.textContent = user.USER_NAME || user.NAME_ || "[User]";
   }
 
-  if (balanceSpan) {
-    const balance = user.CURRENT_ACCOUNT ?? 0;
-    balanceSpan.textContent = `${Number(balance).toFixed(2)}€`;
-  }
-
   addGameBtn.onclick = function () {
     window.location.href = "addGames.html";
   };
 
-  delGameBtn.onclick = function () {
-    // PH
+  delGameBtn.onclick = async function () {
+    if (!selectedGameId) {
+      alert("Por favor, selecciona un videojuego para eliminar");
+      return;
+    }
+
+    if (!confirm("¿Estás seguro de que deseas eliminar este videojuego?")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`../../api/DeleteGame.php?code=${selectedGameId}`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      let data = {};
+      if (response.ok && response.status !== 204) {
+        data = await response.json();
+      }
+
+      if (response.ok) {
+        alert("Videojuego eliminado correctamente");
+        selectedGameId = null;
+        document.getElementById("selectedGame").textContent = "Select a game";
+        await loadVideogames();
+      } else {
+        alert(data.error || data.resultado || "Error al eliminar el videojuego");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error al conectar con el servidor");
+    }
   };
 
   // Cargar lista de videojuegos
   await loadVideogames();
+
+  setupSearch();
 });
 
 async function get_all_videogames() {
@@ -42,20 +75,31 @@ async function get_all_videogames() {
 
 async function loadVideogames() {
   const tbody = document.querySelector(".storeTable tbody");
-  const selectedGameSpan = document.getElementById("selectedGame");
 
   if (!tbody) return;
 
   // Limpiar cualquier fila anterior (incluida la "Tabla sin contenido")
   tbody.innerHTML = "";
 
-  let videogames = [];
-
   try {
-    videogames = await get_all_videogames();
+    ALL_VIDEOGAMES = await get_all_videogames();
   } catch (e) {
     console.error("Error obteniendo videojuegos:", e);
+    ALL_VIDEOGAMES = [];
   }
+
+  populateFilters(ALL_VIDEOGAMES);
+
+  renderVideogames(ALL_VIDEOGAMES);
+}
+
+function renderVideogames(videogames) {
+  const tbody = document.querySelector(".storeTable tbody");
+  const selectedGameSpan = document.getElementById("selectedGame");
+
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
 
   if (!videogames || videogames.length === 0) {
     const row = document.createElement("tr");
@@ -65,6 +109,9 @@ async function loadVideogames() {
     cell.textContent = "No hay videojuegos disponibles";
     row.appendChild(cell);
     tbody.appendChild(row);
+    if (selectedGameSpan) {
+      selectedGameSpan.textContent = "Select a game";
+    }
     return;
   }
 
@@ -73,6 +120,7 @@ async function loadVideogames() {
 
     // Las claves vienen de la tabla VIDEOGAME_: PRICE, NAME_, PLATAFORM, GENRE, PEGI, STOCK, COMPANYNAME, RELEASE_DATE
     const {
+      VIDEOGAME_CODE,
       NAME_,
       GENRE,
       PLATAFORM,
@@ -96,6 +144,7 @@ async function loadVideogames() {
 
     // Al hacer click en una fila, marcar juego seleccionado
     row.addEventListener("click", () => {
+      selectedGameId = VIDEOGAME_CODE;
       if (selectedGameSpan) {
         selectedGameSpan.textContent = NAME_ || "Unknown";
       }
@@ -103,4 +152,70 @@ async function loadVideogames() {
 
     tbody.appendChild(row);
   });
+}
+
+function populateFilters(videogames) {
+  const genreSelect = document.getElementById("searchGenre");
+  const platformSelect = document.getElementById("searchPlatform");
+
+  if (!genreSelect || !platformSelect) return;
+
+  // Limpiar, dejando solo la opción "All"
+  genreSelect.innerHTML = '<option value="all">All</option>';
+  platformSelect.innerHTML = '<option value="all">All</option>';
+
+  const genres = new Set();
+  const platforms = new Set();
+
+  videogames.forEach((game) => {
+    if (game.GENRE) genres.add(game.GENRE);
+    if (game.PLATAFORM) platforms.add(game.PLATAFORM);
+  });
+
+  genres.forEach((g) => {
+    const opt = document.createElement("option");
+    opt.value = g;
+    opt.textContent = g;
+    genreSelect.appendChild(opt);
+  });
+
+  platforms.forEach((p) => {
+    const opt = document.createElement("option");
+    opt.value = p;
+    opt.textContent = p;
+    platformSelect.appendChild(opt);
+  });
+}
+
+function setupSearch() {
+  const searchInput = document.getElementById("searchTitle");
+  const genreSelect = document.getElementById("searchGenre");
+  const platformSelect = document.getElementById("searchPlatform");
+
+  if (!searchInput || !genreSelect || !platformSelect){
+   return;   
+  } 
+
+  const applyFilters = () => {
+    const text = searchInput.value.trim().toLowerCase();
+    const genre = genreSelect.value;
+    const platform = platformSelect.value;
+
+    const filtered = ALL_VIDEOGAMES.filter((game) => {
+      const name = (game.NAME_ || "").toLowerCase();
+      const matchesText = !text || name.includes(text);
+
+      const matchesGenre = genre === "all" || game.GENRE === genre;
+      const matchesPlatform =
+        platform === "all" || game.PLATAFORM === platform;
+
+      return matchesText && matchesGenre && matchesPlatform;
+    });
+
+    renderVideogames(filtered);
+  };
+
+  searchInput.addEventListener("input", applyFilters);
+  genreSelect.addEventListener("change", applyFilters);
+  platformSelect.addEventListener("change", applyFilters);
 }
