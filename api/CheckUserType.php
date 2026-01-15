@@ -36,8 +36,6 @@ if (isset($_SESSION['logeado']) && $_SESSION['logeado'] === true) {
             'exito' => false
         ], JSON_UNESCAPED_UNICODE);
     }
-
-
     exit;
 }
 
