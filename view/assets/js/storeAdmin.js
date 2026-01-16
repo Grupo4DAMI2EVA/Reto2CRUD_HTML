@@ -1,5 +1,5 @@
 let ALL_VIDEOGAMES = [];
-let selectedGameId = null; // Guardar el ID del juego seleccionado
+let selectedGame = null; // Guardar el juego seleccionado
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Verificar sesión y cargar datos del usuario
@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Pintar nombre del usuario
   const nameSpan = document.getElementById("storeUserName");
   const addGameBtn = document.getElementById("addGameBtn");
+  const modifyGameBtn = document.getElementById("modifyGameBtn");
   const delGameBtn = document.getElementById("delGameBtn");
 
   if (nameSpan) {
@@ -20,8 +21,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     window.location.href = "addGames.html";
   };
 
+  modifyGameBtn.onclick = function (e) {
+    e.preventDefault();
+    if (!selectedGame) {
+      alert("Por favor, selecciona un videojuego para modificar");
+      return false;
+    }
+    localStorage.setItem('selectedGame', JSON.stringify(selectedGame));
+    window.location.href = "modifyGames.html";
+  };
+
   delGameBtn.onclick = async function () {
-    if (!selectedGameId) {
+    if (!selectedGame) {
       alert("Por favor, selecciona un videojuego para eliminar");
       return;
     }
@@ -31,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-      const response = await fetch(`../../api/DeleteGame.php?code=${selectedGameId}`, {
+      const response = await fetch(`../../api/DeleteGame.php?code=${selectedGame.VIDEOGAME_CODE}`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -46,7 +57,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       if (response.ok) {
         alert("Videojuego eliminado correctamente");
-        selectedGameId = null;
+        selectedGame = null;
         document.getElementById("selectedGame").textContent = "Select a game";
         await loadVideogames();
       } else {
@@ -144,7 +155,7 @@ function renderVideogames(videogames) {
 
     // Al hacer click en una fila, marcar juego seleccionado
     row.addEventListener("click", () => {
-      selectedGameId = VIDEOGAME_CODE;
+      selectedGame = game;
       if (selectedGameSpan) {
         selectedGameSpan.textContent = NAME_ || "Unknown";
       }

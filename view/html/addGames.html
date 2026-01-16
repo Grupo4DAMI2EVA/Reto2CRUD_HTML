@@ -14,35 +14,41 @@
       </a>
     </header>
     <main class="storeMain">
-      <form action="AddGame.php" class="storePanel">
+      <form id="addGameForm" class="storePanel" method="POST" action="../../api/AddGame.php">
         <section class="fields">
           <div class="field half">
             <label for="name">Name:</label>
-            <input id="name" type="text" required class="filterInput" />
+            <input id="name" name="name" type="text" required class="filterInput" placeholder="Enter game name" />
+            <span id="nameError" class="error-message"></span>
           </div>
           <div class="field half">
             <label for="platform">Platforms:</label>
             <select name="platform" id="platform" required class="filterSelect">
+              <option value="">-- Select Platform --</option>
               <option value="pc">PC</option>
               <option value="playstation">Playstation</option>
               <option value="xbox">Xbox</option>
               <option value="nintendo">Nintendo</option>
               <option value="other">Other</option>
             </select>
+            <span id="platformError" class="error-message"></span>
           </div>
           <div class="field half">
             <label for="company">Company:</label>
-            <input id="company" type="text" required class="filterInput" />
+            <input id="company" name="company" type="text" required class="filterInput" placeholder="Enter company name" />
+            <span id="companyError" class="error-message"></span>
           </div>
           <div class="field half">
             <label for="stock">Stock:</label>
-            <input id="stock" type="text" required class="filterInput" />
+            <input id="stock" name="stock" type="number" required class="filterInput" placeholder="Enter stock quantity" min="0" />
+            <span id="stockError" class="error-message"></span>
           </div>
         </section>
         <section class="fields">
           <div class="field half">
             <label for="genre">Genre:</label>
             <select name="genre" id="genre" required class="filterSelect">
+              <option value="">-- Select Genre --</option>
               <option value="action">Action</option>
               <option value="adventure">Adventure</option>
               <option value="rpg">RPG</option>
@@ -55,24 +61,29 @@
               <option value="educational">Educational</option>
               <option value="other">Other</option>
             </select>
+            <span id="genreError" class="error-message"></span>
           </div>
           <div class="field half">
             <label for="price">Price:</label>
-            <input id="price" type="text" required class="filterInput" />
+            <input id="price" name="price" type="number" required class="filterInput" placeholder="Enter price" step="0.01" min="0" />
+            <span id="priceError" class="error-message"></span>
           </div>
           <div class="field half">
             <label for="pegi">PEGI:</label>
             <select name="pegi" id="pegi" required class="filterSelect">
+              <option value="">-- Select PEGI --</option>
               <option value="3">3</option>
               <option value="7">7</option>
               <option value="12">12</option>
               <option value="16">16</option>
               <option value="18">18</option>
             </select>
+            <span id="pegiError" class="error-message"></span>
           </div>
           <div class="field half">
             <label for="releaseDate">Release Date:</label>
-            <input id="releaseDate" type="date" required class="filterInput" />
+            <input id="releaseDate" name="releaseDate" type="date" required class="filterInput" />
+            <span id="releaseDateError" class="error-message"></span>
           </div>
         </section>
         <div class="actions">
@@ -80,5 +91,6 @@
         </div>
       </form>
     </main>
+    <script src="../assets/js/addGames.js"></script>
   </body>
 </html>
