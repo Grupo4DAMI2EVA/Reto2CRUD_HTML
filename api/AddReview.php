@@ -27,22 +27,22 @@ if (!$error) {
 
 if ($error) {
     echo json_encode([
-        'resultado' => 'Invalid syntax in one of the fields.',
+        'result' => 'Invalid syntax in one of the fields.',
         'status' => http_response_code(400),
-        'exito' => false
+        'success' => false
     ]);
 } else {
     if ($addReview) {
         echo json_encode([
-            'success' => true,
-            'message' => 'Review added correctly',
-            'status' => http_response_code(203)
+            'result' => 'Review added correctly',
+            'status' => http_response_code(203),
+            'success' => true
         ]);
     } else {
         echo json_encode([
-            'success' => false,
             'error' => 'Error adding the review',
-            'status' => http_response_code(400)
+            'status' => http_response_code(400),
+            'success' => false
         ]);
     }
 }

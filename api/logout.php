@@ -17,8 +17,8 @@ if (isset($_COOKIE[session_name()])) {
 }
 
 echo json_encode([
-    "ok" => true,
-    "mensaje" => "Sesión cerrada correctamente",
-    'status' => http_response_code(200)
+    "result" => "Sesión cerrada correctamente",
+    'status' => http_response_code(200),
+    "success" => true
 ], JSON_UNESCAPED_UNICODE);
 ?>

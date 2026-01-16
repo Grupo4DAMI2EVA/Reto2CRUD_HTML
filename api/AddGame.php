@@ -54,22 +54,22 @@ try {
 
     if ($error) {
         echo json_encode([
-            'resultado' => 'Invalid syntax in one of the fields.',
+            'result' => 'Invalid syntax in one of the fields.',
             'status' => http_response_code(400),
-            'exito' => false
+            'success' => false
         ]);
     } else {
         if ($add > 0) {
             echo json_encode([
-                'resultado' => 'El videojuego ha sido creado correctamente.',
+                'result' => 'El videojuego ha sido creado correctamente.',
                 'status' => http_response_code(201),
-                'exito' => true
+                'success' => true
             ], JSON_UNESCAPED_UNICODE);
         } else {
             echo json_encode([
-                'resultado' => 'No se ha creado correctamente el videojuego.',
+                'result' => 'No se ha creado correctamente el videojuego.',
                 'status' => http_response_code(400),
-                'exito' => false
+                'success' => false
             ]);
         }
     }
@@ -78,7 +78,7 @@ try {
     echo json_encode([
         'error' => 'Error del servidor: ' . $e->getMessage(),
         'status' => http_response_code(500),
-        'exito' => false
+        'success' => false
     ]);
 }
 ?>

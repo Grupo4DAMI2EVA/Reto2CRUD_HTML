@@ -26,8 +26,8 @@ $response = ["exito" => false];
 if (empty($username) || empty($pswd1)) {
     echo json_encode([
         'error' => 'Usuario y contraseña son obligatorios',
-        'exito' => false,
-        'status' => http_response_code(400)
+        'status' => http_response_code(400),
+        'success' => false
     ], JSON_UNESCAPED_UNICODE);
     exit;
 }
@@ -49,22 +49,22 @@ try {
         echo json_encode([
             'message' => "The user was created properly.",
             'resultado' => $user,
-            'exito' => true,
-            'status' => http_response_code(203)
+            'status' => http_response_code(201),
+            'success' => true
         ], JSON_UNESCAPED_UNICODE);
     } else {
         echo json_encode([
             'error' => 'No se ha creado correctamente el usuario',
-            'exito' => false,
-            'status' => http_response_code(400)
+            'status' => http_response_code(400),
+            'success' => false
         ]);
     }
 } catch (Exception $e) {
     error_log("Error en AddUser.php: " . $e->getMessage() . " en " . $e->getFile() . ":" . $e->getLine());
     echo json_encode([
         'error' => 'Error del servidor: ' . $e->getMessage(),
-        'exito' => false,
-        'status' => http_response_code(500)
+        'status' => http_response_code(500),
+        'success' => false
     ]);
 }
 ?>
