@@ -861,3 +861,10 @@ li {
     flex-wrap: wrap;
   }
 }
+
+.error-message {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 4px;
+  display: none;
+}

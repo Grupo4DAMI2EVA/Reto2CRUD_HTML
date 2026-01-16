@@ -95,37 +95,30 @@ require_once '../controller/controller.php';
 $controller = new controller();
 $modify = $controller->modifyUser($email, $username, $telephone, $name, $surname, $gender, $card_no, $profile_code);
 
-if ($error) {
+// $error ya no se usa; solo comprobamos el resultado de la operación
+if ($modify) {
+    // Actualizar datos en sesión si el usuario modifica su propio perfil
+    if ($_SESSION['user_data']['PROFILE_CODE'] == $profile_code) {
+        $_SESSION['user_data']['EMAIL'] = $email;
+        $_SESSION['user_data']['USER_NAME'] = $username;
+        $_SESSION['user_data']['TELEPHONE'] = $telephone;
+        $_SESSION['user_data']['NAME_'] = $name;
+        $_SESSION['user_data']['SURNAME'] = $surname;
+        $_SESSION['user_data']['GENDER'] = $gender;
+        $_SESSION['user_data']['CARD_NO'] = $card_no;
+        $_SESSION['username'] = $username;
+    }
+
     echo json_encode([
-        'resultado' => 'Invalid syntax in one of the fields.',
-        'status' => http_response_code(400),
-        'exito' => false
+        'success' => true,
+        'message' => 'Usuario modificado correctamente',
+        'status' => http_response_code(200)
     ]);
 } else {
-    if ($modify) {
-        // Actualizar datos en sesión si el usuario modifica su propio perfil
-        if ($_SESSION['user_data']['PROFILE_CODE'] == $profile_code) {
-            $_SESSION['user_data']['EMAIL'] = $email;
-            $_SESSION['user_data']['USER_NAME'] = $username;
-            $_SESSION['user_data']['TELEPHONE'] = $telephone;
-            $_SESSION['user_data']['NAME_'] = $name;
-            $_SESSION['user_data']['SURNAME'] = $surname;
-            $_SESSION['user_data']['GENDER'] = $gender;
-            $_SESSION['user_data']['CARD_NO'] = $card_no;
-            $_SESSION['username'] = $username;
-        }
-
-        echo json_encode([
-            'success' => true,
-            'message' => 'Usuario modificado correctamente',
-            'status' => http_response_code(200)
-        ]);
-    } else {
-        echo json_encode([
-            'success' => false,
-            'error' => 'Error modificando el usuario. Puede que el email o username ya existan.',
-            'status' => http_response_code(400)
-        ]);
-    }
+    echo json_encode([
+        'success' => false,
+        'error' => 'Error modificando el usuario. Puede que el email o username ya existan.',
+        'status' => http_response_code(400)
+    ]);
 }
 ?>
