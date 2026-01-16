@@ -46,10 +46,6 @@ try {
     // ✅ CORREGIDO: Usar get_user_reviews en lugar de me()
     $reviews = $controller->get_user_reviews($profile_code);
     
-    // Para debugging, puedes añadir esto temporalmente:
-    error_log("Profile code recibido: " . $profile_code);
-    error_log("Resultado de get_user_reviews: " . json_encode($reviews));
-    
     if ($reviews !== false) {
         http_response_code(200);
         echo json_encode([
