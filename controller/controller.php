@@ -3,6 +3,7 @@ require_once '../Config/Database.php';
 require_once '../model/UserModel.php';
 require_once '../model/ReviewModel.php';
 require_once '../model/VideogameModel.php';
+require_once '../model/OrderModel.php';
 
 
 class controller
@@ -11,6 +12,7 @@ class controller
     private $VideogameModel;
 
     private $ReviewModel;
+    private $OrderModel;
 
     public function __construct()
     {
@@ -19,6 +21,7 @@ class controller
         $this->UserModel = new UserModel($db);
         $this->VideogameModel = new VideogameModel($db);
         $this->ReviewModel = new ReviewModel($db);
+        $this->OrderModel = new OrderModel($db);
     }
 
     public function loginUser($username, $password)
@@ -120,6 +123,16 @@ class controller
     public function delete_item_from_cart($ticket_id)
     {
         return $this->ReviewModel->delete_item_from_cart($ticket_id);
+    }
+
+    public function processPurchase($profile_code, $cartItems)
+    {
+        return $this->OrderModel->processPurchase($profile_code, $cartItems, $this->VideogameModel, $this->UserModel);
+    }
+
+    public function get_user_by_profile_code($profile_code)
+    {
+        return $this->UserModel->get_user_by_profile_code($profile_code);
     }
 }
 ?>

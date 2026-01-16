@@ -211,5 +211,65 @@ class UserModel
             return false;
         }
     }
+
+    public function get_user_by_profile_code($profile_code)
+    {
+        $query = "SELECT * FROM USER_ U JOIN PROFILE_ P ON U.PROFILE_CODE = P.PROFILE_CODE WHERE U.PROFILE_CODE = :profile_code";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':profile_code', $profile_code, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function updateBalance($profile_code, $newBalance)
+    {
+        $query = "UPDATE USER_ SET BALANCE = :balance WHERE PROFILE_CODE = :profile_code";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':balance', $newBalance);
+        $stmt->bindParam(':profile_code', $profile_code, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function validateBalance($profile_code, $totalCost)
+    {
+        $user = $this->get_user_by_profile_code($profile_code);
+        if (!$user) {
+            return [
+                'valid' => false,
+                'error_type' => 'user_not_found',
+                'message' => 'Usuario no encontrado'
+            ];
+        }
+
+        $userBalance = floatval($user['BALANCE']);
+        if ($userBalance < $totalCost) {
+            $needed = $totalCost - $userBalance;
+            return [
+                'valid' => false,
+                'error_type' => 'insufficient_balance',
+                'message' => "Saldo insuficiente. Tienes {$userBalance}€ pero necesitas {$totalCost}€. Te faltan {$needed}€.",
+                'balance' => $userBalance,
+                'required' => $totalCost,
+                'needed' => $needed
+            ];
+        }
+
+        return [
+            'valid' => true,
+            'balance' => $userBalance
+        ];
+    }
+
+    public function deductBalance($profile_code, $amount)
+    {
+        $user = $this->get_user_by_profile_code($profile_code);
+        if (!$user) {
+            return false;
+        }
+
+        $currentBalance = floatval($user['BALANCE']);
+        $newBalance = $currentBalance - $amount;
+        return $this->updateBalance($profile_code, $newBalance);
+    }
 }
 ?>

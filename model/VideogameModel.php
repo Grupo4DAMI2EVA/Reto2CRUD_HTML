@@ -66,5 +66,94 @@ class VideogameModel
         return $stmt->rowCount();
     }
 
+    public function updateStock($videogame_code, $newStock)
+    {
+        $query = "UPDATE VIDEOGAME_ SET STOCK = ? WHERE VIDEOGAME_CODE = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $newStock);
+        $stmt->bindParam(2, $videogame_code);
+        return $stmt->execute();
+    }
+
+    public function validateStock($cartItems)
+    {
+        $allVideogames = $this->get_all_videogames();
+        $videogamesMap = [];
+        foreach ($allVideogames as $game) {
+            $videogamesMap[$game['VIDEOGAME_CODE']] = $game;
+        }
+
+        $stockErrors = [];
+        $validatedItems = [];
+
+        foreach ($cartItems as $item) {
+            $videogame_code = intval($item['id'] ?? $item['videogame_code'] ?? 0);
+            $quantity = intval($item['qty'] ?? $item['quantity'] ?? 0);
+
+            if (!isset($videogamesMap[$videogame_code])) {
+                return [
+                    'valid' => false,
+                    'error_type' => 'not_found',
+                    'message' => 'Uno o más videojuegos no se encontraron'
+                ];
+            }
+
+            $game = $videogamesMap[$videogame_code];
+
+            if ($game['STOCK'] < $quantity) {
+                $stockErrors[] = [
+                    'name' => $game['NAME_'],
+                    'requested' => $quantity,
+                    'available' => $game['STOCK']
+                ];
+            }
+
+            $validatedItems[] = [
+                'videogame_code' => $videogame_code,
+                'quantity' => $quantity,
+                'price' => floatval($game['PRICE']),
+                'current_stock' => $game['STOCK'],
+                'name' => $game['NAME_']
+            ];
+        }
+
+        if (!empty($stockErrors)) {
+            $errorMessages = [];
+            foreach ($stockErrors as $error) {
+                $errorMessages[] = "{$error['name']}: solicitas {$error['requested']} pero solo hay {$error['available']} disponibles";
+            }
+            return [
+                'valid' => false,
+                'error_type' => 'insufficient_stock',
+                'message' => 'Stock insuficiente: ' . implode('. ', $errorMessages)
+            ];
+        }
+
+        return [
+            'valid' => true,
+            'items' => $validatedItems,
+            'videogamesMap' => $videogamesMap
+        ];
+    }
+
+    public function calculateTotalCost($validatedItems)
+    {
+        $totalCost = 0;
+        foreach ($validatedItems as $item) {
+            $totalCost += $item['price'] * $item['quantity'];
+        }
+        return $totalCost;
+    }
+
+    public function processStockReduction($orders, $videogamesMap)
+    {
+        foreach ($orders as $order) {
+            $newStock = $videogamesMap[$order['videogame_code']]['STOCK'] - $order['quantity'];
+            if (!$this->updateStock($order['videogame_code'], $newStock)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
 ?>

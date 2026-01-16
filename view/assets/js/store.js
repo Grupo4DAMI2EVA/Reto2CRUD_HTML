@@ -1,4 +1,5 @@
 let ALL_VIDEOGAMES = [];
+let selectedGame = null; // Almacena el juego seleccionado con todos sus datos
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Verificar sesión y cargar datos del usuario
@@ -24,6 +25,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Configurar eventos de búsqueda
   setupSearch();
+
+  // Configurar botón "Add to Cart"
+  setupAddToCart();
 });
 
 async function get_all_videogames() {
@@ -107,6 +111,9 @@ function renderVideogames(videogames) {
 
     // Al hacer click en una fila, marcar juego seleccionado
     row.addEventListener("click", () => {
+      // Guardar el juego completo seleccionado
+      selectedGame = game;
+      
       if (selectedGameSpan) {
         selectedGameSpan.textContent = NAME_ || "Unknown";
       }
@@ -188,4 +195,48 @@ function setupSearch() {
   searchInput.addEventListener("input", applyFilters);
   genreSelect.addEventListener("change", applyFilters);
   platformSelect.addEventListener("change", applyFilters);
+}
+
+function setupAddToCart() {
+  const addToCartBtn = document.querySelector('.storeBtn.accent');
+  
+  if (!addToCartBtn) return;
+
+  addToCartBtn.addEventListener("click", async () => {
+    if (!selectedGame) {
+      alert("Por favor, selecciona un juego de la tabla primero");
+      return;
+    }
+
+    // Verificar que hay stock disponible
+    if (!selectedGame.STOCK || selectedGame.STOCK <= 0) {
+      alert("Este juego no está disponible en stock");
+      return;
+    }
+
+    try {
+      const response = await fetch("../../api/AddToCart.php", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          videogame_code: selectedGame.VIDEOGAME_CODE,
+          quantity: 1
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success || data.exito) {
+        alert(data.message || "Juego añadido al carrito correctamente");
+      } else {
+        alert(data.error || "Error al añadir el juego al carrito");
+      }
+    } catch (error) {
+      console.error("Error añadiendo al carrito:", error);
+      alert("Error de conexión al añadir al carrito");
+    }
+  });
 }
