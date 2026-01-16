@@ -160,9 +160,9 @@ try {
     if (empty($code) || !filter_var($code, FILTER_VALIDATE_INT)) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => 'Invalid game code',
+            'result' => 'Invalid game code',
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -172,9 +172,9 @@ try {
     if (!$nameValidation['valid']) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => $nameValidation['message'],
+            'result' => $nameValidation['message'],
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -183,9 +183,9 @@ try {
     if (!$platformValidation['valid']) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => $platformValidation['message'],
+            'result' => $platformValidation['message'],
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -194,9 +194,9 @@ try {
     if (!$companyValidation['valid']) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => $companyValidation['message'],
+            'result' => $companyValidation['message'],
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -205,9 +205,9 @@ try {
     if (!$stockValidation['valid']) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => $stockValidation['message'],
+            'result' => $stockValidation['message'],
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -216,9 +216,9 @@ try {
     if (!$genreValidation['valid']) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => $genreValidation['message'],
+            'result' => $genreValidation['message'],
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -227,9 +227,9 @@ try {
     if (!$priceValidation['valid']) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => $priceValidation['message'],
+            'result' => $priceValidation['message'],
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -238,9 +238,9 @@ try {
     if (!$pegiValidation['valid']) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => $pegiValidation['message'],
+            'result' => $pegiValidation['message'],
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -249,9 +249,9 @@ try {
     if (!$releaseDateValidation['valid']) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => $releaseDateValidation['message'],
+            'result' => $releaseDateValidation['message'],
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -272,32 +272,25 @@ try {
 
     if ($error) {
         echo json_encode([
-            'result' => 'Invalid syntax in one of the fields.',
-            'status' => http_response_code(400),
-            'success' => false
-        ]);
+            'result' => 'El videojuego ha sido modificado correctamente.',
+            'status' => 200,
+            'success' => true
+        ], JSON_UNESCAPED_UNICODE);
     } else {
-        if ($modify) {
-            echo json_encode([
-                'result' => 'El videojuego ha sido modificado correctamente.',
-                'status' => http_response_code(200),
-                'success' => true
-            ], JSON_UNESCAPED_UNICODE);
-        } else {
-            echo json_encode([
-                'result' => 'No se ha creado correctamente el videojuego.',
-                'status' => http_response_code(400),
-                'success' => false
-            ]);
-        }
+        http_response_code(400);
+        echo json_encode([
+            'result' => 'No se ha modificado correctamente el videojuego.',
+            'status' => 400,
+            'success' => false
+        ], JSON_UNESCAPED_UNICODE);
     }
 } catch (Exception $e) {
     error_log($e->getMessage());
     http_response_code(500);
     echo json_encode([
         'error' => 'Error del servidor: ' . $e->getMessage(),
-        'status' => http_response_code(500),
+        'status' => 500,
         'success' => false
-    ]);
+    ], JSON_UNESCAPED_UNICODE);
 }
 ?>
