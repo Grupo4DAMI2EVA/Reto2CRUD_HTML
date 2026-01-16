@@ -105,6 +105,11 @@ class controller
         return $this->ReviewModel->get_all_reviews();
     }
 
+    public function get_user_reviews($user_code)
+    {
+        return $this->ReviewModel->get_user_reviews($user_code);
+    }
+
     public function delete_review($id)
     {
         return $this->ReviewModel->delete_review($id);
