@@ -24,6 +24,15 @@ class ReviewModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function get_user_reviews($user_code)
+    {
+        $query = "SELECT * FROM REVIEW_ WHERE USER_CODE = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $user_code);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function add_review($comment, $rating, $user_code, $videogame_code)
     {
         $query = "INSERT INTO REVIEW_ (COMMENT, RATING, USER_CODE, VIDEOGAME_CODE) VALUES (?, ?, ?, ?)";
