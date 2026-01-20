@@ -28,6 +28,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Configurar botón "Add to Cart"
   setupAddToCart();
+  
+  // Configurar botón "Review"
+  setupReviewButton();
 });
 
 async function get_all_videogames() {
@@ -96,6 +99,7 @@ function renderVideogames(videogames) {
       STOCK,
       COMPANYNAME,
       RELEASE_DATE,
+      VIDEOGAME_CODE
     } = game;
 
     row.innerHTML = `
@@ -239,4 +243,42 @@ function setupAddToCart() {
       alert("Error de conexión al añadir al carrito");
     }
   });
+}
+
+function setupReviewButton() {
+  // Encuentra el botón "Review" (ghost) en la tienda
+  const reviewButtons = document.querySelectorAll('a[href="review.html"] button, button[onclick*="review.html"]');
+  
+  reviewButtons.forEach(button => {
+    // Reemplazar el comportamiento por defecto
+    button.addEventListener("click", function(e) {
+      e.preventDefault(); // Prevenir la navegación por defecto
+      
+      if (!selectedGame) {
+        alert("Por favor, selecciona un juego de la tabla primero para dejar una reseña");
+        return;
+      }
+      
+      // Navegar a review.html con los parámetros del juego
+      navigateToReview(selectedGame);
+    });
+  });
+}
+
+function navigateToReview(game) {
+  if (!game || !game.VIDEOGAME_CODE || !game.NAME_) {
+    alert("Error: No se pudo obtener la información del juego seleccionado");
+    return;
+  }
+  
+  // Codificar el nombre para la URL
+  const encodedName = encodeURIComponent(game.NAME_);
+  
+  // Construir la URL con parámetros
+  const reviewUrl = `review.html?game_id=${game.VIDEOGAME_CODE}&game_name=${encodedName}`;
+  
+  console.log(`Navegando a: ${reviewUrl}`);
+  
+  // Navegar a la página de reseñas
+  window.location.href = reviewUrl;
 }
