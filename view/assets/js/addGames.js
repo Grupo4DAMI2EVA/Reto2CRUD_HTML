@@ -69,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Form submission
   form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
     if (!validateForm()) return;
 
@@ -78,9 +79,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (data.exito) {
         alert(data.resultado);
+        // Clear all errors before reload
+        Object.keys(rules).forEach(field => clearError(field));
         location.reload();
       } else {
-        alert(data.resultado || 'Error al crear el juego');
+        // Try to identify which field has the error based on the message
+        let fieldWithError = null;
+        const message = data.resultado.toLowerCase();
+        
+        Object.keys(rules).forEach(field => {
+          if (message.includes(field.toLowerCase())) {
+            fieldWithError = field;
+          }
+        });
+        
+        if (fieldWithError) {
+          showError(fieldWithError, data.resultado);
+        } else {
+          alert(data.resultado || 'Error al crear el juego');
+        }
       }
     } catch (err) {
       alert('Network error: ' + err.message);

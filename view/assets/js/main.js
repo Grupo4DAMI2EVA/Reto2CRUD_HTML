@@ -428,9 +428,11 @@ async function refreshAdminTable() {
   }
 }
 
-function openModifyAdminPopup() {
+async function openModifyAdminPopup() {
   document.getElementById("messageAdmin").innerHTML = "";
-  const actualProfile = profile; // Usar el profile cargado del servidor
+  const actualProfile = await comprobarSesion(); // Obtener el profile del servidor
+  if (!actualProfile) return;
+  
   let modifyAdminPopup = document.getElementById("modifyAdminPopup");
 
   const usuario = {
@@ -529,20 +531,22 @@ async function modifyAdmin() {
     document.getElementById("messageAdmin").style.color = "red";
   } else {
     try {
-      const response = await fetch(
-        `../../api/ModifyAdmin.php?profile_code=${encodeURIComponent(
-          profile_code
-        )}&name=${encodeURIComponent(name)}&surname=${encodeURIComponent(
-          surname
-        )}&email=${encodeURIComponent(email)}&username=${encodeURIComponent(
-          username
-        )}&telephone=${encodeURIComponent(
-          telephone
-        )}&current_account=${encodeURIComponent(current_account)}`,
-        {
-          credentials: "include",
-        }
-      );
+      const response = await fetch("../../api/ModifyAdmin.php", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          profile_code: profile_code,
+          name: name,
+          surname: surname,
+          email: email,
+          username: username,
+          telephone: telephone,
+          current_account: current_account
+        }),
+      });
 
       const data = await response.json();
       //DEBUG console.log(data);
@@ -551,20 +555,31 @@ async function modifyAdmin() {
         document.getElementById("messageAdmin").innerHTML = data.message;
         document.getElementById("messageAdmin").style.color = "green";
 
-        actualProfile.NAME_ = name;
-        actualProfile.SURNAME = surname;
-        actualProfile.EMAIL = email;
-        actualProfile.USER_NAME = username;
-        actualProfile.TELEPHONE = telephone;
-        actualProfile.CURRENT_ACCOUNT = current_account;
+        // Actualizar los campos de la modal con los nuevos valores
+        document.getElementById("firstNameAdmin").value = name;
+        document.getElementById("lastNameAdmin").value = surname;
+        document.getElementById("emailAdmin").value = email;
+        document.getElementById("usernameAdmin").value = username;
+        document.getElementById("phoneAdmin").value = telephone;
+        document.getElementById("currentAccountAdmin").value = current_account;
 
-        profile = actualProfile;
+        // Esperar un poco y luego recargar datos de sesión y tabla
+        setTimeout(async () => {
+          // Recargar sesión desde servidor
+          await comprobarSesion();
+          // Refrescar tabla de admin
+          await refreshAdminTable();
+          // Cerrar modales
+          document.getElementById("modifyAdminPopup").style.display = "none";
+          document.getElementById("adminTableModal").style.display = "none";
+        }, 1000);
       } else {
         document.getElementById("messageAdmin").innerHTML = data.error;
         document.getElementById("messageAdmin").style.color = "red";
       }
     } catch (error) {
-      //DEBUG console.log(error);
+      console.error("Error modifying admin:", error);
+      document.getElementById("messageAdmin").innerHTML = "Connection error. Please try again.";
     }
   }
 }

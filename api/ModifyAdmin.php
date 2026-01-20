@@ -8,22 +8,28 @@ ini_set('error_log', 'php_error.log');
 
 header('Content-Type: application/json; charset=utf-8');
 
+session_start();
+
 require_once '../controller/controller.php';
 
+// Obtener datos del JSON
+$json = file_get_contents('php://input');
+$data = json_decode($json, true);
+
 $error = false;
-$profile_code = $_GET['profile_code'] ?? '';
-$email = $_GET['email'] ?? '';
-if (!filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL)) {
+$profile_code = $data['profile_code'] ?? '';
+$email = $data['email'] ?? '';
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $error = true;
 }
-$username = filter_input(INPUT_POST, "username", FILTER_UNSAFE_RAW);
-$telephone = $_GET['telephone'] ?? '';
-if (!filter_input(INPUT_POST, "telephone", FILTER_VALIDATE_INT) && !$error) {
+$username = $data['username'] ?? '';
+$telephone = $data['telephone'] ?? '';
+if (!filter_var($telephone, FILTER_VALIDATE_INT) && !$error) {
     $error = true;
 }
-$name = filter_input(INPUT_POST, "name", FILTER_UNSAFE_RAW);
-$surname = filter_input(INPUT_POST, "surname", FILTER_UNSAFE_RAW);
-$current_account = $_GET['current_account'] ?? '';
+$name = $data['name'] ?? '';
+$surname = $data['surname'] ?? '';
+$current_account = $data['current_account'] ?? '';
 
 if (!$error) {
     $controller = new controller();
@@ -38,6 +44,16 @@ if ($error) {
     ]);
 } else {
     if ($modify) {
+        // Actualizar la sesión con los nuevos datos
+        if (isset($_SESSION['user_data'])) {
+            $_SESSION['user_data']['NAME_'] = $name;
+            $_SESSION['user_data']['SURNAME'] = $surname;
+            $_SESSION['user_data']['EMAIL'] = $email;
+            $_SESSION['user_data']['USER_NAME'] = $username;
+            $_SESSION['user_data']['TELEPHONE'] = $telephone;
+            $_SESSION['user_data']['CURRENT_ACCOUNT'] = $current_account;
+        }
+        
         echo json_encode([
             'success' => true,
             'message' => 'Admin modified correctly',
