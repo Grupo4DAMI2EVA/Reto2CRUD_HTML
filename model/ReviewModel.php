@@ -36,7 +36,7 @@ class ReviewModel
 
     public function add_review($comment, $rating, $user_code, $videogame_code)
     {
-        $query = "INSERT INTO REVIEW_ (COMMENT, RATING, USER_CODE, VIDEOGAME_CODE) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO REVIEW_ (COMMENT, RATING, PROFILE_CODE, VIDEOGAME_CODE) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $comment);
         $stmt->bindParam(2, $rating);
