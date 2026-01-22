@@ -8,42 +8,107 @@ ini_set('error_log', 'php_error.log');
 
 header('Content-Type: application/json; charset=utf-8');
 
+session_start();
+
+// Verificar que el usuario esté autenticado
+if (!isset($_SESSION['logeado']) || !$_SESSION['logeado']) {
+    http_response_code(401);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Usuario no autenticado.'
+    ]);
+    exit;
+}
+
 require_once '../controller/controller.php';
 
-$error = false;
-$comment = filter_input(INPUT_POST, "coment", FILTER_UNSAFE_RAW);
-$rating = $_GET['rating'] ?? '';
-if (!filter_input(INPUT_POST, "rating", FILTER_VALIDATE_FLOAT)) {
-    $error = true;
-}
-$user_code = $_GET['profile_code'] ?? '';
-//Currently unsettable
-$videogame_code = $_GET['videogame_code'] ?? '';
+try {
+    // Obtener datos de la petición
+    $data = json_decode(file_get_contents('php://input'), true);
 
-if (!$error) {
-    $controller = new controller();
-    $addReview = $controller->add_review($comment, $rating, $user_code, $videogame_code);
-}
+    // Si no hay JSON, intentar con POST normal
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        $data = $_POST;
+    }
 
-if ($error) {
-    echo json_encode([
-        'result' => 'Invalid syntax in one of the fields.',
-        'status' => http_response_code(400),
-        'success' => false
-    ]);
-} else {
-    if ($addReview) {
+    // Validar datos requeridos
+    if (!isset($data['comment']) || !isset($data['rating']) || !isset($data['videogame_code'])) {
+        http_response_code(400);
         echo json_encode([
-            'result' => 'Review added correctly',
-            'status' => http_response_code(203),
-            'success' => true
+            'success' => false,
+            'error' => 'Faltan campos requeridos: comment, rating, videogame_code'
+        ]);
+        exit;
+    }
+
+    $comment = trim($data['comment']);
+    $rating = floatval($data['rating']);
+    $videogame_code = intval($data['videogame_code']);
+
+    // Obtener el PROFILE_CODE de la sesión (no USER_CODE)
+    $profile_code = $_SESSION['user_data']['PROFILE_CODE']
+        ?? $_SESSION['user_data']['USER_CODE']
+        ?? null;
+
+    if (!$profile_code) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'error' => 'No se pudo identificar al usuario (profile_code no encontrado)',
+            'session_data' => $_SESSION['user_data'] ?? 'No hay datos de sesión'
+        ]);
+        exit;
+    }
+
+    // Validar rating (0.5 a 5.0)
+    if ($rating < 0.5 || $rating > 5.0) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'error' => 'El rating debe estar entre 0.5 y 5.0'
+        ]);
+        exit;
+    }
+
+    // Validar comentario (máximo 500 caracteres)
+    if (strlen($comment) > 500) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'error' => 'El comentario no puede exceder 500 caracteres'
+        ]);
+        exit;
+    }
+
+    $controller = new controller();
+    $addReview = $controller->add_review($comment, $rating, $profile_code, $videogame_code);
+
+    if ($addReview > 0) {
+        echo json_encode([
+            'success' => true,
+            'message' => 'Reseña añadida correctamente',
+            'review_id' => $addReview
+        ]);
+    } else if ($addReview === false) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'error' => 'Ya tienes una reseña para este juego'
         ]);
     } else {
+        http_response_code(400);
         echo json_encode([
-            'error' => 'Error adding the review',
-            'status' => http_response_code(400),
-            'success' => false
+            'success' => false,
+            'error' => 'Error al añadir la reseña'
         ]);
     }
+
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Error del servidor: ' . $e->getMessage(),
+        'trace' => $e->getTraceAsString()
+    ]);
 }
 ?>
