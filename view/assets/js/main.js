@@ -10,6 +10,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     return; // La sesión no es válida, comprobarSesion ya redirige a login
   }
 
+  let editingUserProfile = null;
+
   /* ----------HOME---------- */
   const homeBtn = document.getElementById("adjustData");
 
@@ -96,6 +98,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       adminTableModal.style.display = "none";
     } else if (event.target == modifyUserPopup) {
       modifyUserPopup.style.display = "none";
+      editingUserProfile = null; 
     } else if (event.target == modifyAdminPopup) {
       modifyAdminPopup.style.display = "none";
     } else if (event.target == changePwdModal) {
@@ -192,30 +195,31 @@ document.addEventListener("DOMContentLoaded", async () => {
  ******************************************************************************************************/
 
 /* ----------HOME---------- */
-function openModifyUserPopup(actualProfile) {
+function openModifyUserPopup(userToEdit) {
   document.getElementById("message").innerHTML = "";
 
-  const usuario = {
-    profile_code: actualProfile.PROFILE_CODE,
-    password: actualProfile.PSWD,
-    email: actualProfile.EMAIL,
-    username: actualProfile.USER_NAME,
-    telephone: actualProfile.TELEPHONE,
-    name: actualProfile.NAME_,
-    surname: actualProfile.SURNAME,
-    gender: actualProfile.GENDER,
-    card_no: actualProfile.CARD_NO,
+  // Guardar el usuario siendo editado
+  editingUserProfile = {
+    profile_code: userToEdit.PROFILE_CODE,
+    password: userToEdit.PSWD,
+    email: userToEdit.EMAIL,
+    username: userToEdit.USER_NAME,
+    telephone: userToEdit.TELEPHONE,
+    name: userToEdit.NAME_,
+    surname: userToEdit.SURNAME,
+    gender: userToEdit.GENDER,
+    card_no: userToEdit.CARD_NO,
   };
 
-  document.getElementById("usernameUser").value = usuario.username;
+  document.getElementById("usernameUser").value = editingUserProfile.username;
   //if the profile has an atribute, it has them all, because all are mandatory
-  if (usuario.email) {
-    document.getElementById("emailUser").value = usuario.email;
-    document.getElementById("phoneUser").value = usuario.telephone;
-    document.getElementById("firstNameUser").value = usuario.name;
-    document.getElementById("lastNameUser").value = usuario.surname;
-    document.getElementById("genderUser").value = usuario.gender;
-    document.getElementById("cardNumberUser").value = usuario.card_no;
+  if (editingUserProfile.email) {
+    document.getElementById("emailUser").value = editingUserProfile.email;
+    document.getElementById("phoneUser").value = editingUserProfile.telephone;
+    document.getElementById("firstNameUser").value = editingUserProfile.name;
+    document.getElementById("lastNameUser").value = editingUserProfile.surname;
+    document.getElementById("genderUser").value = editingUserProfile.gender;
+    document.getElementById("cardNumberUser").value = editingUserProfile.card_no;
   }
 
   let modifyUserPopup = document.getElementById("modifyUserPopupAdmin");
@@ -227,7 +231,8 @@ async function modifyUser() {
   let actualProfile = await comprobarSesion();
   if (!actualProfile) return;
 
-  const usuario = {
+  // Usar editingUserProfile si está definido, si no, usar actualProfile
+  const usuario = editingUserProfile || {
     profile_code: actualProfile.PROFILE_CODE,
     email: actualProfile.EMAIL,
     username: actualProfile.USER_NAME,
@@ -302,24 +307,21 @@ async function modifyUser() {
       document.getElementById("message").innerHTML = data.message;
       document.getElementById("message").style.color = "green";
 
-      // Actualizar perfil local
-      actualProfile.NAME_ = name;
-      actualProfile.SURNAME = surname;
-      actualProfile.EMAIL = email;
-      actualProfile.USER_NAME = username;
-      actualProfile.TELEPHONE = telephone;
-      actualProfile.CARD_NO = card_no;
-      actualProfile.GENDER = gender;
-
-      // Si es admin, refrescar la tabla
-      if (actualProfile.CURRENT_ACCOUNT) {
-        await refreshAdminTable();
+      // Actualizar profile global del servidor 
+      const currentProfile = await comprobarSesion();
+      if (currentProfile) {
+        profile = currentProfile;
+        
+        // Si es admin editando a otro usuario, refrescar la tabla
+        if (currentProfile.CURRENT_ACCOUNT) {
+          await refreshAdminTable();
+          // Limpiar el usuario siendo editado
+          editingUserProfile = null;
+          setTimeout(() => {
+            document.getElementById("modifyUserPopupAdmin").style.display = "none";
+          }, 1000);
+        }
       }
-      
-      // Opcional: Recargar datos de sesión desde el servidor
-      setTimeout(async () => {
-        profile = await comprobarSesion();
-      }, 1000);
 
     } else {
       document.getElementById("message").innerHTML = data.error;
