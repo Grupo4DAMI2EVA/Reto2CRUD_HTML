@@ -2,6 +2,14 @@ let ALL_VIDEOGAMES = [];
 let selectedGame = null; // Almacena el juego seleccionado con todos sus datos
 
 document.addEventListener("DOMContentLoaded", async () => {
+  const loader = document.getElementById('pageLoader');
+  if (loader) {
+    loader.style.opacity = '0';
+    loader.style.visibility = 'hidden';
+    // Opcional: remover del DOM después de la animación
+    setTimeout(() => loader.remove(), 5000);
+  }
+  
   // Verificar sesión y cargar datos del usuario
   const user = await comprobarSesion();
   if (!user) return;

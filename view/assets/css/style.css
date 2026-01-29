@@ -868,3 +868,134 @@ li {
   margin-top: 4px;
   display: none;
 }
+
+/* === ANIMACIONES DE TRANSICIÓN GLOBAL === */
+/* Transición suave para todos los elementos interactivos */
+.storeBtn,
+.filterInput,
+.filterSelect,
+.storeTable tbody tr,
+.storeHelp {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Mejora de la animación hover para los botones de la store */
+.storeBtn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Animación específica para botones principales */
+.storeBtn.primary:hover {
+  background: #2c3e50;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 10px 22px rgba(16, 20, 22, 0.25);
+}
+
+/* Animación para los elementos de la tabla al hacer hover */
+.storeTable tbody tr:not(.emptyRow):hover {
+  background: #f0f7ff !important;
+  transform: translateX(5px);
+}
+
+/* Animación para inputs y selects al enfocar */
+.filterInput:focus,
+.filterSelect:focus {
+  transform: scale(1.02);
+  border-color: #729acb;
+  box-shadow: 0 0 0 3px rgba(114, 154, 203, 0.2);
+}
+
+/* Animación para las tarjetas/paneles */
+.storePanel,
+.storeControls {
+  animation: slideUp 0.6s ease-out 0.2s both;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animación para el botón de ayuda */
+.storeHelp:hover {
+  transform: rotate(10deg) scale(1.1);
+  background: #101416;
+  color: white;
+}
+
+
+
+/* Animación para el header */
+.storeHeader {
+  animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animación para cuando se selecciona un juego (feedback visual) */
+.storeTable tbody tr.selected {
+  animation: pulseHighlight 1.5s ease-out;
+  background: #e8f4ff;
+}
+
+@keyframes pulseHighlight {
+  0% {
+    background: #ffffff;
+  }
+  50% {
+    background: #e8f4ff;
+    box-shadow: inset 0 0 0 2px #729acb;
+  }
+  100% {
+    background: #e8f4ff;
+  }
+}
+
+/* Efecto de carga para los datos dinámicos */
+#selectedGame {
+  transition: all 0.3s ease;
+}
+
+#selectedGame.changing {
+  animation: textPulse 0.5s ease-out;
+}
+
+@keyframes textPulse {
+  0% {
+    color: inherit;
+  }
+  50% {
+    color: #729acb;
+    font-weight: bold;
+  }
+  100% {
+    color: inherit;
+  }
+}
+
+/* Media query para animaciones en móviles (más sutiles) */
+@media (max-width: 900px) {
+  .storeTable tbody tr:not(.emptyRow):hover {
+    transform: translateX(2px);
+  }
+  
+  .storeBtn:hover {
+    transform: translateY(-1px) scale(1.01);
+  }
+}
