@@ -999,3 +999,56 @@ li {
     transform: translateY(-1px) scale(1.01);
   }
 }
+/* Modal de Ayuda */
+.helpModal {
+  display: none;
+}
+
+.helpModal.show {
+  display: flex;
+}
+
+.helpModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  border-bottom: 2px #f1f1f1 solid;
+  padding-bottom: 12px;
+}
+
+.helpModalHeader h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.helpModalFooter {
+  margin-top: 16px;
+  text-align: right;
+  border-top: 2px #f1f1f1 solid;
+  padding-top: 12px;
+}
+
+.helpModal h3 {
+  font-weight: 600;
+  margin: 14px 0 8px 0;
+  font-size: 14px;
+}
+
+.helpModal p {
+  margin: 8px 0;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.helpModal ol,
+.helpModal ul {
+  margin: 8px 0 8px 20px;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.helpModal li {
+  margin: 6px 0;
+}

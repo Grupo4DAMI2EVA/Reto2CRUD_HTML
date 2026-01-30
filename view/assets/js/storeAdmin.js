@@ -73,6 +73,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadVideogames();
 
   setupSearch();
+
+  // Configurar modal de ayuda
+  setupHelpModal();
 });
 
 async function get_all_videogames() {
@@ -229,4 +232,30 @@ function setupSearch() {
   searchInput.addEventListener("input", applyFilters);
   genreSelect.addEventListener("change", applyFilters);
   platformSelect.addEventListener("change", applyFilters);
+}
+function setupHelpModal() {
+  const helpBtn = document.getElementById("storeHelpBtn");
+  const helpModal = document.getElementById("helpModal");
+  const closeBtn = document.getElementById("helpModalClose");
+  const okBtn = document.getElementById("helpModalOkBtn");
+
+  if (!helpBtn || !helpModal) return;
+
+  helpBtn.addEventListener("click", () => {
+    helpModal.classList.add("show");
+  });
+
+  closeBtn.addEventListener("click", () => {
+    helpModal.classList.remove("show");
+  });
+
+  okBtn.addEventListener("click", () => {
+    helpModal.classList.remove("show");
+  });
+
+  helpModal.addEventListener("click", (event) => {
+    if (event.target === helpModal) {
+      helpModal.classList.remove("show");
+    }
+  });
 }
