@@ -17,7 +17,7 @@ if (!isset($_SESSION['logeado']) || !$_SESSION['logeado'] || !isset($_SESSION['u
     echo json_encode([
         "error" => "No autorizado",
         'status' => http_response_code(401),
-        'success' => false
+        'exito' => false
     ], JSON_UNESCAPED_UNICODE);
     exit;
 }
@@ -32,7 +32,7 @@ if (!!filter_input(INPUT_POST, "amount", FILTER_VALIDATE_INT) || $amount <= 0) {
     echo json_encode([
         "error" => "Cantidad no válida",
         'status' => http_response_code(400),
-        'success' => false
+        'exito' => false
     ], JSON_UNESCAPED_UNICODE);
     exit;
 }
@@ -43,7 +43,7 @@ if ($profile_code === null) {
     echo json_encode([
         "error" => "Perfil de usuario no encontrado",
         'status' => http_response_code(400),
-        'success' => false
+        'exito' => false
     ], JSON_UNESCAPED_UNICODE);
     exit;
 }
@@ -55,7 +55,7 @@ if ($result === false) {
     echo json_encode([
         "error" => "Error al actualizar el saldo",
         'status' => http_response_code(500),
-        'success' => false
+        'exito' => false
     ], JSON_UNESCAPED_UNICODE);
     exit;
 }
@@ -64,9 +64,10 @@ if ($result === false) {
 $_SESSION['user_data']['BALANCE'] = $result['BALANCE'];
 
 echo json_encode([
+    "success" => true,
     "new_balance" => $result['BALANCE'],
     'status' => http_response_code(200),
-    "success" => true
+    'exito' => false
 ], JSON_UNESCAPED_UNICODE);
 
 ?>

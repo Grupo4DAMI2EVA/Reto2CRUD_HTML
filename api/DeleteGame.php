@@ -18,15 +18,15 @@ try {
 
     if ($del) {
         echo json_encode([
-            'result' => 'El videojuego ha sido eliminado correctamente.',
+            'resultado' => 'El videojuego ha sido eliminado correctamente.',
             'status' => http_response_code(204),
-            'success' => true
+            'exito' => true
         ], JSON_UNESCAPED_UNICODE);
     } else {
         echo json_encode([
-            'result' => 'No se ha encontrado el videojuego.',
+            'resultado' => 'No se ha encontrado el videojuego.',
             'status' => http_response_code(404),
-            'success' => false
+            'exito' => false
         ]);
     }
 } catch (Exception $e) {
@@ -34,7 +34,7 @@ try {
     echo json_encode([
         'error' => 'Error del servidor: ' . $e->getMessage(),
         'status' => http_response_code(500),
-        'success' => false
+        'exito' => false
     ]);
 }
 ?>

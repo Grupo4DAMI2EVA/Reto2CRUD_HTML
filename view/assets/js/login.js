@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data["error"]) {
           alert("El nombre de usuario o la contraseña con incorrectas.");
         } else {
-          if (data["result"]) {
+          if (data["resultado"]) {
             window.location.href = "main.html";
           }
         }

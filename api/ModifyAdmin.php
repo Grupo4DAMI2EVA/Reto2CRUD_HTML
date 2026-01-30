@@ -38,9 +38,9 @@ if (!$error) {
 
 if ($error) {
     echo json_encode([
-        'result' => 'Invalid syntax in one of the fields.',
+        'resultado' => 'Invalid syntax in one of the fields.',
         'status' => http_response_code(400),
-        'success' => false
+        'exito' => false
     ]);
 } else {
     if ($modify) {
@@ -53,17 +53,17 @@ if ($error) {
             $_SESSION['user_data']['TELEPHONE'] = $telephone;
             $_SESSION['user_data']['CURRENT_ACCOUNT'] = $current_account;
         }
-
+        
         echo json_encode([
+            'success' => true,
             'message' => 'Admin modified correctly',
-            'status' => http_response_code(200),
-            'success' => true
+            'status' => http_response_code(200)
         ]);
     } else {
         echo json_encode([
+            'success' => false,
             'error' => 'Error modifying the admin',
-            'status' => http_response_code(400),
-            'success' => false
+            'status' => http_response_code(400)
         ]);
     }
 }

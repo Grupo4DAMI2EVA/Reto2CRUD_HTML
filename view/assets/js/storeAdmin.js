@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       alert("Por favor, selecciona un videojuego para modificar");
       return false;
     }
-    localStorage.setItem("selectedGame", JSON.stringify(selectedGame));
+    localStorage.setItem('selectedGame', JSON.stringify(selectedGame));
     window.location.href = "modifyGames.html";
   };
 
@@ -42,16 +42,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-      const response = await fetch(
-        `../../api/DeleteGame.php?code=${selectedGame.VIDEOGAME_CODE}`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
+      const response = await fetch(`../../api/DeleteGame.php?code=${selectedGame.VIDEOGAME_CODE}`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+      });
 
       let data = {};
       if (response.ok && response.status !== 204) {
@@ -64,7 +61,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("selectedGame").textContent = "Select a game";
         await loadVideogames();
       } else {
-        alert(data.error || data.result || "Error al eliminar el videojuego");
+        alert(data.error || data.resultado || "Error al eliminar el videojuego");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -87,7 +84,7 @@ async function get_all_videogames() {
   });
 
   const data = await response.json();
-  return data.result || [];
+  return data.resultado || [];
 }
 
 async function loadVideogames() {
@@ -209,9 +206,9 @@ function setupSearch() {
   const genreSelect = document.getElementById("searchGenre");
   const platformSelect = document.getElementById("searchPlatform");
 
-  if (!searchInput || !genreSelect || !platformSelect) {
-    return;
-  }
+  if (!searchInput || !genreSelect || !platformSelect){
+   return;   
+  } 
 
   const applyFilters = () => {
     const text = searchInput.value.trim().toLowerCase();
@@ -223,7 +220,8 @@ function setupSearch() {
       const matchesText = !text || name.includes(text);
 
       const matchesGenre = genre === "all" || game.GENRE === genre;
-      const matchesPlatform = platform === "all" || game.PLATAFORM === platform;
+      const matchesPlatform =
+        platform === "all" || game.PLATAFORM === platform;
 
       return matchesText && matchesGenre && matchesPlatform;
     });
