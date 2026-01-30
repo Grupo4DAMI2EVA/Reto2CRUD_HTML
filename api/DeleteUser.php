@@ -15,7 +15,7 @@ if (!isset($_SESSION['logeado']) || !$_SESSION['logeado']) {
     echo json_encode([
         'error' => 'No autorizado',
         'status' => http_response_code(401),
-        'exito' => false
+        'success' => false
     ], JSON_UNESCAPED_UNICODE);
     exit;
 }
@@ -30,7 +30,7 @@ if ($id === null || !filter_var($id, FILTER_VALIDATE_INT)) {
     echo json_encode([
         'error' => 'ID inválido',
         'status' => http_response_code(400),
-        'exito' => false
+        'success' => false
     ], JSON_UNESCAPED_UNICODE);
     exit;
 }
@@ -46,7 +46,7 @@ if (!$isAdmin && ($selfId === null || $selfId !== $id)) {
     echo json_encode([
         'error' => 'Acceso denegado. Sólo puedes borrar tu propia cuenta.',
         'status' => http_response_code(403),
-        'exito' => false
+        'success' => false
     ], JSON_UNESCAPED_UNICODE);
     exit;
 }
@@ -61,22 +61,22 @@ if ($result) {
         session_unset();
         session_destroy();
         echo json_encode([
-            'result' => true,
-            'message' => 'Cuenta eliminada y sesión cerrada.',
-            'status' => http_response_code(204)
+            'result' => 'Cuenta eliminada y sesión cerrada.',
+            'status' => http_response_code(204),
+            'success' => true
         ], JSON_UNESCAPED_UNICODE);
     } else {
         echo json_encode([
-            'result' => false,
             'error' => "The account wasn't deleted correctly.",
-            'status' => http_response_code(500)
+            'status' => http_response_code(500),
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
     }
 } else {
     echo json_encode([
         'error' => 'User not found',
         'status' => http_response_code(404),
-        'exito' => false
+        'success' => false
     ], JSON_UNESCAPED_UNICODE);
 }
 ?>

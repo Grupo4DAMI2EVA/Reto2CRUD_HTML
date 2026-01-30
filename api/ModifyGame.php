@@ -11,7 +11,8 @@ header('Content-Type: application/json; charset=utf-8');
 require_once '../controller/controller.php';
 
 // Validation functions
-function validateName($name) {
+function validateName($name)
+{
     $name = trim($name);
     if (empty($name)) {
         return ['valid' => false, 'message' => 'Name is required'];
@@ -28,7 +29,8 @@ function validateName($name) {
     return ['valid' => true];
 }
 
-function validatePlatform($platform) {
+function validatePlatform($platform)
+{
     $validPlatforms = ['pc', 'playstation', 'xbox', 'nintendo', 'other'];
     if (empty($platform)) {
         return ['valid' => false, 'message' => 'Platform is required'];
@@ -39,7 +41,8 @@ function validatePlatform($platform) {
     return ['valid' => true];
 }
 
-function validateCompany($company) {
+function validateCompany($company)
+{
     $company = trim($company);
     if (empty($company)) {
         return ['valid' => false, 'message' => 'Company is required'];
@@ -56,14 +59,15 @@ function validateCompany($company) {
     return ['valid' => true];
 }
 
-function validateStock($stock) {
+function validateStock($stock)
+{
     if (empty($stock)) {
         return ['valid' => false, 'message' => 'Stock is required'];
     }
     if (!filter_var($stock, FILTER_VALIDATE_INT) && $stock !== '0') {
         return ['valid' => false, 'message' => 'Stock must be a valid integer'];
     }
-    $stockNum = (int)$stock;
+    $stockNum = (int) $stock;
     if ($stockNum < 0) {
         return ['valid' => false, 'message' => 'Stock cannot be negative'];
     }
@@ -73,7 +77,8 @@ function validateStock($stock) {
     return ['valid' => true];
 }
 
-function validateGenre($genre) {
+function validateGenre($genre)
+{
     $validGenres = ['action', 'adventure', 'rpg', 'platformer', 'shooter', 'strategy', 'racing', 'sports', 'simulation', 'educational', 'other'];
     if (empty($genre)) {
         return ['valid' => false, 'message' => 'Genre is required'];
@@ -84,14 +89,15 @@ function validateGenre($genre) {
     return ['valid' => true];
 }
 
-function validatePrice($price) {
+function validatePrice($price)
+{
     if (empty($price)) {
         return ['valid' => false, 'message' => 'Price is required'];
     }
     if (!filter_var($price, FILTER_VALIDATE_FLOAT)) {
         return ['valid' => false, 'message' => 'Price must be a valid number'];
     }
-    $priceNum = (float)$price;
+    $priceNum = (float) $price;
     if ($priceNum <= 0) {
         return ['valid' => false, 'message' => 'Price must be greater than 0'];
     }
@@ -104,7 +110,8 @@ function validatePrice($price) {
     return ['valid' => true];
 }
 
-function validatePegi($pegi) {
+function validatePegi($pegi)
+{
     $validPegis = ['3', '7', '12', '16', '18'];
     if (empty($pegi)) {
         return ['valid' => false, 'message' => 'PEGI is required'];
@@ -115,24 +122,25 @@ function validatePegi($pegi) {
     return ['valid' => true];
 }
 
-function validateReleaseDate($date) {
+function validateReleaseDate($date)
+{
     if (empty($date)) {
         return ['valid' => false, 'message' => 'Release Date is required'];
     }
-    
+
     $dateObj = DateTime::createFromFormat('Y-m-d', $date);
-    
+
     if (!$dateObj) {
         return ['valid' => false, 'message' => 'Invalid date format'];
     }
-    
+
     $today = new DateTime();
     $today->setTime(0, 0, 0);
-    
+
     if ($dateObj > $today) {
         return ['valid' => false, 'message' => 'Release date cannot be in the future'];
     }
-    
+
     return ['valid' => true];
 }
 
@@ -152,9 +160,9 @@ try {
     if (empty($code) || !filter_var($code, FILTER_VALIDATE_INT)) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => 'Invalid game code',
+            'result' => 'Invalid game code',
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -164,9 +172,9 @@ try {
     if (!$nameValidation['valid']) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => $nameValidation['message'],
+            'result' => $nameValidation['message'],
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -175,9 +183,9 @@ try {
     if (!$platformValidation['valid']) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => $platformValidation['message'],
+            'result' => $platformValidation['message'],
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -186,9 +194,9 @@ try {
     if (!$companyValidation['valid']) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => $companyValidation['message'],
+            'result' => $companyValidation['message'],
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -197,9 +205,9 @@ try {
     if (!$stockValidation['valid']) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => $stockValidation['message'],
+            'result' => $stockValidation['message'],
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -208,9 +216,9 @@ try {
     if (!$genreValidation['valid']) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => $genreValidation['message'],
+            'result' => $genreValidation['message'],
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -219,9 +227,9 @@ try {
     if (!$priceValidation['valid']) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => $priceValidation['message'],
+            'result' => $priceValidation['message'],
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -230,9 +238,9 @@ try {
     if (!$pegiValidation['valid']) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => $pegiValidation['message'],
+            'result' => $pegiValidation['message'],
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -241,9 +249,9 @@ try {
     if (!$releaseDateValidation['valid']) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => $releaseDateValidation['message'],
+            'result' => $releaseDateValidation['message'],
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -262,19 +270,18 @@ try {
         $releaseDate
     );
 
-    if ($modify) {
-        http_response_code(200);
+    if ($error) {
         echo json_encode([
-            'resultado' => 'El videojuego ha sido modificado correctamente.',
+            'result' => 'El videojuego ha sido modificado correctamente.',
             'status' => 200,
-            'exito' => true
+            'success' => true
         ], JSON_UNESCAPED_UNICODE);
     } else {
         http_response_code(400);
         echo json_encode([
-            'resultado' => 'No se ha modificado correctamente el videojuego.',
+            'result' => 'No se ha modificado correctamente el videojuego.',
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
     }
 } catch (Exception $e) {
@@ -283,7 +290,7 @@ try {
     echo json_encode([
         'error' => 'Error del servidor: ' . $e->getMessage(),
         'status' => 500,
-        'exito' => false
+        'success' => false
     ], JSON_UNESCAPED_UNICODE);
 }
 ?>

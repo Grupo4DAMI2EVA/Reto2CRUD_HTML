@@ -2,14 +2,14 @@ let ALL_VIDEOGAMES = [];
 let selectedGame = null; // Almacena el juego seleccionado con todos sus datos
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const loader = document.getElementById('pageLoader');
+  const loader = document.getElementById("pageLoader");
   if (loader) {
-    loader.style.opacity = '0';
-    loader.style.visibility = 'hidden';
+    loader.style.opacity = "0";
+    loader.style.visibility = "hidden";
     // Opcional: remover del DOM después de la animación
     setTimeout(() => loader.remove(), 5000);
   }
-  
+
   // Verificar sesión y cargar datos del usuario
   const user = await comprobarSesion();
   if (!user) return;
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Configurar botón "Add to Cart"
   setupAddToCart();
-  
+
   // Configurar botón "Review"
   setupReviewButton();
 
@@ -50,7 +50,7 @@ async function get_all_videogames() {
   });
 
   const data = await response.json();
-  return data.resultado || [];
+  return data.result || [];
 }
 
 async function loadVideogames() {
@@ -110,7 +110,7 @@ function renderVideogames(videogames) {
       STOCK,
       COMPANYNAME,
       RELEASE_DATE,
-      VIDEOGAME_CODE
+      VIDEOGAME_CODE,
     } = game;
 
     row.innerHTML = `
@@ -128,7 +128,7 @@ function renderVideogames(videogames) {
     row.addEventListener("click", () => {
       // Guardar el juego completo seleccionado
       selectedGame = game;
-      
+
       if (selectedGameSpan) {
         selectedGameSpan.textContent = NAME_ || "Unknown";
       }
@@ -177,7 +177,7 @@ function setupSearch() {
   const platformSelect = document.getElementById("searchPlatform");
   // Botón "Search" (es el único storeBtn primary dentro de los filtros)
   const searchButton = document.querySelector(
-    ".storeFilters .storeBtn.primary"
+    ".storeFilters .storeBtn.primary",
   );
 
   if (!searchInput || !genreSelect || !platformSelect || !searchButton) return;
@@ -192,8 +192,7 @@ function setupSearch() {
       const matchesText = !text || name.includes(text);
 
       const matchesGenre = genre === "all" || game.GENRE === genre;
-      const matchesPlatform =
-        platform === "all" || game.PLATAFORM === platform;
+      const matchesPlatform = platform === "all" || game.PLATAFORM === platform;
 
       return matchesText && matchesGenre && matchesPlatform;
     });
@@ -213,8 +212,8 @@ function setupSearch() {
 }
 
 function setupAddToCart() {
-  const addToCartBtn = document.querySelector('.storeBtn.accent');
-  
+  const addToCartBtn = document.querySelector(".storeBtn.accent");
+
   if (!addToCartBtn) return;
 
   addToCartBtn.addEventListener("click", async () => {
@@ -238,13 +237,13 @@ function setupAddToCart() {
         },
         body: JSON.stringify({
           videogame_code: selectedGame.VIDEOGAME_CODE,
-          quantity: 1
+          quantity: 1,
         }),
       });
 
       const data = await response.json();
 
-      if (data.success || data.exito) {
+      if (data.success) {
         alert(data.message || "Juego añadido al carrito correctamente");
       } else {
         alert(data.error || "Error al añadir el juego al carrito");
@@ -258,18 +257,22 @@ function setupAddToCart() {
 
 function setupReviewButton() {
   // Encuentra el botón "Review" (ghost) en la tienda
-  const reviewButtons = document.querySelectorAll('a[href="review.html"] button, button[onclick*="review.html"]');
-  
-  reviewButtons.forEach(button => {
+  const reviewButtons = document.querySelectorAll(
+    'a[href="review.html"] button, button[onclick*="review.html"]',
+  );
+
+  reviewButtons.forEach((button) => {
     // Reemplazar el comportamiento por defecto
-    button.addEventListener("click", function(e) {
+    button.addEventListener("click", function (e) {
       e.preventDefault(); // Prevenir la navegación por defecto
-      
+
       if (!selectedGame) {
-        alert("Por favor, selecciona un juego de la tabla primero para dejar una reseña");
+        alert(
+          "Por favor, selecciona un juego de la tabla primero para dejar una reseña",
+        );
         return;
       }
-      
+
       // Navegar a review.html con los parámetros del juego
       navigateToReview(selectedGame);
     });
@@ -281,15 +284,15 @@ function navigateToReview(game) {
     alert("Error: No se pudo obtener la información del juego seleccionado");
     return;
   }
-  
+
   // Codificar el nombre para la URL
   const encodedName = encodeURIComponent(game.NAME_);
-  
+
   // Construir la URL con parámetros
   const reviewUrl = `review.html?game_id=${game.VIDEOGAME_CODE}&game_name=${encodedName}`;
-  
+
   console.log(`Navegando a: ${reviewUrl}`);
-  
+
   // Navegar a la página de reseñas
   window.location.href = reviewUrl;
 }

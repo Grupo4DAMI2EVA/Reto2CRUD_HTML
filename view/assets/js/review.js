@@ -6,17 +6,19 @@ let currentGameName = "";
 
 async function countUserReviews(profileCode) {
   try {
-    const response = await fetch(`../../api/GetUserReviews.php?profile_code=${profileCode}`);
-    
+    const response = await fetch(
+      `../../api/GetUserReviews.php?profile_code=${profileCode}`,
+    );
+
     if (!response.ok) {
       console.error("Error en la respuesta del servidor:", response.status);
       return 0;
     }
-    
+
     const data = await response.json();
-    
-    if (data.exito && data.resultado) {
-      return data.resultado.length;
+
+    if (data.success && data.result) {
+      return data.result.length;
     }
     return 0;
   } catch (err) {
@@ -29,46 +31,44 @@ async function countUserReviews(profileCode) {
 function getUrlParams() {
   const params = {};
   const queryString = window.location.search.substring(1);
-  
+
   if (!queryString) return params;
-  
-  const pairs = queryString.split('&');
-  
+
+  const pairs = queryString.split("&");
+
   for (const pair of pairs) {
-    const [key, value] = pair.split('=');
+    const [key, value] = pair.split("=");
     if (key) {
-      params[decodeURIComponent(key)] = decodeURIComponent(value || '');
+      params[decodeURIComponent(key)] = decodeURIComponent(value || "");
     }
   }
-  
+
   return params;
 }
-
 
 // Función para cargar información del juego
 async function loadGameInfo(gameId, gameName) {
   try {
     currentGameId = gameId;
     currentGameName = decodeURIComponent(gameName);
-    
+
     // Actualizar el campo oculto
-    const gameIdInput = document.getElementById('current-game-id');
+    const gameIdInput = document.getElementById("current-game-id");
     if (gameIdInput) {
       gameIdInput.value = gameId;
     }
-    
+
     // Actualizar el título del juego
-    const gameTitleElement = document.getElementById('game-title');
+    const gameTitleElement = document.getElementById("game-title");
     if (gameTitleElement) {
       gameTitleElement.textContent = currentGameName;
       gameTitleElement.dataset.gameId = gameId;
     }
-    
+
     console.log(`Juego cargado: ${currentGameName} (ID: ${gameId})`);
-    
+
     // Opcional: puedes hacer una petición a la API para obtener más detalles del juego
     // await fetchGameDetails(gameId);
-    
   } catch (error) {
     console.error("Error cargando información del juego:", error);
   }
@@ -85,19 +85,21 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Obtener parámetros de la URL
   const params = getUrlParams();
   const gameId = params.game_id || params.id || params.videogame_code;
-  
+
   if (!gameId) {
-    alert("No se ha especificado un juego para valorar. Regresando a la tienda.");
+    alert(
+      "No se ha especificado un juego para valorar. Regresando a la tienda.",
+    );
     window.location.href = "store.html";
     return;
   }
-  
+
   // Obtener nombre del juego
   const gameName = params.game_name || params.name || "Juego Desconocido";
-  
+
   // Cargar información del juego
   await loadGameInfo(gameId, gameName);
-  
+
   const nameSpan = document.getElementById("storeUserName");
   if (nameSpan) {
     nameSpan.textContent = user.USER_NAME || user.NAME_ || "[User]";
@@ -253,7 +255,9 @@ function initializeButtons() {
 
 async function submitReview() {
   if (!currentGameId) {
-    alert("Error: No se pudo identificar el juego. Por favor, regresa a la tienda.");
+    alert(
+      "Error: No se pudo identificar el juego. Por favor, regresa a la tienda.",
+    );
     return;
   }
 
@@ -282,7 +286,7 @@ async function submitReview() {
     const reviewData = {
       comment: reviewText.trim(),
       rating: currentRating,
-      videogame_code: currentGameId
+      videogame_code: currentGameId,
     };
 
     console.log("Enviando reseña:", reviewData);
@@ -292,15 +296,17 @@ async function submitReview() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(reviewData)
+      body: JSON.stringify(reviewData),
     });
 
     const data = await response.json();
 
     if (data.success) {
       const gameName = currentGameName || "este juego";
-      alert(`¡Gracias por tu reseña de ${currentRating.toFixed(1)} estrellas para ${gameName}! Tu valoración ha sido enviada.`);
-      
+      alert(
+        `¡Gracias por tu reseña de ${currentRating.toFixed(1)} estrellas para ${gameName}! Tu valoración ha sido enviada.`,
+      );
+
       // Actualizar contador de reseñas
       const user = await comprobarSesion();
       const reviewCountSpan = document.getElementById("storeUserReviewCount");
@@ -308,10 +314,10 @@ async function submitReview() {
         const userReviewCount = await countUserReviews(user.PROFILE_CODE);
         reviewCountSpan.textContent = userReviewCount;
       }
-      
+
       resetForm();
     } else {
-      alert(`Error al enviar la reseña: ${data.error || 'Error desconocido'}`);
+      alert(`Error al enviar la reseña: ${data.error || "Error desconocido"}`);
     }
   } catch (error) {
     console.error("Error al enviar reseña:", error);
@@ -325,7 +331,7 @@ async function submitReview() {
 
 function cancelReview() {
   const confirmCancel = confirm(
-    "¿Estás seguro de que quieres cancelar? Se perderán los cambios."
+    "¿Estás seguro de que quieres cancelar? Se perderán los cambios.",
   );
 
   if (confirmCancel) {

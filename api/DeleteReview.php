@@ -18,15 +18,15 @@ $deleteReview = $controller->delete_review($review_id);
 
 if ($deleteReview) {
     echo json_encode([
-        'success' => true,
         'message' => 'Review deleted correctly',
-        'status' => http_response_code(204)
+        'status' => http_response_code(204),
+        'success' => true
     ]);
 } else {
     echo json_encode([
-        'success' => false,
         'error' => 'Error deleting the review',
-        'status' => http_response_code(400)
+        'status' => http_response_code(400),
+        'success' => false
     ]);
 }
 ?>

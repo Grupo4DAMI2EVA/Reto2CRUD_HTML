@@ -25,7 +25,7 @@ if (is_null($user)) {
         echo json_encode([
             "error" => 'El nombre de usuario o contraseña son incorrectos.',
             'status' => http_response_code(400),
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
     } else {
         // Guardar admin en la sesión
@@ -34,9 +34,9 @@ if (is_null($user)) {
         $_SESSION['user_data'] = $admin;
         $_SESSION['username'] = $username;
         echo json_encode([
-            "resultado" => $admin,
+            "result" => $admin,
             'status' => http_response_code(200),
-            'exito' => true
+            'success' => true
         ], JSON_UNESCAPED_UNICODE);
     }
 } else {
@@ -46,9 +46,9 @@ if (is_null($user)) {
     $_SESSION['user_data'] = $user;
     $_SESSION['username'] = $username;
     echo json_encode([
-        "resultado" => $user,
+        "result" => $user,
         'status' => http_response_code(200),
-        'exito' => true
+        'success' => true
     ], JSON_UNESCAPED_UNICODE);
 }
 ?>

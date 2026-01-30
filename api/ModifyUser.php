@@ -13,10 +13,9 @@ session_start();
 // Verificar sesión
 if (!isset($_SESSION['logeado']) || !$_SESSION['logeado']) {
     echo json_encode([
-        'success' => false,
         'error' => 'No autorizado',
         'status' => http_response_code(401),
-        'exito' => false
+        'success' => false
     ]);
     exit;
 }
@@ -24,9 +23,9 @@ if (!isset($_SESSION['logeado']) || !$_SESSION['logeado']) {
 // Solo permitir POST para mayor seguridad
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode([
-        'success' => false,
         'error' => 'Método no permitido',
-        'status' => http_response_code(405)
+        'status' => http_response_code(405),
+        'success' => false
     ]);
     exit;
 }
@@ -37,9 +36,9 @@ $data = json_decode(file_get_contents("php://input"), true);
 // Validar datos requeridos
 if (!isset($data['profile_code'])) {
     echo json_encode([
-        'success' => false,
         'error' => 'Código de perfil requerido',
-        'status' => http_response_code(400)
+        'status' => http_response_code(400),
+        'success' => false
     ]);
     exit;
 }
@@ -49,9 +48,9 @@ $required_fields = ['email', 'username', 'telephone', 'name', 'surname', 'gender
 foreach ($required_fields as $field) {
     if (!isset($data[$field]) || empty(trim($data[$field]))) {
         echo json_encode([
-            'success' => false,
             'error' => "El campo $field es requerido",
-            'status' => http_response_code(400)
+            'status' => http_response_code(400),
+            'success' => false
         ]);
         exit;
     }
@@ -70,9 +69,9 @@ $card_no = trim($data['card_no']);
 // Validar email
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     echo json_encode([
-        'success' => false,
         'error' => 'Email no válido',
-        'status' => http_response_code(400)
+        'status' => http_response_code(400),
+        'success' => false
     ]);
     exit;
 }
@@ -82,9 +81,9 @@ if ($_SESSION['tipo'] === 'user') {
     // Usuario normal solo puede modificar su propio perfil
     if ($_SESSION['user_data']['PROFILE_CODE'] != $profile_code) {
         echo json_encode([
-            'success' => false,
             'error' => 'No tienes permiso para modificar este perfil',
-            'status' => http_response_code(403)
+            'status' => http_response_code(403),
+            'success' => false
         ]);
         exit;
     }
@@ -110,15 +109,15 @@ if ($modify) {
     }
 
     echo json_encode([
-        'success' => true,
         'message' => 'Usuario modificado correctamente',
-        'status' => http_response_code(200)
+        'status' => http_response_code(200),
+        'success' => true
     ]);
 } else {
     echo json_encode([
-        'success' => false,
         'error' => 'Error modificando el usuario. Puede que el email o username ya existan.',
-        'status' => http_response_code(400)
+        'status' => http_response_code(400),
+        'success' => false
     ]);
 }
 ?>

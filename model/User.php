@@ -54,5 +54,4 @@ class User extends Profile
         return "User: " . parent::mostrar() . " - Gender: " . $this->gender . " - Card Number: " . $this->cardNumber;
     }
 }
-
 ?>

@@ -14,7 +14,7 @@ if (!isset($_SESSION['logeado']) || !$_SESSION['logeado']) {
     echo json_encode([
         "error" => "No autorizado",
         'status' => http_response_code(401),
-        'exito' => false
+        'success' => false
     ], JSON_UNESCAPED_UNICODE);
     exit;
 }
@@ -23,6 +23,6 @@ if (!isset($_SESSION['logeado']) || !$_SESSION['logeado']) {
 echo json_encode([
     $_SESSION['user_data'],
     'status' => http_response_code(200),
-    'exito' => true
+    'success' => true
 ], JSON_UNESCAPED_UNICODE);
 ?>

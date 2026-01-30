@@ -6,7 +6,7 @@ const rules = {
   genre: { required: true },
   price: { required: true },
   pegi: { required: true },
-  releaseDate: { required: true }
+  releaseDate: { required: true },
 };
 
 function validate(field, value) {
@@ -21,28 +21,28 @@ function validate(field, value) {
 }
 
 function showError(fieldId, message) {
-  const errorEl = document.getElementById(fieldId + 'Error');
+  const errorEl = document.getElementById(fieldId + "Error");
   const inputEl = document.getElementById(fieldId);
   if (errorEl) {
     errorEl.textContent = message;
-    errorEl.style.display = 'block';
+    errorEl.style.display = "block";
   }
-  if (inputEl) inputEl.style.borderColor = '#dc3545';
+  if (inputEl) inputEl.style.borderColor = "#dc3545";
 }
 
 function clearError(fieldId) {
-  const errorEl = document.getElementById(fieldId + 'Error');
+  const errorEl = document.getElementById(fieldId + "Error");
   const inputEl = document.getElementById(fieldId);
   if (errorEl) {
-    errorEl.textContent = '';
-    errorEl.style.display = 'none';
+    errorEl.textContent = "";
+    errorEl.style.display = "none";
   }
-  if (inputEl) inputEl.style.borderColor = '';
+  if (inputEl) inputEl.style.borderColor = "";
 }
 
 function validateForm() {
   let isValid = true;
-  Object.keys(rules).forEach(field => {
+  Object.keys(rules).forEach((field) => {
     const error = validate(field, document.getElementById(field).value);
     if (error) {
       showError(field, error);
@@ -54,13 +54,13 @@ function validateForm() {
   return isValid;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('addGameForm');
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("addGameForm");
 
   // Real-time validation on blur (When focus is lost)
-  Object.keys(rules).forEach(field => {
+  Object.keys(rules).forEach((field) => {
     const el = document.getElementById(field);
-    el.addEventListener('blur', () => {
+    el.addEventListener("blur", () => {
       const error = validate(field, el.value);
       if (error) showError(field, error);
       else clearError(field);
@@ -68,39 +68,42 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Form submission
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     if (!validateForm()) return;
 
     try {
-      const res = await fetch(form.action, { method: 'POST', body: new FormData(form) });
+      const res = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+      });
       const data = await res.json();
 
-      if (data.exito) {
-        alert(data.resultado);
+      if (data.success) {
+        alert(data.result);
         // Clear all errors before reload
-        Object.keys(rules).forEach(field => clearError(field));
+        Object.keys(rules).forEach((field) => clearError(field));
         location.reload();
       } else {
         // Try to identify which field has the error based on the message
         let fieldWithError = null;
-        const message = data.resultado.toLowerCase();
-        
-        Object.keys(rules).forEach(field => {
+        const message = data.result.toLowerCase();
+
+        Object.keys(rules).forEach((field) => {
           if (message.includes(field.toLowerCase())) {
             fieldWithError = field;
           }
         });
-        
+
         if (fieldWithError) {
-          showError(fieldWithError, data.resultado);
+          showError(fieldWithError, data.result);
         } else {
-          alert(data.resultado || 'Error al crear el juego');
+          alert(data.result || "Error al crear el juego");
         }
       }
     } catch (err) {
-      alert('Network error: ' + err.message);
+      alert("Network error: " + err.message);
     }
   });
 });
