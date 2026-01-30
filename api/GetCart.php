@@ -13,9 +13,10 @@ session_start();
 // Verificar sesión
 if (!isset($_SESSION['logeado']) || !$_SESSION['logeado']) {
     echo json_encode([
+        'success' => false,
         'error' => 'No autorizado',
         'status' => http_response_code(401),
-        'success' => false
+        'exito' => false
     ]);
     exit;
 }
@@ -35,7 +36,7 @@ $cartItems = [];
 foreach ($_SESSION['cart'] as $cartItem) {
     $videogame_code = $cartItem['videogame_code'];
     $quantity = $cartItem['quantity'];
-
+    
     // Buscar el videojuego en la lista completa
     foreach ($allVideogames as $game) {
         if ($game['VIDEOGAME_CODE'] == $videogame_code) {

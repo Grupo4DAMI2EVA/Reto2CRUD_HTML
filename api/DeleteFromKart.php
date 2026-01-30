@@ -13,9 +13,10 @@ session_start();
 // Verificar sesión
 if (!isset($_SESSION['logeado']) || !$_SESSION['logeado']) {
     echo json_encode([
+        'success' => false,
         'error' => 'No autorizado',
         'status' => http_response_code(401),
-        'success' => false
+        'exito' => false
     ]);
     exit;
 }
@@ -23,9 +24,10 @@ if (!isset($_SESSION['logeado']) || !$_SESSION['logeado']) {
 // Solo permitir POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode([
+        'success' => false,
         'error' => 'Método no permitido',
         'status' => http_response_code(405),
-        'success' => false
+        'exito' => false
     ]);
     exit;
 }
@@ -41,9 +43,10 @@ if (isset($_POST['id'])) {
 
 if ($id === null) {
     echo json_encode([
+        'success' => false,
         'error' => 'ID del producto requerido',
         'status' => http_response_code(400),
-        'success' => false
+        'exito' => false
     ]);
     exit;
 }
@@ -66,15 +69,17 @@ foreach ($_SESSION['cart'] as $key => $item) {
 
 if ($found) {
     echo json_encode([
+        'success' => true,
         'message' => 'Producto eliminado del carrito correctamente',
         'status' => http_response_code(200),
-        'success' => true
+        'exito' => true
     ]);
 } else {
     echo json_encode([
+        'success' => false,
         'error' => 'Producto no encontrado en el carrito',
         'status' => http_response_code(404),
-        'success' => false
+        'exito' => false
     ]);
 }
 ?>

@@ -20,22 +20,24 @@ if (isset($_SESSION['logeado']) && $_SESSION['logeado'] === true) {
             "admin" => "admin",
             'message' => "The profile is an admin.",
             'status' => http_response_code(200),
-            'success' => true
+            'exito' => true
         ], JSON_UNESCAPED_UNICODE);
     } else if ($tipo === 'user') {
         echo json_encode([
             "user" => "user",
             'message' => "The profile is an user.",
             'status' => http_response_code(200),
-            'success' => true
+            'exito' => true
         ], JSON_UNESCAPED_UNICODE);
     } else {
         echo json_encode([
             "error" => 'Tipo de usuario no válido en la sesión.',
             'status' => http_response_code(400),
-            'success' => false
+            'exito' => false
         ], JSON_UNESCAPED_UNICODE);
     }
+
+
     exit;
 }
 
@@ -51,7 +53,7 @@ if (empty($username) || empty($password)) {
     echo json_encode([
         "error" => 'Se requieren nombre de usuario y contraseña.',
         'status' => http_response_code(400),
-        'success' => false
+        'exito' => false
     ], JSON_UNESCAPED_UNICODE);
     exit;
 }
@@ -64,20 +66,20 @@ if ($type) {
         "admin" => "admin",
         'message' => "The profile is an admin.",
         'status' => http_response_code(200),
-        'success' => true
+        'exito' => true
     ], JSON_UNESCAPED_UNICODE);
 } else if (!$type) {
     echo json_encode([
         "user" => "user",
         'message' => "The profile is an user.",
         'status' => http_response_code(200),
-        'success' => true
+        'exito' => true
     ], JSON_UNESCAPED_UNICODE);
 } else {
     echo json_encode([
         "error" => 'There was an error when processing the profile.',
         'status' => http_response_code(400),
-        'success' => false
+        'exito' => false
     ], JSON_UNESCAPED_UNICODE);
 }
 ?>

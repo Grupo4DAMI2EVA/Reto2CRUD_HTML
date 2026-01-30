@@ -13,9 +13,10 @@ session_start();
 // Verificar sesión
 if (!isset($_SESSION['logeado']) || !$_SESSION['logeado']) {
     echo json_encode([
+        'success' => false,
         'error' => 'No autorizado',
         'status' => http_response_code(401),
-        'success' => false
+        'exito' => false
     ]);
     exit;
 }
@@ -23,9 +24,10 @@ if (!isset($_SESSION['logeado']) || !$_SESSION['logeado']) {
 // Solo permitir POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode([
+        'success' => false,
         'error' => 'Método no permitido',
         'status' => http_response_code(405),
-        'success' => false
+        'exito' => false
     ]);
     exit;
 }
@@ -36,9 +38,10 @@ $data = json_decode(file_get_contents("php://input"), true);
 // Validar datos requeridos
 if (!isset($data['videogame_code']) || !isset($data['quantity'])) {
     echo json_encode([
+        'success' => false,
         'error' => 'Código de videojuego y cantidad requeridos',
         'status' => http_response_code(400),
-        'success' => false
+        'exito' => false
     ]);
     exit;
 }
@@ -49,9 +52,10 @@ $quantity = intval($data['quantity']);
 // Validar que la cantidad sea positiva
 if ($quantity <= 0) {
     echo json_encode([
+        'success' => false,
         'error' => 'La cantidad debe ser mayor a 0',
         'status' => http_response_code(400),
-        'success' => false
+        'exito' => false
     ]);
     exit;
 }
@@ -80,8 +84,9 @@ if (!$found) {
 }
 
 echo json_encode([
+    'success' => true,
     'message' => 'Producto añadido al carrito correctamente',
     'status' => http_response_code(200),
-    'success' => true
+    'exito' => true
 ], JSON_UNESCAPED_UNICODE);
 ?>

@@ -20,15 +20,15 @@ $modify = $controller->modifyPassword($profile_code, $password);
 
 if ($modify) {
     echo json_encode([
+        'success' => true,
         'message' => 'Password modified correctly',
-        'status' => http_response_code(200),
-        'success' => true
+        'status' => http_response_code(200)
     ]);
 } else {
     echo json_encode([
+        'success' => false,
         'error' => 'Error modifying the password',
-        'status' => http_response_code(400),
-        'success' => false
+        'status' => http_response_code(400)
     ]);
 }
 ?>
