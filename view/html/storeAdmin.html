@@ -16,10 +16,44 @@
         </p>
       </div>
       <h1 class="storeTitle">STORE MANAGEMENT</h1>
-      <button class="storeHelp" aria-label="Ayuda">
+      <button class="storeHelp" id="storeHelpBtn" aria-label="Ayuda">
         <span>?</span>
       </button>
     </header>
+
+    <div id="helpModal" class="helpModal popupOverlay">
+      <div class="popupCard">
+        <div class="helpModalHeader">
+          <h2>Cómo usar la gestión</h2>
+          <span class="close" id="helpModalClose">&times;</span>
+        </div>
+        <div>
+          <p><strong>Bienvenido a Store Management.</strong> Esta página permite gestionar el catálogo de videojuegos.</p>
+          
+          <h3>📋 Operaciones disponibles:</h3>
+          <ol>
+            <li><strong>Selecciona un videojuego:</strong> Haz clic en cualquier fila de la tabla para seleccionar el juego</li>
+            <li><strong>Verifica los detalles:</strong> El juego seleccionado aparecerá en la sección "Selected game"</li>
+            <li><strong>Añadir juego:</strong> Usa el botón "Add Game" para abrirse una nueva ventana y añadir un juego nuevo al catálogo</li>
+            <li><strong>Modificar juego:</strong> Usa el botón "Modify Game" para editar los detalles del juego seleccionado</li>
+            <li><strong>Eliminar juego:</strong> Usa el botón "Delete Game" para eliminar el juego seleccionado del catálogo</li>
+          </ol>
+
+          <h3>🔍 Filtros disponibles:</h3>
+          <ul>
+            <li><strong>Search game:</strong> Busca por nombre del videojuego</li>
+            <li><strong>Genre:</strong> Filtra por género (Acción, RPG, etc.)</li>
+            <li><strong>Platform:</strong> Filtra por plataforma (PC, PlayStation, Xbox, etc.)</li>
+          </ul>
+
+          <h3>⚠️ Importante:</h3>
+          <p>Debes seleccionar un videojuego antes de poder modificarlo o eliminarlo. La eliminación es permanente.</p>
+        </div>
+        <div class="helpModalFooter">
+          <button class="storeBtn primary" id="helpModalOkBtn">Entendido</button>
+        </div>
+      </div>
+    </div>
 
     <main class="storeMain">
       <section class="storePanel">

@@ -39,6 +39,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   // Configurar botón "Review"
   setupReviewButton();
+
+  // Configurar modal de ayuda
+  setupHelpModal();
 });
 
 async function get_all_videogames() {
@@ -289,4 +292,31 @@ function navigateToReview(game) {
   
   // Navegar a la página de reseñas
   window.location.href = reviewUrl;
+}
+
+function setupHelpModal() {
+  const helpBtn = document.getElementById("storeHelpBtn");
+  const helpModal = document.getElementById("helpModal");
+  const closeBtn = document.getElementById("helpModalClose");
+  const okBtn = document.getElementById("helpModalOkBtn");
+
+  if (!helpBtn || !helpModal) return;
+
+  helpBtn.addEventListener("click", () => {
+    helpModal.classList.add("show");
+  });
+
+  closeBtn.addEventListener("click", () => {
+    helpModal.classList.remove("show");
+  });
+
+  okBtn.addEventListener("click", () => {
+    helpModal.classList.remove("show");
+  });
+
+  helpModal.addEventListener("click", (event) => {
+    if (event.target === helpModal) {
+      helpModal.classList.remove("show");
+    }
+  });
 }

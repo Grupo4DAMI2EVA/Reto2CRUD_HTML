@@ -58,10 +58,43 @@
       </button>
     </div>
     <h1 class="storeTitle">GAME STORE</h1>
-    <button class="storeHelp" aria-label="Ayuda">
+    <button class="storeHelp" id="storeHelpBtn" aria-label="Ayuda">
       <span>?</span>
     </button>
   </header>
+
+    <div id="helpModal" class="helpModal popupOverlay">
+      <div class="popupCard">
+        <div class="helpModalHeader">
+          <h2>Cómo usar la tienda</h2>
+          <span class="close" id="helpModalClose">&times;</span>
+        </div>
+        <div>
+          <p><strong>Bienvenido a Game Store.</strong> Esta página te permite explorar y comprar videojuegos disponibles.</p>
+          
+          <h3>📋 Pasos para comprar:</h3>
+          <ol>
+            <li><strong>Selecciona un videojuego:</strong> Haz clic en cualquier fila de la tabla para seleccionar el juego</li>
+            <li><strong>Verifica los detalles:</strong> El juego seleccionado aparecerá en la sección "Selected game"</li>
+            <li><strong>Añade a carrito:</strong> Usa el botón "Add to Cart" para agregar el juego a tu carrito de compras</li>
+            <li><strong>Escribe una reseña:</strong> Usa el botón "Review" para acceder a la sección de reseñas</li>
+          </ol>
+
+          <h3>🔍 Filtros disponibles:</h3>
+          <ul>
+            <li><strong>Search game:</strong> Busca por nombre del videojuego</li>
+            <li><strong>Genre:</strong> Filtra por género (Acción, RPG, etc.)</li>
+            <li><strong>Platform:</strong> Filtra por plataforma (PC, PlayStation, Xbox, etc.)</li>
+          </ul>
+
+          <h3>💰 Tu saldo:</h3>
+          <p>Consulta tu balance actual en la esquina superior izquierda. Puedes añadir saldo usando el botón "Añadir saldo".</p>
+        </div>
+        <div class="helpModalFooter">
+          <button class="storeBtn primary" id="helpModalOkBtn">Entendido</button>
+        </div>
+      </div>
+    </div>
 
   <main class="storeMain">
     <section class="storePanel">
