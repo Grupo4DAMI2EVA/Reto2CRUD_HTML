@@ -228,6 +228,7 @@ function initializeTextArea() {
 
 function updateCharacterCounter(length, charCounter) {
   charCounter.textContent = length + "/500 caracteres";
+  const textarea = document.getElementById("review-textarea");
 
   if (length >= 450) {
     charCounter.style.color = "#e27171";
@@ -235,6 +236,16 @@ function updateCharacterCounter(length, charCounter) {
     charCounter.style.color = "#ffa500";
   } else {
     charCounter.style.color = "#6b6b6b";
+  }
+
+  // Si intenta escribir al llegar al límite, aplica la animación
+  if (length === 500) {
+    textarea.classList.add("textarea-shake");
+    
+    // Quita la animación después de que termine
+    setTimeout(() => {
+      textarea.classList.remove("textarea-shake");
+    }, 500);
   }
 }
 
