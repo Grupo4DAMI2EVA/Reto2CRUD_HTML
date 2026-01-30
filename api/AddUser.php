@@ -20,7 +20,7 @@ $username = $input['username'] ?? '';
 $pswd1 = $input['pswd1'] ?? '';
 $pswd2 = $input['pswd2'] ?? '';
 
-$response = ["exito" => false];
+$response = ["success" => false];
 
 // Validación básica
 if (empty($username) || empty($pswd1)) {
@@ -48,7 +48,7 @@ try {
 
         echo json_encode([
             'message' => "The user was created properly.",
-            'resultado' => $user,
+            'result' => $user,
             'status' => http_response_code(201),
             'success' => true
         ], JSON_UNESCAPED_UNICODE);

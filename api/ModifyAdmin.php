@@ -38,7 +38,7 @@ if (!$error) {
 
 if ($error) {
     echo json_encode([
-        'resultado' => 'Invalid syntax in one of the fields.',
+        'result' => 'Invalid syntax in one of the fields.',
         'status' => http_response_code(400),
         'success' => false
     ]);
@@ -53,7 +53,7 @@ if ($error) {
             $_SESSION['user_data']['TELEPHONE'] = $telephone;
             $_SESSION['user_data']['CURRENT_ACCOUNT'] = $current_account;
         }
-        
+
         echo json_encode([
             'message' => 'Admin modified correctly',
             'status' => http_response_code(200),

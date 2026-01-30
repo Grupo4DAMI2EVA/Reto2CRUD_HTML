@@ -13,10 +13,9 @@ session_start();
 // Verificar sesión
 if (!isset($_SESSION['logeado']) || !$_SESSION['logeado']) {
     echo json_encode([
-        'success' => false,
         'error' => 'No autorizado',
         'status' => http_response_code(401),
-        'exito' => false
+        'success' => false
     ]);
     exit;
 }
@@ -24,10 +23,9 @@ if (!isset($_SESSION['logeado']) || !$_SESSION['logeado']) {
 // Solo permitir POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode([
-        'success' => false,
         'error' => 'Método no permitido',
         'status' => http_response_code(405),
-        'exito' => false
+        'success' => false
     ]);
     exit;
 }
@@ -38,10 +36,9 @@ $data = json_decode(file_get_contents("php://input"), true);
 // Validar que hay items en el carrito
 if (!isset($data['items']) || !is_array($data['items']) || empty($data['items'])) {
     echo json_encode([
-        'success' => false,
         'error' => 'El carrito está vacío',
         'status' => http_response_code(400),
-        'exito' => false
+        'success' => false
     ]);
     exit;
 }
@@ -50,10 +47,9 @@ $profile_code = $_SESSION['user_data']['PROFILE_CODE'] ?? null;
 
 if (!$profile_code) {
     echo json_encode([
-        'success' => false,
         'error' => 'Error al obtener información del usuario',
         'status' => http_response_code(400),
-        'exito' => false
+        'success' => false
     ]);
     exit;
 }
@@ -74,10 +70,9 @@ if (is_array($result) && isset($result['success']) && $result['success']) {
     }
 
     echo json_encode([
-        'success' => true,
         'message' => $result['message'] ?? 'Compra realizada con éxito',
         'status' => http_response_code(200),
-        'exito' => true
+        'success' => true
     ]);
 } else {
     // Devolver error específico
@@ -85,11 +80,10 @@ if (is_array($result) && isset($result['success']) && $result['success']) {
     $errorMessage = is_array($result) && isset($result['message']) ? $result['message'] : 'Error al procesar la compra';
 
     $response = [
-        'success' => false,
         'error' => $errorMessage,
         'error_type' => $errorType,
         'status' => http_response_code(400),
-        'exito' => false
+        'success' => false
     ];
 
     // Añadir información adicional si está disponible
@@ -101,7 +95,6 @@ if (is_array($result) && isset($result['success']) && $result['success']) {
         if (isset($result['needed']))
             $response['needed'] = $result['needed'];
     }
-
     echo json_encode($response);
 }
 ?>

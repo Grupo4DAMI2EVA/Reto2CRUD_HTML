@@ -20,14 +20,7 @@ async function comprobarSesion() {
     if (response.ok) {
       const userData = await response.json();
 
-      // Adaptar la nueva estructura devuelta por el servidor
-      // Ejemplo:
-      // {
-      //   "0": { ...perfil... },
-      //   "status": 200,
-      //   "exito": true
-      // }
-      if (userData?.exito === false || userData?.status === 401) {
+      if (userData?.success === false || userData?.status === 401) {
         window.location.href = "login.html";
         return null;
       }

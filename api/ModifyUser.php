@@ -48,9 +48,9 @@ $required_fields = ['email', 'username', 'telephone', 'name', 'surname', 'gender
 foreach ($required_fields as $field) {
     if (!isset($data[$field]) || empty(trim($data[$field]))) {
         echo json_encode([
-            'success' => false,
             'error' => "El campo $field es requerido",
-            'status' => http_response_code(400)
+            'status' => http_response_code(400),
+            'success' => false
         ]);
         exit;
     }

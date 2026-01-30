@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       adminTableModal.style.display = "none";
     } else if (event.target == modifyUserPopup) {
       modifyUserPopup.style.display = "none";
-      editingUserProfile = null; 
+      editingUserProfile = null;
     } else if (event.target == modifyAdminPopup) {
       modifyAdminPopup.style.display = "none";
     } else if (event.target == changePwdModal) {
@@ -219,7 +219,8 @@ function openModifyUserPopup(userToEdit) {
     document.getElementById("firstNameUser").value = editingUserProfile.name;
     document.getElementById("lastNameUser").value = editingUserProfile.surname;
     document.getElementById("genderUser").value = editingUserProfile.gender;
-    document.getElementById("cardNumberUser").value = editingUserProfile.card_no;
+    document.getElementById("cardNumberUser").value =
+      editingUserProfile.card_no;
   }
 
   let modifyUserPopup = document.getElementById("modifyUserPopupAdmin");
@@ -247,13 +248,25 @@ async function modifyUser() {
   const surname = document.getElementById("lastNameUser").value.trim();
   const email = document.getElementById("emailUser").value.trim();
   const username = document.getElementById("usernameUser").value.trim();
-  const telephone = document.getElementById("phoneUser").value.replace(/\s/g, "").trim();
+  const telephone = document
+    .getElementById("phoneUser")
+    .value.replace(/\s/g, "")
+    .trim();
   const gender = document.getElementById("genderUser").value;
   const card_no = document.getElementById("cardNumberUser").value.trim();
 
   // Validación de campos vacíos
-  if (!name || !surname || !email || !username || !telephone || !gender || !card_no) {
-    document.getElementById("message").innerHTML = "You must fill all the fields";
+  if (
+    !name ||
+    !surname ||
+    !email ||
+    !username ||
+    !telephone ||
+    !gender ||
+    !card_no
+  ) {
+    document.getElementById("message").innerHTML =
+      "You must fill all the fields";
     document.getElementById("message").style.color = "red";
     return;
   }
@@ -261,13 +274,14 @@ async function modifyUser() {
   // Validación de email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
-    document.getElementById("message").innerHTML = "Please enter a valid email address";
+    document.getElementById("message").innerHTML =
+      "Please enter a valid email address";
     document.getElementById("message").style.color = "red";
     return;
   }
 
   // Verificar si hay cambios
-  const hasChanges = 
+  const hasChanges =
     name !== usuario.name ||
     surname !== usuario.surname ||
     email !== usuario.email ||
@@ -297,39 +311,40 @@ async function modifyUser() {
         username: username,
         telephone: telephone,
         gender: gender,
-        card_no: card_no
+        card_no: card_no,
       }),
     });
-    
+
     const data = await response.json();
 
     if (data.success) {
       document.getElementById("message").innerHTML = data.message;
       document.getElementById("message").style.color = "green";
 
-      // Actualizar profile global del servidor 
+      // Actualizar profile global del servidor
       const currentProfile = await comprobarSesion();
       if (currentProfile) {
         profile = currentProfile;
-        
+
         // Si es admin editando a otro usuario, refrescar la tabla
         if (currentProfile.CURRENT_ACCOUNT) {
           await refreshAdminTable();
           // Limpiar el usuario siendo editado
           editingUserProfile = null;
           setTimeout(() => {
-            document.getElementById("modifyUserPopupAdmin").style.display = "none";
+            document.getElementById("modifyUserPopupAdmin").style.display =
+              "none";
           }, 1000);
         }
       }
-
     } else {
       document.getElementById("message").innerHTML = data.error;
       document.getElementById("message").style.color = "red";
     }
   } catch (error) {
     console.error("Error modifying user:", error);
-    document.getElementById("message").innerHTML = "Connection error. Please try again.";
+    document.getElementById("message").innerHTML =
+      "Connection error. Please try again.";
     document.getElementById("message").style.color = "red";
   }
 }
@@ -341,7 +356,7 @@ async function get_all_users() {
   });
   const data = await response.json();
 
-  return data["resultado"];
+  return data["result"];
 }
 
 async function delete_user_admin(id) {
@@ -351,7 +366,7 @@ async function delete_user_admin(id) {
     `../../api/DeleteUser.php?id=${encodeURIComponent(id)}`,
     {
       credentials: "include",
-    }
+    },
   );
 
   const data = await response.json();
@@ -434,7 +449,7 @@ async function openModifyAdminPopup() {
   document.getElementById("messageAdmin").innerHTML = "";
   const actualProfile = await comprobarSesion(); // Obtener el profile del servidor
   if (!actualProfile) return;
-  
+
   let modifyAdminPopup = document.getElementById("modifyAdminPopup");
 
   const usuario = {
@@ -546,7 +561,7 @@ async function modifyAdmin() {
           email: email,
           username: username,
           telephone: telephone,
-          current_account: current_account
+          current_account: current_account,
         }),
       });
 
@@ -581,7 +596,8 @@ async function modifyAdmin() {
       }
     } catch (error) {
       console.error("Error modifying admin:", error);
-      document.getElementById("messageAdmin").innerHTML = "Connection error. Please try again.";
+      document.getElementById("messageAdmin").innerHTML =
+        "Connection error. Please try again.";
     }
   }
 }
@@ -601,7 +617,7 @@ async function delete_user(id) {
     `../../api/DeleteUser.php?id=${encodeURIComponent(id)}`,
     {
       credentials: "include",
-    }
+    },
   );
 
   const data = await response.json();

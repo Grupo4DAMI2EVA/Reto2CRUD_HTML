@@ -159,9 +159,9 @@ try {
     if (!$nameValidation['valid']) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => $nameValidation['message'],
+            'result' => $nameValidation['message'],
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -170,9 +170,9 @@ try {
     if (!$platformValidation['valid']) {
         http_response_code(400);
         echo json_encode([
-            'resultado' => $platformValidation['message'],
+            'result' => $platformValidation['message'],
             'status' => 400,
-            'exito' => false
+            'success' => false
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }

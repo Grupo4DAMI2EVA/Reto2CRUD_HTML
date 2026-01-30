@@ -34,11 +34,11 @@ document.addEventListener("DOMContentLoaded", () => {
           throw new Error("Respuesta no es JSON válida: " + rawText);
         }
 
-        if (data.resultado) {
+        if (data.result) {
           parrafo.innerText = "Usuario creado con éxito.";
           parrafo.style.color = "green";
           window.location.href = "main.html";
-          console.log("Datos recibidos:", data.resultado);
+          console.log("Datos recibidos:", data.result);
         } else {
           parrafo.innerText =
             "El Usuario ya existe, elija otro nombre de usuario";
