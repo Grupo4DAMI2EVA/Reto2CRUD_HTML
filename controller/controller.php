@@ -115,21 +115,6 @@ class controller
         return $this->ReviewModel->delete_review($id);
     }
 
-    public function buy_ticket($profile_code, $event_id, $quantity)
-    {
-        return $this->ReviewModel->buy_ticket($profile_code, $event_id, $quantity);
-    }
-
-    public function get_user_tickets($profile_code)
-    {
-        return $this->ReviewModel->get_user_tickets($profile_code);
-    }
-
-    public function delete_item_from_cart($ticket_id)
-    {
-        return $this->ReviewModel->delete_item_from_cart($ticket_id);
-    }
-
     public function processPurchase($profile_code, $cartItems)
     {
         return $this->OrderModel->processPurchase($profile_code, $cartItems, $this->VideogameModel, $this->UserModel);

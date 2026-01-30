@@ -1,105 +1,134 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Game Store</title>
-    <link rel="stylesheet" href="../assets/css/style.css" />
-    <script src="../assets/js/auth.js"></script>
-  </head>
-  <body class="storeBody">
-    <header class="storeHeader">
-      <div class="storeUser">
-        <p class="storeWelcome">
-          Welcome, <span id="storeUserName">[User]</span>
-        </p>
-        <p class="storeBalance">
-          Balance: <span id="storeUserBalance">0.00€</span>
-        </p>
-        <button
-          class="storeBtn primary"
-          style="margin-top: 6px; width: 100%; max-width: 180px"
-          onclick="window.location.href='add_balance.html'"
-        >
-          Añadir saldo
-        </button>
-      </div>
-      <h1 class="storeTitle">GAME STORE</h1>
-      <button class="storeHelp" aria-label="Ayuda">
-        <span>?</span>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Store</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script src="../assets/js/auth.js"></script>
+</head>
+
+<body class="storeBody">
+  <div id="pageLoader" style="
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #f1f1f1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+">
+    <div style="text-align: center;">
+      <div style="
+      width: 50px;
+      height: 50px;
+      border: 3px solid #101416;
+      border-top-color: #729acb;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    "></div>
+      <p style="color: #101416; font-weight: bold;">Cargando Game Store...</p>
+    </div>
+  </div>
+
+  <style>
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+  <header class="storeHeader">
+    <div class="storeUser">
+      <p class="storeWelcome">
+        Welcome, <span id="storeUserName">[User]</span>
+      </p>
+      <p class="storeBalance">
+        Balance: <span id="storeUserBalance">0.00€</span>
+      </p>
+      <button class="storeBtn primary" style="margin-top: 6px; width: 100%; max-width: 180px"
+        onclick="window.location.href='add_balance.html'">
+        Añadir saldo
       </button>
-    </header>
+    </div>
+    <h1 class="storeTitle">GAME STORE</h1>
+    <button class="storeHelp" aria-label="Ayuda">
+      <span>?</span>
+    </button>
+  </header>
 
-    <main class="storeMain">
-      <section class="storePanel">
-        <div class="storePanelHeader">
-          <h2>Available Games</h2>
-        </div>
-        <div class="storeTableWrapper">
-          <table class="storeTable">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Genre</th>
-                <th>Platform</th>
-                <th>Price (€)</th>
-                <th>Pegi</th>
-                <th>Stock</th>
-                <th>Company</th>
-                <th>Release Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="emptyRow">
-                <td colspan="8">Tabla sin contenido</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+  <main class="storeMain">
+    <section class="storePanel">
+      <div class="storePanelHeader">
+        <h2>Available Games</h2>
+      </div>
+      <div class="storeTableWrapper">
+        <table class="storeTable">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Genre</th>
+              <th>Platform</th>
+              <th>Price (€)</th>
+              <th>Pegi</th>
+              <th>Stock</th>
+              <th>Company</th>
+              <th>Release Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="emptyRow">
+              <td colspan="8">Tabla sin contenido</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
-      <section class="storeControls">
-        <div class="storeFilters">
-          <label class="filterLabel" for="searchTitle">Search game:</label>
-          <input
-            id="searchTitle"
-            type="text"
-            placeholder="Game name..."
-            class="filterInput"
-          />
-          <label class="filterLabel" for="searchGenre">Genre:</label>
-          <select id="searchGenre" class="filterSelect">
-            <option value="all">All</option>
-          </select>
-          <label class="filterLabel" for="searchPlatform">Platform:</label>
-          <select id="searchPlatform" class="filterSelect">
-            <option value="all">All</option>
-          </select>
-          <button class="storeBtn primary" style="display:none;">Search</button>
-        </div>
+    <section class="storeControls">
+      <div class="storeFilters">
+        <label class="filterLabel" for="searchTitle">Search game:</label>
+        <input id="searchTitle" type="text" placeholder="Game name..." class="filterInput" />
+        <label class="filterLabel" for="searchGenre">Genre:</label>
+        <select id="searchGenre" class="filterSelect">
+          <option value="all">All</option>
+        </select>
+        <label class="filterLabel" for="searchPlatform">Platform:</label>
+        <select id="searchPlatform" class="filterSelect">
+          <option value="all">All</option>
+        </select>
+        <button class="storeBtn primary" style="display:none;">Search</button>
+      </div>
 
-        <div class="storeSelected">
-          <span class="selectedLabel">Selected game:</span>
-          <span class="selectedValue" id="selectedGame">Select a game</span>
-        </div>
+      <div class="storeSelected">
+        <span class="selectedLabel">Selected game:</span>
+        <span class="selectedValue" id="selectedGame">Select a game</span>
+      </div>
 
-        <div class="storeActions">
-          <div class="storeActionsLeft">
-            <a href="carrito.html">
+      <div class="storeActions">
+        <div class="storeActionsLeft">
+          <a href="carrito.html">
             <button class="storeBtn ghost">Cart</button>
-            </a>
-            <a href="review.html">
+          </a>
+          <a href="review.html">
             <button class="storeBtn ghost">Review</button>
-            </a>
-          </div>
-          <div class="storeActionsRight">
-            <button class="storeBtn accent">Add to Cart</button>
-            <button class="storeBtn danger" onclick="window.location.href='main.html'">Exit</button>
-          </div>
+          </a>
         </div>
-      </section>
-    </main>
+        <div class="storeActionsRight">
+          <button class="storeBtn accent">Add to Cart</button>
+          <button class="storeBtn danger" onclick="window.location.href='main.html'">Exit</button>
+        </div>
+      </div>
+    </section>
+  </main>
 
-    <script src="../assets/js/store.js"></script>
-  </body>
+  <script src="../assets/js/store.js"></script>
+</body>
+
 </html>
