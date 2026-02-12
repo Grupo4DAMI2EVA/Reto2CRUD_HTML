@@ -116,77 +116,43 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       document.getElementById("messageOldPassword").innerHTML = "";
       document.getElementById("messageWrongPassword").innerHTML = "";
-      document.getElementById("message").innerHTML = "";
 
-      // Obtener datos actuales del servidor
       let actualProfile = await comprobarSesion();
       if (!actualProfile) return;
 
-      const profile_code = actualProfile["PROFILE_CODE"];
-      const userPassword = actualProfile["PSWD"];
-      const password = document.getElementById("currentPassword").value;
       const newPassword = document.getElementById("newPassword").value;
-      const confirmPassword =
-        document.getElementById("confirmNewPassword").value;
+      const confirmPassword = document.getElementById("confirmNewPassword").value;
 
-      let hasErrors = false;
-
-      if (userPassword != password) {
-        document.getElementById("messageOldPassword").innerHTML =
-          "That is not your current password";
-        hasErrors = true;
-        console.log("CURRENT PASSWORD: ", userPassword);
-        console.log("INPUT: ", password);
+      if (newPassword !== confirmPassword) {
+        document.getElementById("messageWrongPassword").innerHTML = "The passwords are not the same";
+        return;
       }
 
-      if (userPassword == newPassword) {
-        document.getElementById("messageWrongPassword").innerHTML =
-          "Password used before, try another one";
-        hasErrors = true;
-      }
+      try {
+        const response = await fetch("../../api/ModifyPassword.php", {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            profile_code: actualProfile["PROFILE_CODE"],
+            currentPassword: document.getElementById("currentPassword").value,
+            newPassword: newPassword,
+          }),
+        });
 
-      if (newPassword != confirmPassword) {
-        document.getElementById("messageWrongPassword").innerHTML =
-          "The passwords are not the same";
-        hasErrors = true;
-      }
+        const data = await response.json();
 
-      if (!hasErrors) {
-        try {
-          const response = await fetch("../../api/ModifyPassword.php", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              profile_code: profile_code,
-              password: newPassword,
-            }),
-          });
-
-          const data = await response.json();
-
-          if (data.success) {
-            actualProfile.PSWD = newPassword;
-            document.getElementById("messageSuccessPassword").innerHTML =
-              "Password correctly changed";
-            profile = actualProfile;
-
-            setTimeout(() => {
-              document.getElementById("messageSuccessPassword").innerHTML = ""; // clean the modified message
-              document.getElementById("changePasswordForm").reset(); // clean all the fields
-            }, 3000);
-          } else {
-            document.getElementById("messageSuccessPassword").innerHTML =
-              data.error;
-            document.getElementById("messageSuccessPassword").style.color =
-              "red";
-          }
-        } catch (error) {
-          //DEBUG console.log(error);
+        if (data.success) {
+          document.getElementById("messageSuccessPassword").innerHTML = "Password correctly changed";
+          document.getElementById("changePasswordForm").reset();
+          setTimeout(() => {
+            document.getElementById("messageSuccessPassword").innerHTML = "";
+          }, 3000);
+        } else {
+          const msgElement = data.error.includes("current") ? "messageOldPassword" : "messageWrongPassword";
+          document.getElementById(msgElement).innerHTML = data.error;
         }
-      }
+      } catch (error) {}
     });
 });
 

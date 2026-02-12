@@ -214,11 +214,23 @@ class UserModel
 
     public function get_user_by_profile_code($profile_code)
     {
+        // Primero intenta buscar en USER_
         $query = "SELECT * FROM USER_ U JOIN PROFILE_ P ON U.PROFILE_CODE = P.PROFILE_CODE WHERE U.PROFILE_CODE = :profile_code";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':profile_code', $profile_code, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Si no encuentra en USER_, intenta en ADMIN_
+        if (!$result) {
+            $query = "SELECT * FROM ADMIN_ A JOIN PROFILE_ P ON A.PROFILE_CODE = P.PROFILE_CODE WHERE A.PROFILE_CODE = :profile_code";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':profile_code', $profile_code, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        
+        return $result;
     }
 
     public function updateBalance($profile_code, $newBalance)
