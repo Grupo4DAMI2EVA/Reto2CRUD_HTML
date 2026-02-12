@@ -54,7 +54,7 @@ class VideogameModel
         $stmt->bindParam(8, $release_date);
         $stmt->bindParam(9, $videogame_code);
         $stmt->execute();
-        return $stmt->rowCount();
+        return $stmt->execute();
     }
 
     public function delete_videogame($videogame_code)

@@ -79,24 +79,28 @@ if (is_array($result) && isset($result['success']) && $result['success']) {
         'status' => http_response_code(200),
         'exito' => true
     ]);
-} else {
-    // Devolver error específico
+}  else {
+    // Identificar el tipo de error
     $errorType = is_array($result) && isset($result['error_type']) ? $result['error_type'] : 'unknown';
     $errorMessage = is_array($result) && isset($result['message']) ? $result['message'] : 'Error al procesar la compra';
+    
+    // Asignar código HTTP: 402 si es saldo, 400 para otros errores
+    $httpCode = ($errorType === 'insufficient_balance') ? 402 : 400;
+    http_response_code($httpCode);
     
     $response = [
         'success' => false,
         'error' => $errorMessage,
         'error_type' => $errorType,
-        'status' => http_response_code(400),
+        'status' => $httpCode, // Usamos la variable, no la función
         'exito' => false
     ];
     
-    // Añadir información adicional si está disponible
     if (is_array($result)) {
         if (isset($result['balance'])) $response['balance'] = $result['balance'];
         if (isset($result['required'])) $response['required'] = $result['required'];
-        if (isset($result['needed'])) $response['needed'] = $result['needed'];
+        // Redondeamos el "needed" para evitar los decimales infinitos del punto flotante
+        if (isset($result['needed'])) $response['needed'] = round($result['needed'], 2);
     }
     
     echo json_encode($response);
