@@ -84,6 +84,7 @@ try {
     $addReview = $controller->add_review($comment, $rating, $profile_code, $videogame_code);
     
     if ($addReview > 0) {
+        http_response_code(201);
         echo json_encode([
             'success' => true,
             'message' => 'Reseña añadida correctamente',
